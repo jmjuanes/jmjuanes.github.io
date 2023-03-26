@@ -4,7 +4,7 @@ import {Projects} from "../components/Projects.jsx";
 
 export default props => (
     <Layout>
-        <div className="py:24">
+        <div className="py:20">
             <div className="text:xl mb:6">
                 <strong>Hi! I'm Josemi &#128075;</strong>
             </div>
