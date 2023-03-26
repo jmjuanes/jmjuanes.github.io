@@ -19,12 +19,11 @@ exports.onRenderBody = actions => {
         <meta property="og:image" content="https://www.josemi.xyz/og.png" />,
         <meta property="og:description" content="Hey! I'm Josemi, a mathematician, frontend developer and product designer." />,
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" />,
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;800&display=swap" />,
         <link rel="stylesheet" href={"/low.css"} />,
         <title>Josemi Juanes, Ph.D.</title>,
     ]);
 
     actions.setBodyAttributes({
-        className: "font:inter bg:dark-900 text:light-200 lh:normal",
+        className: "font:inter bg:white text:gray-800 lh:normal",
     });
 };
