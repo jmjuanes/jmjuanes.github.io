@@ -9,11 +9,11 @@ export const Projects = () => (
         </div>
         <div className="d:grid cols:1 cols:2@sm cols:4@lg w:full gap:4">
             {featuredProjects.map(item => (
-                <div key={item.name} className="w:full">
-                    <Link to={item.url} className="text:gray-800 text:no-underline mb:2">
+                <div key={item.name} className="w:full mb:4">
+                    <Link to={item.url} className="d:block text:no-underline text:gray-800 mb:2">
                         <strong className="text:uppercase text:lg">{item.name}</strong>
                     </Link>
-                    <div className="mb:4">
+                    <div className="">
                         {item.description}
                     </div>
                 </div>
