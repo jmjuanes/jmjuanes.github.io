@@ -11,14 +11,14 @@ import packagesData from "../data/packages.js";
 
 export default () => (
     <Layout>
-        <div className="pt-20 pb-32 d-flex flex-col">
-            <div className="text-6xl text-gray-800 font-black font-crimson tracking-tight">
+        <div className="d-flex flex-col justify-center minh-screen">
+            <div className="text-4xl text-6xl@md text-gray-800 font-black font-crimson tracking-tight">
                 Hi! I'm Josemi.
             </div>
             <div className="w-full maxw-xl mt-4 text-lg text-gray-700">
                 Mathematician, <b>React.js</b> developer and Product designer. Currently based on Valencia, Spain.
             </div>
-            <div className="mt-10 d-flex">
+            <div className="mt-10 d-flex@md">
                 <PrimaryButton to="/resume" text="Resume" icon={(<FileIcon />)} />
             </div>
         </div>
