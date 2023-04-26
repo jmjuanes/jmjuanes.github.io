@@ -21,6 +21,7 @@ exports.onRenderBody = actions => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" />,
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@700;900&display=swap" />,
         <link rel="stylesheet" href={"/low.css"} />,
+        <link rel="stylesheet" href={"/resume.css"} />,
         <title>Josemi Juanes, Ph.D.</title>,
     ]);
 
