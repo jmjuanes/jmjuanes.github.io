@@ -57,7 +57,7 @@ export default () => (
     <React.Fragment>
         <div className="resume-page">
             <div className="mb-8">
-                <div className="font-black font-crimson tracking-tight text-2xl mb-2">Jose M. Juanes, Ph.D.</div>
+                <div className="font-black font-crimson tracking-tight text-4xl mb-2">Jose M. Juanes, Ph.D.</div>
                 <div className="mb-4">
                     <div>I am a <b>mathematician</b> and <b>bioinformatician</b> that loves to <b>design</b> and <b>develop</b> web products.</div>
                     <div>My areas of interest are <b>JavaScript</b>, <b>React</b>, <b>Data Visualization</b> and <b>UI/UX Design</b>.</div>
@@ -127,7 +127,7 @@ export default () => (
             <div className="">
                 <SectionTitle icon={(<ToolsIcon />)} title="Side Projects" />
                 <div className="mb-4">
-                    I spend most of my free-time working on <b>side projects</b>.
+                    I spend most of my free-time working on <b>Open Source projects</b>, . There are some of my side projects that I am working on.
                 </div>
                 {data.sideProjects.map(item => (
                     <div key={item.title} className="mb-6">

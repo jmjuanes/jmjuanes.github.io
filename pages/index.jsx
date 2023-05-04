@@ -11,7 +11,7 @@ import packagesData from "../data/packages.js";
 
 export default () => (
     <Layout>
-        <div className="d-flex flex-col justify-center minh-screen">
+        <div className="d-flex flex-col py-28">
             <div className="text-4xl text-6xl@md text-gray-800 font-black font-crimson tracking-tight">
                 Hi! I'm Josemi.
             </div>
@@ -24,7 +24,7 @@ export default () => (
         </div>
         <div className="pt-24 pb-20">
             <div className="font-crimson font-black text-4xl text-gray-800 mb-16 tracking-tight text-center text-underline">
-                <span>My Projects</span>
+                <a href="index.html#projects" name="projects" className="text-gray-800">Projects</a>
             </div>
             <div className="">
                 {appsData.map(appProps => (
