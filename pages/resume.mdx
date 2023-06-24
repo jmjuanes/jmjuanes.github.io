@@ -120,7 +120,7 @@ export const Separator = () => (
             <div>My areas of interest are <b>JavaScript</b>, <b>React</b>, <b>Data Visualization</b> and <b>UI/UX Design</b>.</div>
         </div>
         <div className="flex flex-wrap w-full gap-4">
-            <ContactItem icon={(<Icon icon="globe" />)} text={props.data.author.url} />
+            <ContactItem icon={(<Icon icon="globe" />)} text={props.data.author.url.replace("https://", "")} />
             <ContactItem icon={(<Icon icon="envelope" />)} text={props.data.author.email} />
             <ContactItem icon={(<Icon icon="location" />)} text="Valencia, Spain" />
         </div>
