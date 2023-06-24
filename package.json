@@ -4,22 +4,33 @@
     "version": "0.0.1",
     "private": true,
     "homepage": "https://www.josemi.xyz/",
+    "author": {
+        "email": "hello@josemi.xyz",
+        "name": "Josemi",
+        "url": "https://josemi.xyz"
+    },
+    "social": {
+        "github": "https://github.com/jmjuanes"
+    },
     "scripts": {
-        "build": "gatsby build",
-        "serve": "stattic --folder public --port 5000"
+        "prebuild": "rm -rf public && mkdir -p public",
+        "build": "babel-node --presets '@babel/preset-react' build.jsx",
+        "postbuild": "cp node_modules/lowcss/dist/low.css public/ && cp assets/* public/",
+        "serve": "stattic --folder public --port 3000"
     },
     "dependencies": {
-        "@mochicons/react": "^0.0.1",
         "classnames": "^2.3.2",
-        "copy-webpack-plugin": "^11.0.0",
-        "gatsby": "^5.6.1",
-        "gatsby-cli": "^5.6.0",
-        "gatsby-plugin-page-creator": "^5.6.0",
-        "gatsby-source-filesystem": "^5.6.0",
-        "lowcss": "^0.11.1",
+        "lowcss": "^0.12.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "stattic": "^0.4.0"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "@babel/core": "^7.22.5",
+        "@babel/node": "^7.22.5",
+        "@babel/preset-react": "^7.22.5",
+        "@mdx-js/mdx": "^2.3.0",
+        "gray-matter": "^4.0.3"
+    }
 }
