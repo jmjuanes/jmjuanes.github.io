@@ -1,0 +1,29 @@
+{
+    "email": "hello@josemi.xyz",
+    "social": [
+        {
+            "image": "./github.svg",
+            "url": "https://github.com/jmjuanes"
+        }
+    ],
+    "projects": [
+        {
+            "title": "Folio.",
+            "description": "A minimalistic whiteboard for sketching, annotating and prototyping.",
+            "keywords": ["App", "React", "SVG", "Sketching"],
+            "url": "https://www.josemi.xyz/folio"
+        },
+        {
+            "title": "lowCSS.",
+            "description": "A low-level CSS utility framework for building elegant user interfaces using reusable and responsive building blocks.",
+            "keywords": ["SASS", "CSS Utilities"],
+            "url": "https://josemi.xyz/lowcss"
+        },
+        {
+            "title": "siimple.",
+            "description": "The minimal and themeable CSS toolkit for flat and clean designs.",
+            "keywords": ["CSS", "CSS Toolkit", "UI Components"],
+            "url": "https://www.siimple.xyz"
+        }
+    ]
+}

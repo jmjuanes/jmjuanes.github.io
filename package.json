@@ -1,16 +1,13 @@
 {
     "name": "josemi.xyz",
     "description": "Content of my personal website",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "private": true,
+    "license": "MIT",
     "homepage": "https://www.josemi.xyz/",
     "author": {
-        "email": "hello@josemi.xyz",
         "name": "Josemi",
-        "url": "https://josemi.xyz"
-    },
-    "social": {
-        "github": "https://github.com/jmjuanes"
+        "email": "hello@josemi.xyz"
     },
     "scripts": {
         "prebuild": "rm -rf public && mkdir -p public",
@@ -19,18 +16,14 @@
         "serve": "stattic --folder public --port 3000"
     },
     "dependencies": {
-        "classnames": "^2.3.2",
         "lowcss": "^0.12.0",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "stattic": "^0.4.0"
+        "react-dom": "^18.2.0"
     },
-    "license": "MIT",
     "devDependencies": {
         "@babel/core": "^7.22.5",
         "@babel/node": "^7.22.5",
         "@babel/preset-react": "^7.22.5",
-        "@mdx-js/mdx": "^2.3.0",
-        "gray-matter": "^4.0.3"
+        "stattic": "^0.4.0"
     }
 }
