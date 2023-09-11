@@ -1,0 +1,30 @@
+/* resume page container */
+.resume {
+    width: 21cm;
+    height: auto;
+    background: #fff;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Print version hidden content */
+@media print {
+    body {
+        margin: 0!important;
+        padding: 0!important;
+    }
+    .resume{
+        margin: 0;
+        box-shadow: none;
+        width: 100%;
+        /* height: 29cm; */
+    }
+    /*
+    .resume:not(:last-of-type) {
+        page-break-after: always;
+    }
+    */
+    .resume-separator {
+        display: none;
+    }
+}

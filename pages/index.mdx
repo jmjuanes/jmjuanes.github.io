@@ -1,0 +1,111 @@
+---
+layout: "default"
+title: "Home"
+email: "hello@josemi.xyz"
+projects: 
+  - title: "Online Tools"
+    icon: "tools"
+    items:
+      - title: "Folio."
+        description: "A minimalistic whiteboard for sketching, annotating and prototyping."
+        keywords: ["App", "React", "SVG", "Sketching"]
+        url: "https://www.josemi.xyz/folio"
+  - title: "CSS Toolkits"
+    icon: "css"
+    items:
+      - title: "lowCSS."
+        description: "A low-level CSS utility framework for building elegant user interfaces using reusable and responsive building blocks."
+        keywords: ["SASS", "CSS Utilities"]
+        url: "https://josemi.xyz/lowcss"
+      - title: "siimple."
+        description: "The minimal and themeable CSS toolkit for flat and clean designs."
+        keywords: ["CSS", "CSS Toolkit", "UI Components"]
+        url: "https://www.siimple.xyz"
+social:
+  - url: "https://github.com/jmjuanes"
+    image: "github.svg"
+---
+
+export const ProjectItem = project => (
+    <a href={project.url} target="_blank" className="no-underline flex flex-col p-6 hover:bg-gray-100 o-80 hover:o-100 rounded-xl">
+        <div className="font-bold text-gray-900 text-2xl leading-none">
+            <span>{project.title}</span>
+        </div>
+        <div className="mt-2 text-sm text-gray-800">
+            <span>{project.description}</span>
+        </div>
+        {project.keywords.length > 0 && (
+            <div className="mt-4 flex gap-2 flex-wrap">
+                {project.keywords.map(key => (
+                    <div key={key} className="rounded-full px-2 py-1 bg-gray-300 text-2xs text-gray-800">
+                        <span>{key}</span>
+                    </div>
+                ))}
+            </div>
+        )}
+    </a>
+);
+
+<div className="w-full maxw-6xl mx-auto px-6">
+    <div className="flex flex-col py-32">
+        <div className="text-6xl md:text-8xl text-gray-900 font-black leading-tight">
+            <span>Hi! I'm Josemi.</span>
+        </div>
+        <div className="w-full maxw-4xl mt-4 text-2xl text-gray-700">
+            <span>I am a passionate <b>mathematician</b> turned <b>React</b> developer. I combine my mathematical background with my love for design to craft beautiful and performant user interfaces.</span>
+        </div>
+        <div className="mt-10 md:flex">
+            <a href="./resume" className="flex items-center justify-center gap-2 rounded-md px-6 py-4 bg-gray-900 hover:bg-gray-800 no-underline">
+                <div className="flex items-center text-2xl text-white">
+                    <Icon icon="file" />
+                </div>
+                <div className="font-bold text-lg text-white">
+                    <span>See my resume</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div className="sm:py-24 py-16">
+        <div className="font-black text-4xl sm:text-6xl text-gray-900 mb-8 sm:mb-12 leading-tight">
+            <span>Projects</span>
+        </div>
+        {props.page.data.projects.map(group => (
+            <div key={group.title} className="mb-8">
+                <div className="flex items-center gap-2 text-gray-700 mb-2 select-none">
+                    <div className="flex items-center text-2xl">
+                        <Icon icon={group.icon} />
+                    </div>
+                    <div className="font-bold text-xl">{group.title}</div>
+                </div>
+                <div className="w-64 border-b-2 border-dashed border-gray-300 mb-4" />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {group.items.map(project => (
+                        <ProjectItem key={project.title} {...project} />
+                    ))}
+                </div>
+            </div>
+        ))}
+    </div>
+    <div className="pt-24 pb-32">
+        <div className="font-black text-4xl sm:text-6xl mb-6 leading-tight">
+            <a href={`mailto:${props.page.data.email}`} className="no-underline hover:underline text-gray-800 hover:text-gray-700">
+                <span>{props.page.data.email}</span>
+            </a>
+        </div>
+        <div className="w-full maxw-3xl leading-relaxed text-lg mb-8">
+            Thank you for visiting my online profile! 
+            I look forward to the opportunity to contribute my skills and expertise to your next project.
+        </div>
+        <div className="flex gap-4 items-center mb-20">
+            {props.page.data.social.map(item => (
+                <a key={item.url} href={item.url} target="_blank" className="no-underline o-100 hover:o-70">
+                    <img className="w-8 h-8" src={item.image} />
+                </a>
+            ))}
+        </div>
+        <div className="text-sm">
+            <div className="mb-2">Hand-crafted with care and love by <b>Josemi</b>.</div>
+            <div>Last built on {props.build.time.formatted}.</div>
+        </div>
+    </div>
+</div>

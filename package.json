@@ -5,25 +5,24 @@
     "private": true,
     "license": "MIT",
     "homepage": "https://www.josemi.xyz/",
-    "author": {
-        "name": "Josemi",
-        "email": "hello@josemi.xyz"
-    },
+    "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
-        "prebuild": "rm -rf public && mkdir -p public",
+        "prebuild": "rm -rf public && mkdir -p www",
         "build": "babel-node --presets '@babel/preset-react' build.jsx",
-        "postbuild": "cp node_modules/lowcss/dist/low.css public/ && cp assets/* public/",
-        "serve": "stattic --folder public --port 3000"
+        "postbuild": "cp node_modules/lowcss/dist/low.css www/ && cp assets/* www/",
+        "serve": "serve www"
     },
     "dependencies": {
-        "lowcss": "^0.12.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
-    },
-    "devDependencies": {
         "@babel/core": "^7.22.5",
         "@babel/node": "^7.22.5",
         "@babel/preset-react": "^7.22.5",
-        "stattic": "^0.4.0"
+        "@josemi-icons/react": "^0.3.2",
+        "@mdx-js/mdx": "^2.3.0",
+        "classnames": "^2.3.2",
+        "lowcss": "^0.13.0",
+        "gray-matter": "^4.0.3",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "serve": "^14.2.1"
     }
 }

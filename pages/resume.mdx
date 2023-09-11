@@ -1,0 +1,210 @@
+---
+layout: "empty"
+title: "Resume"
+email: "hello@josemi.xyz"
+url: "josemi.xyz"
+education:
+  - university: "University of Valencia"
+    title: "Ph.D. in Computer Science and Bioinformatics"
+    startDate: "2015"
+    endDate: "2021"
+  - university: "University of Valencia"
+    title: "Master's Degree in Bioinformatics"
+    startDate: "2013"
+    endDate: "2015"
+  - university: "University of Valencia"
+    title: "Bachelor's Degree in Mathematics"
+    startDate: "2008"
+    endDate: "2013"
+experience:
+  - company: "Zetta Genomics Europe S.L."
+    title: "Senior Frontend Developer"
+    keywords: ["Lit", "Bootstrap", "Data Visualization"]
+    startDate: "09, 2021"
+    endDate: null
+    description: "Design, implement, and test the front-end side of a highly scalable and reliable platform Xetabase, using modern technologies like Lit and Bootstrap."
+  - company: "DevCenter S.L."
+    title: "Senior Frontend Developer"
+    keywords: ["React", "Redux", "TypeScript"]
+    startDate: "06, 2021"
+    endDate: "09, 2021"
+    description: "Development of the b2b e-commerce platform of an international sportswear company."
+  - company: "Kanteron Systems S.L.U."
+    title: "Frontend Developer"
+    keywords: ["React", "Siimple", "Google Cloud"]
+    startDate: "01, 2020"
+    endDate: "05, 2021"
+    description: "Development of reactive web systems for clinical information management in Kanteron's Data Analysis department. Creation of applications for annotating clinical images (radiology and pathology) and dashboards for precision medicine."
+  - company: "Fundacion Hospital Clinico Valencia - INCLIVA"
+    title: "Full Stack Developer"
+    keywords: ["Polymer", "React", "Python", "Node.js", "REST Services", "SQL"]
+    startDate: "01, 2016"
+    endDate: "12, 2019"
+    description: "Development of web applications for genetic diagnosis in the Genetics and Genetic Diagnosis Unit of INCLIVA (Ph.D. internship)."
+skills: ["JavaScript", "React", "Node.js", "CSS", "Sass", "UI Design", "Data Visualization", "HTML5", "Git", "Docker", "Python", "TypeScript", "WebComponents", "Webpack", "Electron", "Google Cloud", "Firebase", "Android", "SQL", "TDD", "Figma"]
+sideProjects:
+  - title: "Folio."
+    type: "App"
+    description: "Folio is a minimalistic whiteboard for sketching, annotating and prototyping."
+    website: "josemi.xyz/folio"
+    repository: "@jmjuanes/folio"
+    keywords: ["React", "SVG", "Sketching"]
+  - title: "lowCSS."
+    type: "CSS Framework"
+    description: "A low-level CSS utility framework for building elegant user interfaces using reusable and responsive building blocks."
+    website: "josemi.xyz/lowcss"
+    repository: "@jmjuanes/lowcss"
+    keywords: ["CSS", "CSS Utilities", "SASS"]
+  - title: "siimple."
+    type: "CSS Framework"
+    description: "Siimple is a minimal, themeable and responsive CSS toolkit for designing flat and clean websites and applications."
+    website: "siimple.xyz"
+    repository: "@jmjuanes/siimple"
+    keywords: ["CSS", "CSS-In-JS", "CSS Toolkit"]
+---
+
+export const ContactItem = props => (
+    <div className="flex items-center gap-1">
+        <div className="flex items-center text-xl">
+            {props.icon}
+        </div>
+        <div className="font-bold">{props.text}</div>
+    </div>
+);
+
+export const ExternalLink = props => (
+    <div className="flex items-center gap-1">
+        {props.icon && (
+            <div className="flex items-center">
+                {props.icon}
+            </div>
+        )}
+        <div className="font-bold text-sm">{props.text}</div>
+    </div>
+);
+
+export const SectionTitle = props => (
+    <div className="mb-4">
+        <div className="flex items-center gap-2 w-full">
+            {props.icon && (
+                <div className="flex items-center text-4xl">
+                    {props.icon}
+                </div>
+            )}
+            <div className="font-bold text-4xl">{props.title}</div>
+        </div>
+    </div>
+);
+
+export const Keywords = props => (
+    <div className="flex items-center gap-2 flex-wrap">
+        {props.items.map(key => (
+            <div key={key} className="px-3 py-1 rounded-full bg-gray-200 text-xs">
+                <strong>{key}</strong>
+            </div>
+        ))}
+    </div>
+);
+
+export const Separator = () => (
+    <div className="w-full py-8">
+        <div className="w-56 mx-auto border-dashed border-b-2 border-gray-400" />
+    </div>
+);
+
+<div className="resume">
+    <div className="mb-8">
+        <div className="font-black text-6xl mb-2">
+            <span>Jose M. Juanes, Ph.D.</span>
+        </div>
+        <div className="mb-4">
+            <div>I am a <b>mathematician</b> and <b>bioinformatician</b> that loves to <b>design</b> and <b>develop</b> web products.</div>
+            <div>My areas of interest are <b>JavaScript</b>, <b>React</b>, <b>Data Visualization</b> and <b>UI/UX Design</b>.</div>
+        </div>
+        <div className="flex flex-wrap w-full gap-4">
+            <ContactItem icon={(<Icon icon="globe" />)} text={props.page.data.url.replace("https://", "")} />
+            <ContactItem icon={(<Icon icon="envelope" />)} text={props.page.data.email} />
+            <ContactItem icon={(<Icon icon="location" />)} text="Valencia, Spain" />
+        </div>
+    </div>
+    <Separator />
+    <div className="mb-8">
+        <SectionTitle icon={(<Icon icon="book" />)} title="Education" />
+        {props.page.data.education.map(item => (
+            <div key={item.title} className="flex justify-between w-full mb-2">
+                <div className="flex items-center gap-2">
+                    <div className="font-bold">{item.title}</div>
+                    <div className="text-gray-500 text-sm">{item.university}</div>
+                </div>
+                <div className="flex items-center gap-1">
+                    <div className="font-bold">{item.startDate}</div>
+                    <div className="flex items-center text-gray-600">-</div>
+                    <div className="font-bold">{item.endDate}</div>
+                </div>
+            </div>
+        ))}
+    </div>
+    <div className="mb-8">
+        <SectionTitle icon={(<Icon icon="briefcase" />)} title="Professional Experience" />
+        {props.page.data.experience.map(item => (
+            <div key={item.title} className="flex justify-between gap-4 w-full mb-6">
+                <div className="">
+                    <div className="flex items-center gap-2">
+                        <div className="font-bold">{item.title}</div>
+                        <div className="text-sm text-gray-600 font-bold">·</div>
+                        <div className="text-sm text-gray-600">{item.company}</div>
+                    </div>
+                    <div className="text-sm mb-2">{item.description}</div>
+                    {item.keywords && (
+                        <Keywords items={item.keywords} />
+                    )}
+                </div>
+                <div className="flex items-center gap-1 shrink-0 justify-end">
+                    <div className="font-bold">{item.startDate}</div>
+                    <div className="flex items-center text-gray-600">-</div>
+                    <div className="font-bold">{item.endDate || "Present"}</div>
+                </div>
+            </div>
+        ))}
+    </div>
+    <Separator />
+    <div className="mb-8">
+        <SectionTitle icon={(<Icon icon="code-block" />)} title="Skills" />
+        <div className="flex items-center gap-2 flex-wrap">
+            {props.page.data.skills.map(item => (
+                <div key={item} className="px-3 py-1 rounded-full text-xs bg-gray-200">
+                    <strong>{item}</strong>
+                </div>
+            ))}
+        </div>
+    </div>
+    <Separator />
+    <div className="mb-8">
+        <SectionTitle icon={(<Icon icon="tools" />)} title="Side Projects" />
+        <div className="mb-4">
+            I spend most of my free-time working on <b>Open Source projects</b>, . There are some of my side projects that I am working on.
+        </div>
+        {props.page.data.sideProjects.map(item => (
+            <div key={item.title} className="mb-6">
+                <div className="flex items-center gap-4">
+                    <div className="font-bold text-2xl">{item.title}</div>
+                    <div className="px-2 py-1 rounded-full bg-gray-200 text-2xs">
+                        <strong>{item.type}</strong>
+                    </div>
+                </div>
+                <div className="mb-2">{item.description}</div>
+                <div className="mb-4 hidden">
+                    <Keywords items={item.keywords} />
+                </div>
+                <div className="flex items-center gap-4 w-full">
+                    {item.website && (
+                        <ExternalLink icon={(<Icon icon="globe" />)} text={item.website} />
+                    )}
+                    {item.repository && (
+                        <ExternalLink icon={(<Icon icon="code" />)} text={item.repository} />
+                    )}
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
