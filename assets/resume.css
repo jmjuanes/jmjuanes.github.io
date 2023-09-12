@@ -1,30 +1,28 @@
 /* resume page container */
 .resume {
-    width: 21cm;
-    height: auto;
     background: #fff;
     display: block;
-    margin: 0 auto;
+    margin: 4rem auto;
+    max-width: 21cm;
+    width: 100%;
 }
 
 /* Print version hidden content */
 @media print {
     body {
-        margin: 0!important;
-        padding: 0!important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .resume{
-        margin: 0;
         box-shadow: none;
+        margin: 0;
+        max-width: 100%;
         width: 100%;
-        /* height: 29cm; */
     }
-    /*
-    .resume:not(:last-of-type) {
-        page-break-after: always;
-    }
-    */
-    .resume-separator {
+    .resume-info,
+    .resume-separator,
+    .site-header,
+    .site-footer {
         display: none;
     }
 }

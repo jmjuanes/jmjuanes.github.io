@@ -1,6 +1,7 @@
 ---
 layout: "empty"
 title: "Resume"
+updatedAt: "2023/09/12"
 email: "hello@josemi.xyz"
 url: "josemi.xyz"
 education:
@@ -106,20 +107,36 @@ export const Keywords = props => (
     </div>
 );
 
-export const Separator = () => (
-    <div className="w-full py-8">
-        <div className="w-56 mx-auto border-dashed border-b-2 border-gray-400" />
+export const ResumeSeparator = () => (
+    <div className="resume-separator border-t-2 border-dashed border-gray-300 mb-8" />
+);
+
+export const ResumeInfoField = props => (
+    <div className="flex items-center gap-2">
+        <div className="text-2xl text-gray-600">
+            {props.icon}
+        </div>
+        <div className="text-sm">{props.children}</div>
     </div>
 );
 
 <div className="resume">
-    <div className="mb-8">
+    <div className="resume-info flex flex-col gap-2 mb-12 select-none">
+        <ResumeInfoField icon={(<Icon icon="printer" />)}>
+            <span>You can safely print this page using <b>Ctrl + P</b> (Windows or Linux) or <b>Cmd + P</b> (Mac).</span>
+        </ResumeInfoField>
+        <ResumeInfoField icon={(<Icon icon="calendar" />)}>
+            <span>This page was last updated on <b>{props.page.data.updatedAt}</b>.</span>
+        </ResumeInfoField>
+    </div>
+    <ResumeSeparator />
+    <div className="mb-12">
         <div className="font-black text-6xl mb-2">
             <span>Jose M. Juanes, Ph.D.</span>
         </div>
         <div className="mb-4">
-            <div>I am a <b>mathematician</b> and <b>bioinformatician</b> that loves to <b>design</b> and <b>develop</b> web products.</div>
-            <div>My areas of interest are <b>JavaScript</b>, <b>React</b>, <b>Data Visualization</b> and <b>UI/UX Design</b>.</div>
+            <span>I am a <b>mathematician</b> and <b>bioinformatician</b> that loves to <b>design</b> and <b>develop</b> web products. </span>
+            <span>My areas of interest are <b>JavaScript</b>, <b>React</b>, <b>Data Visualization</b> and <b>UI/UX Design</b>.</span>
         </div>
         <div className="flex flex-wrap w-full gap-4">
             <ContactItem icon={(<Icon icon="globe" />)} text={props.page.data.url.replace("https://", "")} />
@@ -127,8 +144,7 @@ export const Separator = () => (
             <ContactItem icon={(<Icon icon="location" />)} text="Valencia, Spain" />
         </div>
     </div>
-    <Separator />
-    <div className="mb-8">
+    <div className="mb-12">
         <SectionTitle icon={(<Icon icon="book" />)} title="Education" />
         {props.page.data.education.map(item => (
             <div key={item.title} className="flex justify-between w-full mb-2">
@@ -144,7 +160,7 @@ export const Separator = () => (
             </div>
         ))}
     </div>
-    <div className="mb-8">
+    <div className="mb-12">
         <SectionTitle icon={(<Icon icon="briefcase" />)} title="Professional Experience" />
         {props.page.data.experience.map(item => (
             <div key={item.title} className="flex justify-between gap-4 w-full mb-6">
@@ -167,8 +183,7 @@ export const Separator = () => (
             </div>
         ))}
     </div>
-    <Separator />
-    <div className="mb-8">
+    <div className="mb-12">
         <SectionTitle icon={(<Icon icon="code-block" />)} title="Skills" />
         <div className="flex items-center gap-2 flex-wrap">
             {props.page.data.skills.map(item => (
@@ -178,8 +193,7 @@ export const Separator = () => (
             ))}
         </div>
     </div>
-    <Separator />
-    <div className="mb-8">
+    <div className="mb-12">
         <SectionTitle icon={(<Icon icon="tools" />)} title="Side Projects" />
         <div className="mb-4">
             I spend most of my free-time working on <b>Open Source projects</b>, . There are some of my side projects that I am working on.
@@ -207,4 +221,5 @@ export const Separator = () => (
             </div>
         ))}
     </div>
+    <ResumeSeparator />
 </div>
