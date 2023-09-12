@@ -31,6 +31,23 @@ const fetchImports = () => {
     ]);
 };
 
+// Menu button
+const MenuButton = props => (
+    <a href={props.to} className="py-1 px-0 text-gray-600 hover:text-gray-900 no-underline hover:underline">
+        <span>{props.text}</span>
+    </a>
+);
+
+// External link
+const ExternalLink = props => (
+    <a href={props.to} target="_blank" className="no-underline hover:underline flex items-center gap-1 text-gray-600 hover:text-gray-900">
+        <div className="flex items-center text-lg">
+            {renderIcon("arrow-up-right")}
+        </div>
+        <div className="">{props.text}</div>
+    </a>
+);
+
 const PageWrapper = props => (
     <html lang="en">
         <head>
@@ -51,7 +68,28 @@ const PageWrapper = props => (
             <title>{`Josemi Juanes, Ph.D.`}</title>
         </head>
         <body className="bg-white m-0 p-0 font-inter text-gray-900 leading-normal">
-            {props.pageContent}
+            {props.page?.data?.layout === "default" && (
+                <div className="w-full maxw-2xl mx-auto px-6 md:px-0 py-16">
+                    <div className="site-header flex flex-row items-center gap-4 mb-16">
+                        <MenuButton to="./" text="home" />
+                        <MenuButton to="./projects" text="projects" />
+                        <MenuButton to="./resume" text="resume" />
+                    </div>
+                    {props.pageContent}
+                    <div className="site-footer py-16">
+                        <div className="flex gap-4 mb-8">
+                            <ExternalLink to="https://github.com/jmjuanes" text="my github profile" />
+                        </div>
+                        <div className="text-xs mb-1">Hand-crafted with care and love by <b>Josemi</b>.</div>
+                        <div className="text-xs text-gray-700">Last built on {props.build.time.formatted}.</div>
+                    </div>
+                </div>
+            )}
+            {props.page?.data?.layout === "empty" && (
+                <React.Fragment>
+                    {props.pageContent}
+                </React.Fragment>
+            )}
         </body>
     </html>
 );
@@ -82,10 +120,11 @@ fetchImports().then(imports => {
                                 components: {
                                     Fragment: React.Fragment,
                                     Icon: props => renderIcon(props.icon),
+                                    ExternalLink: ExternalLink,
                                 },
-                                build: buildInfo,
                             }),
                             page: page,
+                            build: buildInfo,
                             // pages: pages,
                         });
                         return renderToStaticMarkup(pageContent);
