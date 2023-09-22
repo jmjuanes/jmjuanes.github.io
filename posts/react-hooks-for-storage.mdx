@@ -1,0 +1,29 @@
+---
+layout: "post"
+title: "Creating React Hooks for Local and Session Storage"
+date: 20230922
+---
+
+## What is Local and Session storage?
+
+**Local** storage and **Session** storage are two web storage options available in JavaScript that allow you to store data on the client-side (in the user's browser) for a specific web domain. They are part of the Web Storage API and provide a way to store key-value pairs persistently (local storage) or for the duration of a page session (session storage).
+
+Data stored using local storage persists even after the browser is closed and is available across multiple browser sessions, and is suitable for storing data that should persist between sessions, such as user preferences, cached data, or application state.
+
+```javascript
+// Storing data in local storage
+localStorage.setItem("username", "John");
+
+// Retrieving data from local storage
+const username = localStorage.getItem("username"); // Returns "John"
+
+// Removing data from local storage
+localStorage.removeItem("username");
+```
+
+### Session storage
+
+Session storage allows you to store data that is available only for the duration of a single page session. Data is automatically cleared when the session ends (e.g., when the user closes the browser tab or window).
+
+Session storage is suitable for temporary data that is needed only while the user is interacting with the current page, such as shopping cart items, form data, or temporary user authentication tokens.
+
