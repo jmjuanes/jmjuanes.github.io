@@ -1,0 +1,17 @@
+---
+layout: "default"
+title: "Posts"
+---
+
+<div className="">
+    {props.posts.sort((a,b) => a.data.date - b.data.date).map(post => (
+        <a key={post.data.date} href={post.url} className="group flex items-center w-full mb-2">
+            <div className="flex items-center text-xs text-gray-500 w-20">
+                <span>{post.data.date}</span>
+            </div>
+            <div className="font-medium">
+                <span>{post.data.title}</span>
+            </div>
+        </a>
+    ))}
+</div>
