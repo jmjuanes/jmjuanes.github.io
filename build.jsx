@@ -63,19 +63,35 @@ const PageWrapper = props => (
             <meta property="og:description" content="Hey! I'm Josemi, a mathematician, frontend developer and product designer." />
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@700;900&display=swap" />
-            <link rel="stylesheet" href={"./low.css"} />
-            <link rel="stylesheet" href={"./resume.css"} />
+            <link rel="stylesheet" href={"/low.css"} />
+            <link rel="stylesheet" href={"/resume.css"} />
             <title>{`Josemi Juanes, Ph.D.`}</title>
         </head>
         <body className="bg-white m-0 p-0 font-inter text-gray-900 leading-normal">
-            {props.page?.data?.layout === "default" && (
+            {(props.page?.data?.layout === "default" || props.page?.data?.layout === "post") && (
                 <div className="w-full maxw-2xl mx-auto px-6 md:px-0 py-16">
                     <div className="site-header flex flex-row items-center gap-4 mb-16">
-                        <MenuButton to="./" text="home" />
-                        <MenuButton to="./projects" text="projects" />
-                        <MenuButton to="./resume" text="resume" />
+                        <MenuButton to="/" text="about" />
+                        <MenuButton to="/projects" text="projects" />
+                        <MenuButton to="/posts" text="writings" />
+                        <MenuButton to="/resume" text="resume" />
                     </div>
-                    {props.pageContent}
+                    {props.page.data.layout === "default" && (
+                        <React.Fragment>
+                            {props.content}
+                        </React.Fragment>
+                    )}
+                    {props.page.data.layout === "post" && (
+                        <React.Fragment>
+                            <div className="mb-8">
+                                <div className="text-2xl font-bold">{props.page.data.title}</div>
+                                <div className="text-gray-600 text-sm">{props.page.data.date}</div>
+                            </div>
+                            <div className="markdown">
+                                {props.content}
+                            </div>
+                        </React.Fragment>
+                    )}
                     <div className="site-footer py-16">
                         <div className="flex gap-4 mb-8">
                             <ExternalLink to="https://github.com/jmjuanes" text="my github profile" />
@@ -87,51 +103,56 @@ const PageWrapper = props => (
             )}
             {props.page?.data?.layout === "empty" && (
                 <React.Fragment>
-                    {props.pageContent}
+                    {props.content}
                 </React.Fragment>
             )}
         </body>
     </html>
 );
 
-fetchImports().then(imports => {
+const readMarkdownFilesFromFolder = async folder => {
+    const files = (await fs.readdir(folder)).filter(file => path.extname(file) === ".mdx");
+    return Promise.all(files.map(file => {
+        const filePath = path.join(folder, file);
+        return fs.readFile(filePath, "utf8").then(fileContent => ({
+            ...matter(fileContent),
+            fileName: path.basename(file, ".mdx") + ".html",
+            url: `/${path.basename(file, ".mdx")}`,
+        }));
+    }));
+};
+
+fetchImports().then(async imports => {
     const [mdx] = imports;
     const buildInfo = getBuildInfo();
-    const inputFolder = path.join(process.cwd(), "pages");
     const outputFolder = path.join(process.cwd(), "www");
-    fs.readdir(inputFolder)
-        .then(files => files.filter(file => path.extname(file) === ".mdx"))
-        .then(files => {
-            return Promise.all(files.map(file => {
-                const filePath = path.join(inputFolder, file);
-                return fs.readFile(filePath, "utf8").then(fileContent => ({
-                    ...matter(fileContent),
-                    fileName: path.basename(file, ".mdx") + ".html",
-                }));
-            }));
-        })
-        .then(pages => {
-            return Promise.all(pages.map(page => {
-                return mdx.evaluate(page.content, {...runtime})
-                    .then(pageComponent => {
-                        const pageContent = React.createElement(PageWrapper, {
-                            pageContent: React.createElement(pageComponent.default, {
-                                page: page,
-                                components: {
-                                    Fragment: React.Fragment,
-                                    Icon: props => renderIcon(props.icon),
-                                    ExternalLink: ExternalLink,
-                                },
-                            }),
-                            page: page,
-                            build: buildInfo,
-                            // pages: pages,
-                        });
-                        return renderToStaticMarkup(pageContent);
-                    })
-                    .then(content => fs.writeFile(path.join(outputFolder, page.fileName), content, "utf8"))
-                    .then(() => console.log(`Saved file 'www/${page.fileName}'.`));
-            }));
-        })
-        .then(() => console.log("Build finished."));
+    const pages = await readMarkdownFilesFromFolder(path.join(process.cwd(), "pages"));
+    const posts = await readMarkdownFilesFromFolder(path.join(process.cwd(), "posts"));
+    await Promise.all([...pages, ...posts].map(page => {
+        return mdx.evaluate(page.content, {...runtime})
+            .then(pageComponent => {
+                const pageContent = React.createElement(PageWrapper, {
+                    content: React.createElement(pageComponent.default, {
+                        page: page,
+                        components: {
+                            Fragment: React.Fragment,
+                            Icon: props => renderIcon(props.icon),
+                            ExternalLink: ExternalLink,
+                        },
+                        pages: pages,
+                        posts: posts,
+                    }),
+                    page: page,
+                    build: buildInfo,
+                });
+                return renderToStaticMarkup(pageContent);
+            })
+            .then(content => {
+                return fs.writeFile(path.join(outputFolder, page.fileName), content, "utf8");
+            })
+            .then(() => {
+                console.log(`Saved file '${path.join("www", page.fileName)}'.`);
+            });
+    }));
+    console.log("Build finished");
 });
