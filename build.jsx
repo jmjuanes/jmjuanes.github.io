@@ -110,6 +110,39 @@ const PageWrapper = props => (
     </html>
 );
 
+// Page components
+const pageComponents = {
+    Fragment: React.Fragment,
+    Icon: props => renderIcon(props.icon),
+    ExternalLink: ExternalLink,
+    h1: props => <h1 className="text-xl font-bold mb-3 mt-4">{props.children}</h1>,
+    h2: props => <h2 className="text-lg font-bold mb-3 mt-4">{props.children}</h2>,
+    p: props => <p className="mt-0 mb-4">{props.children}</p>,
+    ul: props => <ul className="pl-8">{props.children}</ul>,
+    ol: props => <ol className="pl-8">{props.children}</ol>,
+    li: props => <li className="mb-2">{props.children}</li>,
+    code: props => <code className="font-mono text-sm font-bold">{"`"}{props.children}{"`"}</code>,
+    pre: props => {
+        const items = React.Children.toArray(props.children);
+        const code = items[0].props.children;
+        // const language = (items[0].props.className || "").replace("language-", "");
+        // if (props.language) {
+        //     return React.createElement("pre", {
+        //         className: className,
+        //         dangerouslySetInnerHTML: {
+        //             __html: hljs.highlight(props.children, {language: props.language}).value,
+        //         },
+        //     });
+        // }
+        // Default: render without code highlight
+        return (
+            <pre className="font-mono text-xs p-4 rounded-md bg-gray-200 overflow-auto mb-8">
+                {code}
+            </pre>
+        );
+    },
+};
+
 const readMarkdownFilesFromFolder = async folder => {
     const files = (await fs.readdir(folder)).filter(file => path.extname(file) === ".mdx");
     return Promise.all(files.map(file => {
@@ -134,11 +167,7 @@ fetchImports().then(async imports => {
                 const pageContent = React.createElement(PageWrapper, {
                     content: React.createElement(pageComponent.default, {
                         page: page,
-                        components: {
-                            Fragment: React.Fragment,
-                            Icon: props => renderIcon(props.icon),
-                            ExternalLink: ExternalLink,
-                        },
+                        components: pageComponents,
                         pages: pages,
                         posts: posts,
                     }),
