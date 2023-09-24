@@ -4,13 +4,22 @@ title: "Posts"
 ---
 
 <div className="">
-    {props.posts.sort((a,b) => a.data.date - b.data.date).map(post => (
-        <a key={post.data.date} href={post.url} className="group flex items-center w-full mb-2">
-            <div className="flex items-center text-xs text-gray-500 w-20">
+    {props.posts.map(post => (
+        <a key={post.data.date} href={post.url} className="group flex items-start w-full mb-2">
+            <div className="hidden md:block text-xs text-gray-500 w-32 py-1">
                 <span>{post.data.date}</span>
             </div>
-            <div className="font-medium">
-                <span>{post.data.title}</span>
+            <div className="md:pl-2">
+                <div className="font-medium">{post.data.title}</div>
+                {(post.data?.tags || []).length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-1">
+                        {post.data.tags.map(tag => (
+                            <span key={tag} className="rounded-xl bg-gray-100 px-1">
+                                <span className="text-2xs text-gray-700">{tag}</span>
+                            </span>
+                        ))}
+                    </div>
+                )}
             </div>
         </a>
     ))}

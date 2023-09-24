@@ -136,7 +136,7 @@ const pageComponents = {
         // }
         // Default: render without code highlight
         return (
-            <pre className="font-mono text-xs p-4 rounded-md bg-gray-200 overflow-auto mb-8">
+            <pre className="font-mono text-xs p-4 rounded-md bg-gray-100 overflow-auto mb-8">
                 {code}
             </pre>
         );
@@ -161,6 +161,11 @@ fetchImports().then(async imports => {
     const outputFolder = path.join(process.cwd(), "www");
     const pages = await readMarkdownFilesFromFolder(path.join(process.cwd(), "pages"));
     const posts = await readMarkdownFilesFromFolder(path.join(process.cwd(), "posts"));
+    // Sort posts by date
+    const getMs = date => (new Date(date)).getTime();
+    posts.sort((a, b) => {
+        return getMs(b.data.date) - getMs(a.data.date);
+    });
     await Promise.all([...pages, ...posts].map(page => {
         return mdx.evaluate(page.content, {...runtime})
             .then(pageComponent => {
