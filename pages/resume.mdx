@@ -1,7 +1,7 @@
 ---
 layout: "empty"
 title: "Resume"
-updatedAt: "2023/09/12"
+updated_at: "2023/09/24"
 email: "hello@josemi.xyz"
 url: "josemi.xyz"
 education:
@@ -19,7 +19,7 @@ education:
     endDate: "2013"
 experience:
   - company: "Zetta Genomics Europe S.L."
-    title: "Senior Frontend Developer"
+    title: "Frontend Tech Lead"
     keywords: ["Lit", "Bootstrap", "Data Visualization"]
     startDate: "09, 2021"
     endDate: null
@@ -50,6 +50,12 @@ sideProjects:
     website: "josemi.xyz/folio"
     repository: "@jmjuanes/folio"
     keywords: ["React", "SVG", "Sketching"]
+  - title: "Editable"
+    type: "App"
+    description: "An intuitive JavaScript notebook application that enables users to explore, prototype, and learn with ease."
+    website: "josemi.xyz/editable"
+    repository: "@jmjuanes/editable"
+    keywords: ["React", "JavaScript Notebooks"]
   - title: "lowCSS."
     type: "CSS Framework"
     description: "A low-level CSS utility framework for building elegant user interfaces using reusable and responsive building blocks."
@@ -126,7 +132,7 @@ export const ResumeInfoField = props => (
             <span>You can safely print this page using <b>Ctrl + P</b> (Windows or Linux) or <b>Cmd + P</b> (Mac).</span>
         </ResumeInfoField>
         <ResumeInfoField icon={(<Icon icon="calendar" />)}>
-            <span>This page was last updated on <b>{props.page.data.updatedAt}</b>.</span>
+            <span>This page was last updated on <b>{props.page.data.updated_at}</b>.</span>
         </ResumeInfoField>
     </div>
     <ResumeSeparator />
