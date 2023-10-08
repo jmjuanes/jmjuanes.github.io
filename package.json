@@ -8,21 +8,19 @@
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
         "prebuild": "rm -rf www && mkdir -p www",
-        "build": "babel-node --presets '@babel/preset-react' build.jsx",
+        "build": "redocus",
         "postbuild": "cp node_modules/lowcss/dist/low.css www/ && cp assets/* www/",
         "serve": "serve www"
     },
     "dependencies": {
-        "@babel/core": "^7.22.5",
-        "@babel/node": "^7.22.5",
-        "@babel/preset-react": "^7.22.5",
         "@josemi-icons/react": "^0.3.2",
         "@mdx-js/mdx": "^2.3.0",
-        "classnames": "^2.3.2",
         "lowcss": "^0.13.0",
-        "gray-matter": "^4.0.3",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "redocus": "^0.1.1"
+    },
+    "devDependencies": {
         "serve": "^14.2.1"
     }
 }
