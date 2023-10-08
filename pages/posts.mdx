@@ -4,7 +4,7 @@ title: "Posts"
 ---
 
 <div className="">
-    {props.posts.map(post => (
+    {props.site.getPosts(props).map(post => (
         <a key={post.data.date} href={post.url} className="group flex items-start w-full mb-2">
             <div className="hidden md:block text-xs text-gray-500 w-32 py-1">
                 <span>{post.data.date}</span>
