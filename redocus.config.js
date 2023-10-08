@@ -1,9 +1,6 @@
 const fs = require("node:fs/promises");
 const path = require("node:path");
 const React = require("react");
-const {renderToStaticMarkup} = require("react-dom/server");
-const runtime = require("react/jsx-runtime");
-const matter = require("gray-matter")
 const {renderIcon} = require("@josemi-icons/react/cjs");
 
 // Generate build info
@@ -17,18 +14,7 @@ const getBuildInfo = () => {
         timeZone: "CET",
     };
     // Return build info
-    return {
-        time: {
-            formatted: new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now),
-        },
-    };
-};
-
-// Fetch imports before running build script
-const fetchImports = () => {
-    return Promise.all([
-        import("@mdx-js/mdx"),
-    ]);
+    return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
 };
 
 // Menu button
@@ -78,7 +64,7 @@ const PageWrapper = props => (
                     </div>
                     {props.page.data.layout === "default" && (
                         <React.Fragment>
-                            {props.content}
+                            {props.element}
                         </React.Fragment>
                     )}
                     {props.page.data.layout === "post" && (
@@ -88,7 +74,7 @@ const PageWrapper = props => (
                                 <div className="text-gray-600 text-sm">{props.page.data.date}</div>
                             </div>
                             <div className="markdown">
-                                {props.content}
+                                {props.element}
                             </div>
                         </React.Fragment>
                     )}
@@ -97,13 +83,13 @@ const PageWrapper = props => (
                             <ExternalLink to="https://github.com/jmjuanes" text="my github profile" />
                         </div>
                         <div className="text-xs mb-1">Hand-crafted with care and love by <b>Josemi</b>.</div>
-                        <div className="text-xs text-gray-700">Last built on {props.build.time.formatted}.</div>
+                        <div className="text-xs text-gray-700">Last built on {props.site.build}.</div>
                     </div>
                 </div>
             )}
             {props.page?.data?.layout === "empty" && (
                 <React.Fragment>
-                    {props.content}
+                    {props.element}
                 </React.Fragment>
             )}
         </body>
@@ -143,50 +129,28 @@ const pageComponents = {
     },
 };
 
-const readMarkdownFilesFromFolder = async folder => {
-    const files = (await fs.readdir(folder)).filter(file => path.extname(file) === ".mdx");
-    return Promise.all(files.map(file => {
-        const filePath = path.join(folder, file);
-        return fs.readFile(filePath, "utf8").then(fileContent => ({
-            ...matter(fileContent),
-            fileName: path.basename(file, ".mdx") + ".html",
-            url: `/${path.basename(file, ".mdx")}`,
-        }));
-    }));
-};
-
-fetchImports().then(async imports => {
-    const [mdx] = imports;
-    const buildInfo = getBuildInfo();
-    const outputFolder = path.join(process.cwd(), "www");
-    const pages = await readMarkdownFilesFromFolder(path.join(process.cwd(), "pages"));
-    const posts = await readMarkdownFilesFromFolder(path.join(process.cwd(), "posts"));
-    // Sort posts by date
-    const getMs = date => (new Date(date)).getTime();
-    posts.sort((a, b) => {
-        return getMs(b.data.date) - getMs(a.data.date);
-    });
-    await Promise.all([...pages, ...posts].map(page => {
-        return mdx.evaluate(page.content, {...runtime})
-            .then(pageComponent => {
-                const pageContent = React.createElement(PageWrapper, {
-                    content: React.createElement(pageComponent.default, {
-                        page: page,
-                        components: pageComponents,
-                        pages: pages,
-                        posts: posts,
-                    }),
-                    page: page,
-                    build: buildInfo,
-                });
-                return renderToStaticMarkup(pageContent);
-            })
-            .then(content => {
-                return fs.writeFile(path.join(outputFolder, page.fileName), content, "utf8");
-            })
-            .then(() => {
-                console.log(`Saved file '${path.join("www", page.fileName)}'.`);
+module.exports = {
+    pathPrefix: "",
+    input: "./pages",
+    output: "./www",
+    siteMetadata: {
+        build: getBuildInfo(),
+        getPosts: props => {
+            const getMs = date => (new Date(date)).getTime();
+            const posts = props.pages.filter(p => p.data.layout === "post");
+            return posts.sort((a, b) => {
+                return getMs(b.data.date) - getMs(a.data.date);
             });
-    }));
-    console.log("Build finished");
-});
+        },
+    },
+    pageComponents: pageComponents,
+    pageWrapper: PageWrapper,
+    createPages: async ({actions}) => {
+        const postsFolder = path.join(process.cwd(), "posts");
+        const posts = await fs.readdir(postsFolder, "utf8");
+        for (let index = 0; index < posts.length; index++) {
+            const post = posts[index];
+            await actions.createPageFromMarkdownFile(path.join(postsFolder, post));
+        }
+    },
+};
