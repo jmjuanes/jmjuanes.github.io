@@ -1,5 +1,5 @@
 {
-    "name": "josemi.xyz",
+    "name": "josemi",
     "description": "Content of my personal website",
     "version": "0.1.0",
     "private": true,
@@ -8,19 +8,15 @@
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
         "prebuild": "rm -rf www && mkdir -p www",
-        "build": "redocus",
-        "postbuild": "cp node_modules/lowcss/dist/low.css www/ && cp assets/* www/",
+        "build": "node ./scripts/build.mjs",
+        "postbuild": "cp node_modules/lowcss/low.css www/ && cp assets/* www/",
         "serve": "serve www"
     },
     "dependencies": {
-        "@josemi-icons/react": "^0.3.2",
-        "@mdx-js/mdx": "^2.3.0",
-        "lowcss": "^0.13.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "redocus": "^0.1.1"
-    },
-    "devDependencies": {
+        "@josemi-icons/svg": "^0.6.1",
+        "front-matter": "^4.0.2",
+        "lowcss": "^0.23.1",
+        "mikel": "^0.9.0",
         "serve": "^14.2.1"
     }
 }
