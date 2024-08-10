@@ -10,7 +10,7 @@ const readJsonSync = (jsonPath, encoding = "utf8") => {
 // globals
 const input = path.join(process.cwd(), "pages");
 const output = path.join(process.cwd(), "www");
-const template = fs.readFileSync(path.join(process.cwd(), "template.html"), "utf8");
+const template = fs.readFileSync(path.join(process.cwd(), "node_modules", "@josemi-ui", "brand", "template.html"), "utf8");
 const pkg = readJsonSync(path.join(process.cwd(), "package.json"));
 
 // get pages from input folder
@@ -32,25 +32,11 @@ const getPages = () => {
 // global data object
 const globalData = {
     site: {
-        title: pkg.name,
-        description: "",
+        title: "Josemi Juanes, Ph.D.",
+        description: "Hey! I'm Josemi, a mathematician, react developer, and minimal design lover.",
         url: "https://josemi.xyz",
         stylesheets: ["/low.css"],
-        navbar: {
-            subdomain: "folio",
-            links: [
-                {text: "home", link: "/"},
-                {text: "pricing", link: "/"},
-                {text: "releases", link: "/"},
-            ],
-            actions: [
-                {text: "Try it", link: "/"},
-            ],
-        },
-        brand: [
-            {text: "josemi", link: "/"},
-            {text: "folio", link: "/"},
-        ],
+        navbar: {},
         footer: "Made with love by Josemi."
     },
     page: null,

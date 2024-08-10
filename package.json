@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "@josemi-icons/svg": "^0.6.1",
+        "@josemi-ui/brand": "^0.0.1",
         "lowcss": "^0.23.1",
         "mikel": "^0.9.2"
     }
