@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" style="overscroll-behavior-x:none;">
+<head>
+    <meta charSet="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="title" content="{{site.title}}">
+    <meta name="description" content="{{site.description}}">
+    <meta property="og:site_name" content="josemi.xyz">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{site.url}}">
+    <meta property="og:description" content="{{site.description}}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="/low.css">
+    <title>{{page.data.title}} - josemi.xyz</title>
+</head>
+<body class="m-0 p-0 font-inter leading-normal text-neutral-900 bg-white">
+    <div class="w-full max-w-7xl px-10 mx-auto">
+        <header class="hidden py-16 flex gap-2 text-4xl sm:text-5xl font-black leading-none">
+            <div>/</div>
+            <a href="/" class="block hover:underline text-neutral-950">josemi</a>
+        </header>
+        <main class="py-0">
+            {{!page.content}}
+        </main>
+        <footer class="py-20">
+            <div class="text-base font-bold">hello@josemi.xyz</div>
+        </footer>
+    </div>
+</body>
+</html>

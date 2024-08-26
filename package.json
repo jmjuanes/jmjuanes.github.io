@@ -1,24 +1,21 @@
 {
     "name": "josemi.xyz",
-    "description": "Content of my personal website",
-    "version": "0.1.0",
+    "description": "My personal portfolio",
+    "version": "0.2.0",
+    "type": "module",
     "private": true,
     "license": "MIT",
     "homepage": "https://www.josemi.xyz/",
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
-        "prebuild": "rm -rf www && mkdir -p www",
-        "build": "redocus",
-        "postbuild": "cp node_modules/lowcss/dist/low.css www/ && cp assets/* www/",
+        "build": "mkdir -p www && node scripts/build.js",
+        "postbuild": "cp node_modules/lowcss/low.css www/ && cp assets/* www/",
+        "clean": "rm -rf www",
         "serve": "serve www"
     },
     "dependencies": {
-        "@josemi-icons/react": "^0.3.2",
-        "@mdx-js/mdx": "^2.3.0",
-        "lowcss": "^0.13.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "redocus": "^0.1.1"
+        "lowcss": "^0.23.1",
+        "mikel": "^0.10.0"
     },
     "devDependencies": {
         "serve": "^14.2.1"
