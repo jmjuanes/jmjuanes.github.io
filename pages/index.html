@@ -1,0 +1,35 @@
+---
+title: "about me"
+layout: "default"
+links:
+  - text: "Resume"
+    url: "https://resume.josemi.xyz"
+  - text: "GitHub"
+    url: "https://github.com/jmjuanes"
+---
+<div class="pt-12 pb-12">
+    <div class="text-4xl sm:text-5xl font-extrabold text-neutral-950">
+        <span>👋 hi, I'm Josemi</span>
+    </div>
+    <div class="text-xl sm:text-2xl text-neutral-950 font-medium">
+        <span>React developer and minimal design lover.</span>
+    </div>
+    <div class="mt-8 text-base leading-relaxed max-w-2xl">
+        <span>I am a passionate <b>mathematician</b> turned <b>React</b> developer. </span>
+        <span>I combine my mathematical background with my love for design to craft minimal, beautiful, and performant user interfaces.</span>
+    </div>
+    {{#if page.data.links}}
+    <div class="mt-6 flex items-center gap-6">
+        {{#each page.data.links}}
+        <a href="{{url}}" target="_blank" class="flex items-center gap-1 hover:underline font-medium text-neutral-900">
+            <div class="flex items-center text-lg">
+                <svg width="1em" height="1em">
+                    <use xlink:href="/sprite.svg#arrow-up-right"></use>
+                </svg>
+            </div>
+            <span>{{text}}</span>
+        </a>
+        {{/each}}
+    </div>
+    {{/if}}
+</div>
