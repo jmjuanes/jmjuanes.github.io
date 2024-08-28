@@ -14,17 +14,25 @@
     <title>{{page.data.title}} - josemi.xyz</title>
 </head>
 <body class="m-0 p-0 font-inter leading-normal text-neutral-900 bg-white">
-    <div class="w-full max-w-7xl px-10 mx-auto">
-        <header class="hidden py-16 flex gap-2 text-4xl sm:text-5xl font-black leading-none">
-            <div>/</div>
-            <a href="/" class="block hover:underline text-neutral-950">josemi</a>
+    <div class="w-full max-w-3xl mx-auto px-6 py-16 min-h-screen flex flex-col justify-center">
+        {{#ne page.data.layout "empty"}}
+        <header class="flex flex-row items-center gap-4 mb-16">
+            {{#each site.navbar.links}}
+            <a href="{{href}}" class="py-1 px-0 text-neutral-700 hover:text-neutral-900 hover:underline">
+                <span>{{text}}</span>
+            </a>
+            {{/each}}
         </header>
+        {{/ne}}
         <main class="py-0">
             {{!page.content}}
         </main>
-        <footer class="py-20">
-            <div class="text-base font-bold">hello@josemi.xyz</div>
+        {{#ne page.data.layout "empty"}}
+        <footer class="pt-20 pb-4">
+            <div class="mb-4 text-xl font-bold">hello@josemi.xyz</div>
+            <div class="text-neutral-700 text-xs">Last built on {{site.buildInfo}}.</div>
         </footer>
+        {{/ne}}
     </div>
 </body>
 </html>
