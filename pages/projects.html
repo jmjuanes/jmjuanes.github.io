@@ -1,0 +1,80 @@
+---
+layout: "default"
+title: "my projects"
+projects: 
+  - title: "online tools"
+    icon: "component"
+    items:
+      - title: "folio."
+        description: "A minimalistic whiteboard for sketching, annotating and prototyping."
+        keywords: ["app", "react", "svg", "sketching"]
+        url: "https://folio.josemi.xyz"
+  - title: "design and ui"
+    icon: "tools"
+    items:
+      - title: "josemi/icons"
+        description: "A collection of hand-made and open source SVG icons for web projects."
+        keywords: ["icons", "svg"]
+        url: "https://icons.josemi.xyz"
+  - title: "css toolkits"
+    icon: "css"
+    items:
+      - title: "lowcss."
+        description: "A low-level CSS utility framework for building elegant user interfaces using reusable and responsive building blocks."
+        keywords: ["sass", "css utilities"]
+        url: "https://low.josemi.xyz"
+      - title: "siimple."
+        description: "The minimal and themeable CSS toolkit for flat and clean designs."
+        keywords: ["css", "css toolkit", "ui components"]
+        url: "https://www.siimple.xyz"
+  - title: "javascript packages"
+    icon: "javascript"
+    items:
+      - title: "mikel"
+        description: "Micro templating library for Node.js and browser with zero dependencies."
+        keywords: ["js", "templating", "mustache"]
+        url: "https://github.com/jmjuanes/mikel"
+      - title: "codecake"
+        description: "A tiny and lightweight code editor for web applications in under 200 lines of code."
+        keywords: ["js", "code-editor", "syntax-highlight"]
+        url: "https://www.josemi.xyz/codecake"
+---
+<div class="">
+    <div class="font-bold text-3xl text-neutral-950 mb-3">
+        <span>my projects</span>
+    </div>
+    <div class="mb-12 max-w-xl">
+        <span>I spend most of my free-time working on open source projects. </span>
+        <span>You can find all my projects on my <b>GitHub</b> profile.</span>
+    </div>
+    {{#each page.data.projects}}
+    <div data-group="{{title}}" class="mb-16">
+        <div class="flex items-center gap-1 mb-6 select-none text-neutral-700">
+            <div class="flex items-center text-xl">
+                <svg width="1em" height="1em">
+                    <use xlink:href="/sprite.svg#{{icon}}"></use>
+                </svg>
+            </div>
+            <div class="text-2xl leading-none">{{title}}</div>
+        </div>
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4">-->
+        <div class="flex flex-col gap-6">
+        {{#each items}}
+            <a href="{{url}}" target="_blank" class="no-underline flex flex-col">
+                <div class="font-bold text-neutral-950 text-xl leading-none">
+                    <span>{{title}}</span>
+                </div>
+                <div class="mt-2 text-base text-neutral-800">
+                    <span>{{description}}</span>
+                </div>
+                <div class="mt-4 flex gap-2 flex-wrap">
+                {{#each keywords}}
+                    <div class="rounded-full px-2 py-1 bg-neutral-100 text-2xs text-neutral-800">{{.}}</div>
+                {{/each}}
+                </div>
+            </a>
+        {{/each}}
+        </div>
+    </div>
+    {{/each}}
+</div>
