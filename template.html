@@ -14,9 +14,9 @@
     <title>{{page.data.title}} - josemi.xyz</title>
 </head>
 <body class="m-0 p-0 font-inter leading-normal text-neutral-900 bg-white">
-    <div class="w-full max-w-3xl mx-auto px-6 py-16 min-h-screen flex flex-col justify-center">
+    <div class="w-full max-w-3xl mx-auto px-8">
         {{#ne page.data.layout "empty"}}
-        <header class="flex flex-row items-center gap-4 mb-16">
+        <header class="flex flex-row items-center gap-4 py-16 shrink-0">
             {{#each site.navbar.links}}
             <a href="{{href}}" class="py-1 px-0 text-neutral-700 hover:text-neutral-900 hover:underline">
                 <span>{{text}}</span>
@@ -24,11 +24,24 @@
             {{/each}}
         </header>
         {{/ne}}
+        {{#eq page.data.layout "default"}}
         <main class="py-0">
             {{!page.content}}
         </main>
+        {{/eq}}
+        {{#eq page.data.layout "post"}}
+        <main class="py-0">
+            <div class="mb-12">
+                <div class="text-2xl font-bold">{{page.data.title}}</div>
+                <div class="text-neutral-700 text-sm">{{page.data.date}}</div>
+            </div>
+            <div class="markup">
+                {{!page.content}}
+            </div>
+        </main>
+        {{/eq}}
         {{#ne page.data.layout "empty"}}
-        <footer class="pt-20 pb-4">
+        <footer class="py-20">
             <div class="mb-4 text-xl font-bold">hello@josemi.xyz</div>
             <div class="text-neutral-700 text-xs">Last built on {{site.buildInfo}}.</div>
         </footer>
