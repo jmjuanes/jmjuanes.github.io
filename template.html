@@ -14,7 +14,9 @@
     <title>{{page.data.title}} - josemi.xyz</title>
 </head>
 <body class="m-0 p-0 font-inter leading-normal text-neutral-900 bg-white">
-    <div class="w-full max-w-3xl mx-auto px-8">
+    <div class="w-full max-w-3xl mx-auto px-8 py-20 flex flex-col justify-center min-h-screen">
+        {{!page.content}}
+        <!--
         {{#ne page.data.layout "empty"}}
         <header class="flex flex-row items-center gap-4 py-16 shrink-0">
             {{#each site.navbar.links}}
@@ -46,6 +48,7 @@
             <div class="text-neutral-700 text-xs">Last built on {{site.buildInfo}}.</div>
         </footer>
         {{/ne}}
+        -->
     </div>
 </body>
 </html>
