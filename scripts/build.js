@@ -38,18 +38,6 @@ const getPages = () => {
         });
 };
 
-// get data
-const getData = () => {
-    const dataFolder = path.join(process.cwd(), "data");
-    const dataEntries = fs.readdirSync(dataFolder, "utf8")
-        .filter(file => path.extname(file) === ".yaml")
-        .map(file => path.join(dataFolder, file))
-        .map(file => {
-            return [path.basename(file, ".yaml"), mikel.yaml(fs.readFileSync(file, "utf8"))];
-        });
-    return Object.fromEntries(dataEntries);
-};
-
 // get posts
 const getPosts = () => {
     const postsFolder = path.join(process.cwd(), "posts");
@@ -91,12 +79,11 @@ const globalData = {
     },
     page: null,
     pages: getPages(),
-    posts: getPosts(),
-    data: getData(),
+    // posts: getPosts(),
 };
 
 // build stuff
-[...globalData.pages, ...globalData.posts].forEach(page => {
+globalData.pages.forEach(page => {
     console.log(`[build] save ${page.url}`);
     globalData.page = page; // set current page in global data object
     globalData.page.content = mikel(page.content, globalData); // compile page content
