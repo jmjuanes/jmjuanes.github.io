@@ -19,7 +19,6 @@
     },
     "devDependencies": {
         "marked": "^14.1.0",
-        "mikel": "^0.10.0",
-        "serve": "^14.2.1"
+        "mikel": "^0.10.0"
     }
 }
