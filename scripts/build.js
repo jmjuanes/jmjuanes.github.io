@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as marked from "marked";
+import fm from "front-matter";
 import mikel from "mikel";
 
 // globals
@@ -28,11 +29,11 @@ const getPages = () => {
         .filter(file => path.extname(file) === ".html")
         .map(file => path.join(input, file))
         .map(file => {
-            const content = mikel.frontmatter(fs.readFileSync(file, "utf8"));
+            const content = fm(fs.readFileSync(file, "utf8"));
             return {
                 name: path.basename(file, ".html"),
                 url: path.join("/", path.basename(file)),
-                data: content.data,
+                data: content.attributes,
                 content: content.body,
             };
         });
@@ -45,11 +46,11 @@ const getPosts = () => {
         .filter(file => path.extname(file) === ".md")
         .map(file => path.join(postsFolder, file))
         .map(file => {
-            const content = mikel.frontmatter(fs.readFileSync(file, "utf8"));
+            const content = fm(fs.readFileSync(file, "utf8"));
             return {
                 name: path.basename(file, ".md"),
                 url: path.join("/", path.basename(file, ".md") + ".html"),
-                data: content.data,
+                data: content.attributes,
                 content: marked.parse(content.body),
             };
         });
