@@ -64,19 +64,18 @@ const globalData = {
         url: "https://www.josemi.xyz",
         navbar: {
             links: [
-                {text: "about", href: "/"},
-                {text: "projects", href: "/projects"},
-                {text: "notes", href: "/notes"},
-                // {text: "resume", href: "/resume"},
+                // {text: "About", url: "/"},
+                // {text: "Notes", url: "/notes"},
+                {text: "Resume", href: "https://resume.josemi.xyz"},
             ],
         },
         footer: {
-            text: "Made with love by Josemi.",
+            text: "Hand-crafted with care by <b>Josemi</b>.",
             links: [
-                {text: "GitHub", href: "https://github.com/jmjuanes"},
+                {text: "GitHub", url: "https://github.com/jmjuanes"},
             ],
         },
-        buildInfo: getBuildInfo(),
+        build: getBuildInfo(),
     },
     page: null,
     pages: getPages(),
@@ -87,7 +86,16 @@ const globalData = {
 globalData.pages.forEach(page => {
     console.log(`[build] save ${page.url}`);
     globalData.page = page; // set current page in global data object
-    globalData.page.content = mikel(page.content, globalData); // compile page content
-    const content = mikel(template, globalData); // compile template
+    // globalData.page.content = mikel(page.content, globalData); // compile page content
+    const content = mikel(template, globalData, {
+        functions: {
+            icon: args => {
+                return `<svg width="1em" height="1em"><use xlink:href="sprite.svg#${args.opt.icon}"></use></svg>`;
+            },
+        },
+        partials: {
+            content: page.content,
+        },
+    });
     fs.writeFileSync(path.join(output, page.url), content, "utf8");
 });
