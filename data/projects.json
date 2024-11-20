@@ -1,0 +1,26 @@
+[
+    {
+        "title": "folio",
+        "description": "A digital whiteboard for sketching, annotating and prototyping.",
+        "url": "https://folio.josemi.xyz",
+        "githubUrl": "https://github.com/jmjuanes/folio"
+    },
+    {
+        "title": "lowcss",
+        "description": "A low-level functional CSS toolkit for building modern and responsive websites.",
+        "url": "https://low.josemi.xyz",
+        "githubUrl": "https://github.com/jmjuanes/lowcss"
+    },
+    {
+        "title": "josemi/icons",
+        "description": "An open source and hand-crafted SVG icons collection.",
+        "url": "https://icons.josemi.xyz",
+        "githubUrl": "https://github.com/jmjuanes/icons"
+    },
+    {
+        "title": "mikel",
+        "description": "Micro templating library with zero dependencies.",
+        "url": "https://github.com/jmjuanes/mikel",
+        "githubUrl": "https://github.com/jmjuanes/mikel"
+    }
+]

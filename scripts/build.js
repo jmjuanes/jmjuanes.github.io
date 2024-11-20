@@ -23,6 +23,18 @@ const getBuildInfo = () => {
     return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
 };
 
+// read /data folder
+const getData = () => {
+    const dataFolder = path.join(process.cwd(), "data");
+    const files = fs.readdirSync(dataFolder, "utf8")
+        .filter(file => path.extname(file) === ".json")
+        .map(file => path.join(dataFolder, file))
+        .map(file => {
+            return [path.basename(file, ".json"), JSON.parse(fs.readFileSync(file, "utf8"))];
+        });
+    return Object.fromEntries(files);
+};
+
 // get pages from input folder
 const getPages = () => {
     return fs.readdirSync(input, "utf8")
@@ -77,6 +89,7 @@ const globalData = {
         },
         build: getBuildInfo(),
     },
+    data: getData(),
     page: null,
     pages: getPages(),
     // posts: getPosts(),
