@@ -14,3 +14,12 @@ layout: "default"
         <span>or read my <a class="hover:underline font-bold" href="https://resume.josemi.xyz">public resume</a>.</span>
     </div>
 </header>
+<section class="">
+    <div class="text-3xl font-bold mb-2">Open Source Work</div>
+    {{#each data.projects}}
+    <div class="mb-3">
+        <a class="block text-2xl font-medium hover:font-bold underline hover:text-neutral-950" href="{{url}}" target="_blank">{{title}}</a>
+        <div class="text-base text-neutral-800">{{description}}</div>
+    </div>
+    {{/each}}
+</section>
