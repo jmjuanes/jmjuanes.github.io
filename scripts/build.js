@@ -5,7 +5,6 @@ import fm from "front-matter";
 import mikel from "mikel";
 
 // globals
-const input = path.join(process.cwd(), "pages");
 const output = path.join(process.cwd(), "www");
 const template = fs.readFileSync(path.join(process.cwd(), "template.html"), "utf8");
 
@@ -24,11 +23,10 @@ const getBuildInfo = () => {
 };
 
 // read /data folder
-const getData = () => {
-    const dataFolder = path.join(process.cwd(), "data");
-    const files = fs.readdirSync(dataFolder, "utf8")
+const getData = folder => {
+    const files = fs.readdirSync(folder, "utf8")
         .filter(file => path.extname(file) === ".json")
-        .map(file => path.join(dataFolder, file))
+        .map(file => path.join(folder, file))
         .map(file => {
             return [path.basename(file, ".json"), JSON.parse(fs.readFileSync(file, "utf8"))];
         });
@@ -36,36 +34,24 @@ const getData = () => {
 };
 
 // get pages from input folder
-const getPages = () => {
-    return fs.readdirSync(input, "utf8")
-        .filter(file => path.extname(file) === ".html")
-        .map(file => path.join(input, file))
+const getPages = (folder, type, parseContent) => {
+    return fs.readdirSync(folder, "utf8")
+        .filter(file => path.extname(file) === type)
+        .map(file => path.join(folder, file))
         .map(file => {
             const content = fm(fs.readFileSync(file, "utf8"));
             return {
-                name: path.basename(file, ".html"),
-                url: path.join("/", path.basename(file)),
+                name: path.basename(file, type),
+                url: path.join("/", path.basename(file, type) + ".html"),
                 data: content.attributes,
-                content: content.body,
+                content: parseContent(content.body),
             };
         });
 };
 
-// get posts
-const getPosts = () => {
-    const postsFolder = path.join(process.cwd(), "posts");
-    return fs.readdirSync(postsFolder, "utf8")
-        .filter(file => path.extname(file) === ".md")
-        .map(file => path.join(postsFolder, file))
-        .map(file => {
-            const content = fm(fs.readFileSync(file, "utf8"));
-            return {
-                name: path.basename(file, ".md"),
-                url: path.join("/", path.basename(file, ".md") + ".html"),
-                data: content.attributes,
-                content: marked.parse(content.body),
-            };
-        });
+// read a partial file
+const readPartial = (folder = "partials", file) => {
+    return fs.readFileSync(path.join(process.cwd(), folder, file + ".html"), "utf8");
 };
 
 // global data object
@@ -76,8 +62,7 @@ const globalData = {
         url: "https://www.josemi.xyz",
         navbar: {
             links: [
-                // {text: "About", url: "/"},
-                // {text: "Notes", url: "/notes"},
+                {text: "Notes", url: "/notes"},
                 {text: "Resume", href: "https://resume.josemi.xyz"},
             ],
         },
@@ -89,17 +74,16 @@ const globalData = {
         },
         build: getBuildInfo(),
     },
-    data: getData(),
+    data: getData(path.join(process.cwd(), "data")),
+    pages: getPages(path.join(process.cwd(), "pages"), ".html", c => c),
+    posts: getPages(path.join(process.cwd(), "posts"), ".md", marked.parse),
     page: null,
-    pages: getPages(),
-    // posts: getPosts(),
 };
 
 // build stuff
-globalData.pages.forEach(page => {
+[...globalData.pages, ...globalData.posts].forEach(page => {
     console.log(`[build] save ${page.url}`);
     globalData.page = page; // set current page in global data object
-    // globalData.page.content = mikel(page.content, globalData); // compile page content
     const content = mikel(template, globalData, {
         functions: {
             icon: args => {
@@ -108,6 +92,9 @@ globalData.pages.forEach(page => {
         },
         partials: {
             content: page.content,
+            layout: readPartial("layouts", page.data.layout || "default"),
+            postLink: readPartial("partials", "post-link"),
+            pageHeader: readPartial("partials", "page-header"),
         },
     });
     fs.writeFileSync(path.join(output, page.url), content, "utf8");

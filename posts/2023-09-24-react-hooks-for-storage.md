@@ -1,6 +1,7 @@
 ---
 layout: "post"
-title: "Creating React Hooks for Local and Session Storage"
+title: "React Hooks for Local and Session Storage"
+description: "A guide for creating React Hooks to access to the Local and Session Storage of the browser."
 date: "September 24, 2023"
 tags: ["React", "React Hooks", "Local Storage", "Session Storage"]
 ---
