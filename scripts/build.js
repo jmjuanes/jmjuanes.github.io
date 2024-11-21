@@ -63,7 +63,7 @@ const globalData = {
         navbar: {
             links: [
                 {text: "Notes", url: "/notes"},
-                {text: "Resume", href: "https://resume.josemi.xyz"},
+                {text: "Resume", url: "https://resume.josemi.xyz"},
             ],
         },
         footer: {
