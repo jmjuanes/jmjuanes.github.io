@@ -76,7 +76,7 @@ const globalData = {
     },
     data: getData(path.join(process.cwd(), "data")),
     pages: getPages(path.join(process.cwd(), "pages"), ".html", c => c),
-    posts: getPages(path.join(process.cwd(), "notes"), ".md", marked.parse),
+    posts: getPages(path.join(process.cwd(), "posts"), ".md", marked.parse),
     page: null,
 };
 
