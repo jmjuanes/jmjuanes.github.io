@@ -1,0 +1,9 @@
+---
+layout: "default"
+title: "Notes"
+description: "A collection of notes on various topics."
+---
+{{>pageHeader title=page.data.title description=page.data.description}}
+{{#each posts}}
+{{>postLink url=url title=data.title description=data.description date=data.date}}
+{{/each}}
