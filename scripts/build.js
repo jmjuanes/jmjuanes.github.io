@@ -42,7 +42,7 @@ const getPages = (folder, type, parseContent) => {
             const content = fm(fs.readFileSync(file, "utf8"));
             return {
                 name: path.basename(file, type),
-                url: path.join("/", path.basename(file, type) + ".html"),
+                url: path.join("/", path.basename(file, type)),
                 data: content.attributes,
                 content: parseContent(content.body),
             };
@@ -82,7 +82,7 @@ const globalData = {
 
 // build stuff
 [...globalData.pages, ...globalData.posts].forEach(page => {
-    console.log(`[build] save ${page.url}`);
+    console.log(`[build] save ${page.url}.html`);
     globalData.page = page; // set current page in global data object
     const content = mikel(template, globalData, {
         functions: {
@@ -97,5 +97,5 @@ const globalData = {
             pageHeader: readPartial("partials", "page-header"),
         },
     });
-    fs.writeFileSync(path.join(output, page.url), content, "utf8");
+    fs.writeFileSync(path.join(output, page.url + ".html"), content, "utf8");
 });
