@@ -62,8 +62,8 @@ const globalData = {
         url: "https://www.josemi.xyz",
         navbar: {
             links: [
-                {text: "Notes", url: "/notes"},
-                {text: "Resume", url: "https://resume.josemi.xyz"},
+                {text: "notes", url: "/notes"},
+                // {text: "Resume", url: "https://resume.josemi.xyz"},
             ],
         },
         footer: {
