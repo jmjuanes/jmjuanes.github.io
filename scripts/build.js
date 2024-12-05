@@ -22,6 +22,13 @@ const getBuildInfo = () => {
     return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
 };
 
+// sort posts by date
+const sortPosts = posts => {
+    return posts.sort((a, b) => {
+        return new Date(b.data.date) - new Date(a.data.date);
+    });
+};
+
 // read /data folder
 const getData = folder => {
     const files = fs.readdirSync(folder, "utf8")
@@ -76,7 +83,7 @@ const globalData = {
     },
     data: getData(path.join(process.cwd(), "data")),
     pages: getPages(path.join(process.cwd(), "pages"), ".html", c => c),
-    posts: getPages(path.join(process.cwd(), "posts"), ".md", marked.parse),
+    posts: sortPosts(getPages(path.join(process.cwd(), "posts"), ".md", marked.parse)),
     page: null,
 };
 
