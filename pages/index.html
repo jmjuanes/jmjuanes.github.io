@@ -17,12 +17,12 @@ layout: "default"
 <section class="mb-16">
     <div class="text-3xl font-bold mb-2">Open Source Work</div>
     {{#each data.projects}}
-    {{>postLink url=url title=title description=description}}
+    {{>link url=url title=title description=description}}
     {{/each}}
 </section>
 <section class="">
     <div class="text-3xl font-bold mb-2">Notes</div>
     {{#each posts limit=5}}
-    {{>postLink url=url title=data.title description=data.description date=data.date}}
+    {{>link url=url title=data.title description=data.description date=data.date}}
     {{/each}}
 </section>
