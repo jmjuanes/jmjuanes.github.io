@@ -6,7 +6,7 @@ import mikel from "mikel";
 
 // globals
 const output = path.join(process.cwd(), "www");
-const template = fs.readFileSync(path.join(process.cwd(), "template.html"), "utf8");
+const layout = fs.readFileSync(path.join(process.cwd(), "layout.html"), "utf8");
 
 // generate build info
 const getBuildInfo = () => {
@@ -84,7 +84,7 @@ const globalData = {
 [...globalData.pages, ...globalData.posts].forEach(page => {
     console.log(`[build] save ${page.url}.html`);
     globalData.page = page; // set current page in global data object
-    const content = mikel(template, globalData, {
+    const content = mikel(layout, globalData, {
         functions: {
             icon: args => {
                 return `<svg width="1em" height="1em"><use xlink:href="sprite.svg#${args.opt.icon}"></use></svg>`;
@@ -92,9 +92,8 @@ const globalData = {
         },
         partials: {
             content: page.content,
-            layout: readPartial("layouts", page.data.layout || "default"),
-            postLink: readPartial("partials", "post-link"),
-            pageHeader: readPartial("partials", "page-header"),
+            postLink: readPartial("components", "link"),
+            link: readPartial("components", "link"),
         },
     });
     fs.writeFileSync(path.join(output, page.url + ".html"), content, "utf8");
