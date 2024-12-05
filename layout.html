@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="overscroll-behavior-x:none;">
+<html lang="en" style="overscroll-behavior-x:none;" class="bg-neutral-50">
 <head>
     <meta charSet="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="/low.css">
     <title>{{page.data.title}} - josemi.xyz</title>
 </head>
-<body class="m-0 p-0 font-inter leading-normal text-neutral-900 bg-white">
+<body class="m-0 p-0 font-inter leading-normal text-neutral-900">
     <header class="w-full max-w-3xl mx-auto px-6 py-8 flex items-center justify-between">
-        <a class="flex items-center hover:underline font-medium text-xl" href="/">josemi.xyz</a>
+        <a class="flex items-center hover:underline font-medium text-xl" href="/">josemi</a>
         {{#if site.navbar.links}}
         <div class="flex items-center gap-4">
             {{#each site.navbar.links}}
@@ -25,7 +25,22 @@
         {{/if}}
     </header>
     <main class="w-full max-w-3xl mx-auto px-6 py-10">
-        {{>layout}}
+        {{#eq page.data.layout "post"}}
+        <header class="mb-12">
+            <div class="text-5xl font-bold leading-tight mb-1">{{page.data.title}}</div>
+            <div class="text-2xl font-medium text-neutral-800 mb-2">{{page.data.description}}</div>
+            <div class="text-base text-neutral-700">{{page.data.date}}</div>
+        </header>
+        {{/eq}}
+        {{#eq page.data.layout "page"}}
+        <header class="mb-12">
+            <div class="text-5xl font-bold leading-tight mb-1">{{page.data.title}}</div>
+            <div class="text-2xl font-medium text-neutral-800 mb-2">{{page.data.description}}</div>
+        </header>
+        {{/eq}}
+        <article class="block markup">
+            {{>content}}
+        </article>
     </main>
     <footer class="w-full max-w-3xl mx-auto px-6 py-10 border-t border-neutral-200">
         <div class="md:flex items-center justify-between mb-2">
