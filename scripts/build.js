@@ -76,7 +76,8 @@ const globalData = {
         footer: {
             text: "Hand-crafted with care by <b>Josemi</b>.",
             links: [
-                {text: "GitHub", url: "https://github.com/jmjuanes"},
+                {text: "github", url: "https://github.com/jmjuanes"},
+                {text: "linkedin", url: "https://www.linkedin.com/in/jmjuanes"},
             ],
         },
         build: getBuildInfo(),

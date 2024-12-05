@@ -44,19 +44,26 @@
             {{>content}}
         </article>
     </main>
-    <footer class="w-full max-w-2xl mx-auto px-6 py-10 border-t border-neutral-200">
-        <div class="md:flex items-center justify-between mb-2">
-            <div class="text-sm">{{!site.footer.text}}</div>
-            {{#if site.footer.links}}
-            <div class="flex items-center gap-2 text-sm">
-                {{#each site.footer.links}}
-                <a class="hover:underline text-neutral-700 font-medium flex items-center gap-1" href="{{url}}" target="_blank">
-                    <span>{{text}}</span>
-                </a>
-                {{/each}}
-            </div>
-            {{/if}}
+    {{#if site.socials}}
+    <div class="w-full max-w-2xl mx-auto px-6 py-12">
+        <div class="text-xl font-bold mb-4">Let's Connect</div>
+        <div class="mb-4">
+            If you have any questions, feedback, or just want to chat, feel free to reach out to me on any of the following platforms:
         </div>
+    </div>
+    {{/if}}
+    <footer class="w-full max-w-2xl mx-auto px-6 py-12">
+        {{#if site.footer.links}}
+        <div class="flex items-center gap-2 mb-6">
+            {{#each site.footer.links}}
+            <a class="hover:underline text-neutral-700" href="{{url}}" target="_blank">
+                <span>{{text}}</span>
+            </a>
+            <div class="last:hidden text-neutral-700 text-xs">•</div>
+            {{/each}}
+        </div>
+        {{/if}}
+        <div class="text-sm mb-1">{{!site.footer.text}}</div>
         <div class="text-xs text-neutral-600">
             <span>Last built on <b>{{site.build}}</b>.</span>
         </div>
