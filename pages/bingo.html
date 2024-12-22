@@ -3,95 +3,46 @@ title: "Bingo game"
 description: "This is a small bingo game made to play with my family on Christmas Eve."
 ---
 
-<div class="fixed top-0 left-0 w-full h-full min-h-0 bg-neutral-50 flex p-6" style="">
-    <div class="w-full p-6 flex flex-col">
-
-    </div>
-    <div class="w-full p-6 bg-neutral-900 rounded-xl">
-
-    </div>
-    <!--
-    <div class="w-full max-w-6xl mx-auto px-6 py-4 sm:flex gap-4">
-            <div className="w-full sm:flex gap-4 mb-4">
-                <div className="w-full sm:w-72">
-                    <div className="h-64 flex justify-center items-center rounded-lg bg-neutral-100 mb-4">
-                            <div>
-                                <div className="flex items-center justify-center h-40">
-                                    <Ball number={state.calls[state.currentCall]} />
-                                </div>
-                                <div className="text-sm text-neutral-800 font-medium text-center mt-3">
-                                    <span>Ball {state.currentCall + 1} / {props.maxNumbers}</span>
-                                </div>
-                            </div>
-                    </div>
-                    <div className="mt-4">
-                        <div className="text-xs text-neutral-500 text-center mb-2 leading-none">
-                            <span>Extract speed:</span>
-                        </div>
-                        <Toggle
-                            value={state.extractInterval}
-                            items={[
-                                {value: EXTRACT_INTERVAL_SLOW, title: "Slow"},
-                                {value: EXTRACT_INTERVAL_FAST, title: "Fast"},
-                            ]}
-                            onChange={newInterval => {
-                                setState({extractInterval: newInterval});
-                            }}
-                        />
-                        <div className={actionsClass}>
-                            <Button className="w-full" onClick={handleTogglePause}>
-                                <div className="flex items-center text-2xl">
-                                    <PartyHornIcon />
-                                </div>
-                                <strong className="flex items-center text-xl">
-                                    <span>Bingo!</span>
-                                </strong>
-                            </Button>
-                            <Button variant="secondary" className="w-full" onClick={handleTogglePause}>
-                                <div className="flex items-center text-lg">
-                                    {state.gamePaused ? <PlayIcon /> : <PauseIcon />}
-                                </div>
-                                <strong className="flex items-center">
-                                    {state.gamePaused ? "Resume Game" : "Pause Game"}
-                                </strong>
-                            </Button>
+<div class="fixed top-0 left-0 w-full h-full min-h-0 bg-neutral-50 flex flex-col md:flex-row gap-4 p-4">
+    <div class="w-full flex flex-col justify-between px-4">
+        <div class="text-7xl text-neutral-950 font-bold">bingo.</div>
+        <div class="flex flex-col gap-2 h-full">
+            <div data-bingo-role="currentCall" style="display:none;">
+                <div class="w-full p-4 bg-white rounded-3xl flex items-center flex-col gap-2">
+                    <div class="shadow-md bg-white border-neutral-900 border-8 rounded-full w-48 h-48 flex items-center justify-center">
+                        <div class="bg-neutral-900 rounded-full w-40 h-40 flex flex-col items-center justify-center">
+                            <span class="text-white text-xs font-bold leading-none mb-1">Bingo</span>
+                            <span data-bingo-role="currentCallNumber" class="text-white text-8xl font-black leading-none"></span>
                         </div>
                     </div>
-                </div>
-                <div className="w-full">
-                    <div className="hidden sm:block w-full">
-                        <Board
-                            key={state.key}
-                            maxNumbers={props.maxNumbers}
-                            calls={state.calls}
-                            currentCall={state.currentCall}
-                        />
-                    </div>
-                    <div className="w-full mt-4">
-                        <div className="text-xs text-neutral-500 text-center mb-2 leading-none">
-                            <span>Last calls</span>
-                        </div>
-                        <div className="w-full h-24 p-4 rounded-lg bg-neutral-100 flex justify-center items-center gap-4">
-                            {lastExtractedNumbers.map(number => (
-                                <div key={number} className="h-16 w-16 flex justify-center items-center bg-white rounded-full border-4 border-neutral-900">
-                                    <div className="w-12 h-12 flex items-center justify-center bg-neutral-900 rounded-full">
-                                        <span className="font-black text-xl text-white">{number}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    <div data-bingo-role="currentCallCount" class="text-center text-xs font-medium">Ball 0 of 90</div>
                 </div>
             </div>
-
+            <div data-bingo-role="lastCalls" style="display:none;">
+                <div class="w-full p-4 bg-white rounded-3xl flex items-center flex-col gap-2">
+                    <div data-bingo-role="lastCallsNumbers" class="w-full grid grid-cols-5 items-center gap-2"></div>
+                    <div class="text-center text-neutral-700 text-xs font-medium">Last calls</div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-2">
+            <button data-bingo-role="action" class="w-full p-2 bg-neutral-900 text-white text-lg font-bold rounded-full">Start game</button>
+            <button data-bingo-role="restart" class="w-full p-2 border border-neutral-200 bg-white hover:bg-neutral-100 text-lg font-bold rounded-full">New game</button>
+        </div>
     </div>
-    -->
+    <div class="w-full p-4 bg-neutral-900 rounded-3xl">
+        <div id="bingo-calls" class="grid grid-cols-10 items-center w-full h-full text-white text-xl"></div>
+    </div>
 </div>
 
-<!--
-<script type="module">
+<script type="text/javascript">
     const EXTRACT_INTERVAL_SLOW = 7500;
     const EXTRACT_INTERVAL_FAST = 5000;
+
+    // create a new html element
+    const html = htmlString => {
+        return (new DOMParser()).parseFromString(htmlString, "text/html").body.childNodes[0];
+    };
 
     // Generate an array with the privided number of items
     const range = length => {
@@ -109,194 +60,109 @@ description: "This is a small bingo game made to play with my family on Christma
         return array;
     };
 
-    // Ball component
-    const Ball = ({number}) => (
-        <div className="shadow-md bg-white border-neutral-900 border-8 rounded-full w-40 h-40 flex items-center justify-center">
-            <div className="bg-neutral-900 rounded-full w-32 h-32 flex flex-col items-center justify-center">
-                <span className="text-white text-sm font-bold leading-none mb-1">Bingo</span>
-                <span className="text-white text-7xl font-black leading-none">{number}</span>
-            </div>
-        </div>
-    );
-
-    // Board
-    const Board = props => {
-        const numbers = React.useMemo(() => range(props.maxNumbers), [props.maxNumbers]);
-        return (
-            <div className="w-full h-64 grid grid-rows-5 grid-flow-col bg-neutral-900 p-3 gap-1 rounded-lg">
-                {"BINGO".split("").map(char => (
-                    <div key={char} className="hidden sm:flex items-center justify-center p-2 bg-white rounded-md text-neutral-700">
-                        <strong>{char}</strong>
-                    </div>
-                ))}
-                {numbers.map(n => {
-                    const index = props.calls.indexOf(n);
-                    const numberClass = classNames({
-                        "flex items-center justify-center": true,
-                        "text-neutral-700": index > props.currentCall,
-                        "animation-pulse": index === props.currentCall,
-                        "font-black text-white": index <= props.currentCall,
-                    });
-                    return (
-                        <div key={n} className={numberClass}>{n}</div>
-                    );
-                })}
-            </div>
-        );
+    // game state
+    const state = {
+        timer: null,
+        gameFinished: false,
+        gameStarted: false,
+        gamePaused: false,
+        calls: [],
+        currentCall: -1,
+        extractInterval: EXTRACT_INTERVAL_FAST,
     };
 
-    // Toggle components
-    const Toggle = props => (
-        <div className="w-full flex items-center p-1 bg-neutral-100 rounded-lg">
-            {props.items.map(item => {
-                const itemClass = classNames({
-                    "flex justify-center p-2 w-full text-center text-sm rounded-md": true,
-                    "bg-neutral-900 text-white font-bold": props.value === item.value,
-                });
-                const handleChange = () => props.onChange(item.value);
-                return (
-                    <div key={item.value} className={itemClass} onClick={handleChange}>
-                        <span>{item.title}</span>
-                    </div>
-                );
-            })}
-        </div>
-    );
+    // reference to game containers
+    const bingoCallsRef = document.querySelector("#bingo-calls");
+    const bingoCurrentCallRef = document.querySelector(`[data-bingo-role="currentCall"]`);
+    const bingoLastCallsRef = document.querySelector(`[data-bingo-role="lastCalls"]`);
+    const bingoActionRef = document.querySelector(`button[data-bingo-role="action"]`);
+    const bingoRestartRef = document.querySelector(`button[data-bingo-role="restart"]`);
 
-    const BingoApp = props => {
-        const [state, setState] = useComplexState({
-            key: Date.now(),
-            gameStarted: false,
+    // initialize game
+    const initializeGame = (maxNumbers = 90) => {
+        // 1. reset game state
+        Object.assign(state, {
             gameFinished: false,
+            gameStarted: false,
             gamePaused: false,
-            calls: [],
+            calls: shuffleArray(range(maxNumbers)),
             currentCall: -1,
-            extractInterval: EXTRACT_INTERVAL_SLOW,
-            cards: 2,
         });
-        const extractedNumbers = new Set(state.calls.slice(0, state.currentCall + 1));
-        const lastExtractedNumbers = Array.from(extractedNumbers).reverse().slice(1, 6);
-        React.useEffect(() => {
-            if (state.gameStarted && !state.gamePaused && !state.gameFinished) {
-                const extractNextBall = () => {
-                    const hasFinishedGame = !(state.currentCall + 1 < props.maxNumbers);
-                    const callIncrement = hasFinishedGame ? 0 : 1;
-                    return setState({
-                        gameStarted: !hasFinishedGame,
-                        currentCall: state.currentCall + callIncrement,
-                    })
-                };
-                const timer = setTimeout(extractNextBall, state.extractInterval);
-                return () => {
-                    clearTimeout(timer);
-                };
-            }
-        }, [state.gameStarted, state.gamePaused, state.currentCall, state.extractInterval]);
-        // Handle toggle game pause
-        const handleTogglePause = () => {
-            if (state.gameStarted && !state.gameFinished) {
-                return setState({gamePaused: !state.gamePaused});
-            }
-        };
-        const actionsClass = classNames({
-            "flex flex-col gap-2 mt-4": true,
-            "pointer-events-none o-50": !state.gameStarted,
-        });
-        return (
-            <div className="w-full sm:flex gap-4 mb-4">
-                <div className="w-full sm:w-72">
-                    <div className="h-64 flex justify-center items-center rounded-lg bg-neutral-100 mb-4">
-                        {!state.gameStarted && (
-                            <Counter
-                                initialSeconds={90}
-                                onCounterEnd={() => {
-                                    return setState({
-                                        key: Date.now(),
-                                        gameStarted: true,
-                                        gamePaused: false,
-                                        gameFinished: false,
-                                        calls: shuffleArray(range(props.maxNumbers)),
-                                        currentCall: 0,
-                                    });
-                                }}
-                            />
-                        )}
-                        {state.gameStarted && state.currentCall > -1 && (
-                            <div>
-                                <div className="flex items-center justify-center h-40">
-                                    <Ball number={state.calls[state.currentCall]} />
-                                </div>
-                                <div className="text-sm text-neutral-800 font-medium text-center mt-3">
-                                    <span>Ball {state.currentCall + 1} / {props.maxNumbers}</span>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                    <div className="mt-4">
-                        <div className="text-xs text-neutral-500 text-center mb-2 leading-none">
-                            <span>Extract speed:</span>
-                        </div>
-                        <Toggle
-                            value={state.extractInterval}
-                            items={[
-                                {value: EXTRACT_INTERVAL_SLOW, title: "Slow"},
-                                {value: EXTRACT_INTERVAL_FAST, title: "Fast"},
-                            ]}
-                            onChange={newInterval => {
-                                setState({extractInterval: newInterval});
-                            }}
-                        />
-                        <div className={actionsClass}>
-                            <Button className="w-full" onClick={handleTogglePause}>
-                                <div className="flex items-center text-2xl">
-                                    <PartyHornIcon />
-                                </div>
-                                <strong className="flex items-center text-xl">
-                                    <span>Bingo!</span>
-                                </strong>
-                            </Button>
-                            <Button variant="secondary" className="w-full" onClick={handleTogglePause}>
-                                <div className="flex items-center text-lg">
-                                    {state.gamePaused ? <PlayIcon /> : <PauseIcon />}
-                                </div>
-                                <strong className="flex items-center">
-                                    {state.gamePaused ? "Resume Game" : "Pause Game"}
-                                </strong>
-                            </Button>
-                        </div>
-                    </div>
+        // 2. reset calls container
+        bingoCallsRef.replaceChildren();
+        range(maxNumbers).forEach(number => {
+            const numberElement = html(`
+                <div data-number="${number}" class="text-center" style="opacity:0.25;">
+                    <span>${number}</span>
                 </div>
-                <div className="w-full">
-                    <div className="hidden sm:block w-full">
-                        <Board
-                            key={state.key}
-                            maxNumbers={props.maxNumbers}
-                            calls={state.calls}
-                            currentCall={state.currentCall}
-                        />
-                    </div>
-                    <div className="w-full mt-4">
-                        <div className="text-xs text-neutral-500 text-center mb-2 leading-none">
-                            <span>Last calls</span>
-                        </div>
-                        <div className="w-full h-24 p-4 rounded-lg bg-neutral-100 flex justify-center items-center gap-4">
-                            {lastExtractedNumbers.map(number => (
-                                <div key={number} className="h-16 w-16 flex justify-center items-center bg-white rounded-full border-4 border-neutral-900">
-                                    <div className="w-12 h-12 flex items-center justify-center bg-neutral-900 rounded-full">
-                                        <span className="font-black text-xl text-white">{number}</span>
+            `);
+            bingoCallsRef.appendChild(numberElement);
+        });
+    };
+
+    // register listeners for game actions buttons
+    bingoActionRef.addEventListener("click", () => {
+        if (!state.gameFinished) {
+            if (state.gamePaused || !state.gameStarted) {
+                const extractNextBall = () => {
+                    const hasFinishedGame = !(state.currentCall + 1 < state.calls.length);
+                    // if game has finished, clear the timer and set the game as finished
+                    if (hasFinishedGame) {
+                        state.gameFinished = true;
+                        bingoActionRef.style.opacity = 0.3;
+                        return clearInterval(state.timer);
+                    }
+                    // if not, increment the current call and update the number element
+                    state.currentCall = state.currentCall + 1;
+                    const number = state.calls[state.currentCall];
+                    bingoCallsRef.querySelector(`div[data-number="${number}"]`).style.opacity = 1;
+                    // update current call number
+                    bingoCurrentCallRef.style.display = "block";
+                    bingoCurrentCallRef.querySelector(`[data-bingo-role="currentCallNumber"]`).textContent = number;
+                    bingoCurrentCallRef.querySelector(`[data-bingo-role="currentCallCount"]`).textContent = `Ball ${state.currentCall + 1} of ${state.calls.length}`;
+                    // update last calls
+                    if (state.currentCall > 0) {
+                        bingoLastCallsRef.style.display = "block"; // display last calls container
+                        const lastCalls = state.calls.slice(0, state.currentCall + 1).reverse().slice(1, 6);
+                        const lastCallsContainer = bingoLastCallsRef.querySelector(`[data-bingo-role="lastCallsNumbers"]`);
+                        lastCallsContainer.replaceChildren();
+                        lastCalls.forEach(lastCall => {
+                            const lastCallElement = html(`
+                                <div class="w-16 h-16 flex items-center justify-center bg-white rounded-full border-4 border-neutral-900">
+                                    <div class="w-12 h-12 flex items-center justify-center bg-neutral-900 rounded-full">
+                                        <span class="text-xl text-white font-bold">${lastCall}</span>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    };
+                            `);
+                            lastCallsContainer.appendChild(lastCallElement);
+                        });
+                    }
+                };
+                state.gamePaused = false;
+                state.timer = window.setInterval(extractNextBall, state.extractInterval);
+                bingoActionRef.textContent = "Pause game";
+            }
+            else {
+                state.gamePaused = true;
+                clearInterval(state.timer);
+                bingoActionRef.textContent = "Resume game";
+            }
+        }
+        state.gameStarted = true;
+    });
 
-    BingoApp.defaultProps = {
-        maxNumbers: 90,
-    };
+    // register listener for restart button
+    bingoRestartRef.addEventListener("click", () => {
+        if (state.gameStarted && !state.gameFinished) {
+            clearInterval(state.timer);
+        }
+        bingoActionRef.style.opacity = 1; // reset opacity for action button
+        bingoActionRef.textContent = "Start game"; // reset text for action button
+        bingoCurrentCallRef.style.display = "none";
+        bingoLastCallsRef.style.display = "none";
+        initializeGame();
+    });
 
+    // initialize game
+    initializeGame();
 </script>
--->
