@@ -49,7 +49,7 @@ const getPages = (folder, type, parseContent) => {
             const content = fm(fs.readFileSync(file, "utf8"));
             return {
                 name: path.basename(file, type),
-                url: path.join("/", path.basename(file, type)),
+                url: content.attributes?.permalink || path.join("/", path.basename(file, type)),
                 data: content.attributes,
                 content: parseContent(content.body),
             };
@@ -104,5 +104,10 @@ const globalData = {
             link: readPartial("components", "link"),
         },
     });
-    fs.writeFileSync(path.join(output, page.url + ".html"), content, "utf8");
+    const pageUrl = page.url + ".html";
+    const pageFolder = path.join(output, path.dirname(pageUrl));
+    if (!fs.existsSync(pageFolder)) {
+        fs.mkdirSync(pageFolder, {recursive: true});
+    }
+    fs.writeFileSync(path.join(output, pageUrl), content, "utf8");
 });
