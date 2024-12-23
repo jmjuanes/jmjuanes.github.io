@@ -16,13 +16,19 @@ layout: "default"
 </header>
 <section class="mb-16">
     <div class="text-xl font-bold mb-2">Open Source Work</div>
-    {{#each data.projects}}
+    {{#each data.projects limit=5}}
     {{>link url=url title=title description=description}}
     {{/each}}
+    <div class="mt-4">
+        <a class="hover:underline font-bold" href="/projects">See all projects.</a>
+    </div>
 </section>
 <section class="">
     <div class="text-xl font-bold mb-2">Notes</div>
     {{#each posts limit=5}}
     {{>link url=url title=data.title description=data.description date=data.date}}
     {{/each}}
+    <div class="mt-4">
+        <a class="hover:underline font-bold" href="/notes">See all notes.</a>
+    </div>
 </section>
