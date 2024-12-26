@@ -15,12 +15,15 @@ layout: "default"
     </div>
 </header>
 <section class="mb-16">
-    <div class="text-xl font-bold mb-2">Open Source Work</div>
+    <div class="text-xl font-bold mb-2">Projects</div>
     {{#each data.projects limit=5}}
     {{>link url=url title=title description=description}}
     {{/each}}
     <div class="mt-4">
-        <a class="hover:underline font-bold" href="/projects.html">See all projects.</a>
+        <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline text-sm" href="/projects.html">
+            <span>See all projects</span>
+            {{=icon icon="arrow-right"}}
+        </a>
     </div>
 </section>
 <section class="">
@@ -29,6 +32,9 @@ layout: "default"
     {{>link url=url title=data.title description=data.description date=data.date}}
     {{/each}}
     <div class="mt-4">
-        <a class="hover:underline font-bold" href="/notes.html">See all notes.</a>
+        <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline text-sm" href="/notes.html">
+            <span>See all notes</span>
+            {{=icon icon="arrow-right"}}
+        </a>
     </div>
 </section>
