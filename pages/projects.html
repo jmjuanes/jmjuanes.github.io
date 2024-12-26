@@ -3,7 +3,19 @@ layout: "page"
 title: "Projects"
 description: "Here are the projects and experiments that I am maintaining."
 ---
+{{<projects.section}}
+<section class="mb-4 mt-12">
+    <div class="text-lg font-bold leading-tight">{{title}}</div>
+    <div class="text-sm">{{description}}</div>
+</section>
+{{/projects.section}}
 
+{{>projects.section title="Open Source Work" description="Here are some of the open source projects that I have contributed to. They range from simple scripts to full-fledged applications."}}
 {{#each data.projects}}
+{{>link url=url title=title description=description}}
+{{/each}}
+
+{{>projects.section title="Games" description="Extremely simple games that I have built just for fun using SVG and JavaScript. They are not meant to be taken seriously."}}
+{{#each data.games}}
 {{>link url=url title=title description=description}}
 {{/each}}
