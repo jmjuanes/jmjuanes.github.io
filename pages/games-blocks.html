@@ -1,0 +1,162 @@
+---
+title: "Blocks"
+layout: "empty"
+permalink: "games/blocks.html"
+---
+<div class="fixed top-0 left-0 w-full h-full min-h-0 flex items-center justify-center overflow-hidden">
+    <svg width="0px" height="0px">
+        <g data-role="game"></g>
+    </svg>
+</div>
+<script type="text/javascript">
+    const GAME_MAX_WIDTH = 400; // max width of the game
+    const GAME_BACKGROUND = "#F7EADA";
+    const BLOCK_SIZE = 50; // size of the block element
+    const BLOCK_GAP = 5; // gap between blocks
+    const BLOCK_RADIUS = 10; // radius of the block element
+    const BLOCK_COLORS = ["#E2356A", "#543F60"];
+    const BLOCKS_BACKGROUND = "#F1F1F2";
+    const BLOCKS_BORDER_COLOR = "#C4C4C4";
+    const BLOCKS_BORDER_WIDTH = 3;
+    const BLOCKS_RADIUS = 15;
+    const BLOCKS_OFFSET = 10; // offset of the blocks area
+    const SCREENS = {
+        GAME: "screen:game",
+    };
+
+    // generate a clone of the provided object or array
+    const clone = obj => JSON.parse(JSON.stringify(obj));
+
+    // generate a new svg element
+    const createSvgElement = (parent, name, attributes = {}) => {
+        const element = document.createElementNS("http://www.w3.org/2000/svg", name);
+        Object.keys(attributes).forEach(key => {
+            element.setAttribute(key, attributes[key]);
+        });
+        if (parent) {
+            parent.appendChild(element);
+        }
+        return element;
+    };
+    
+    // game engine
+    const $game = {
+        width: 0,
+        height: 0,
+        canvas: document.querySelector("svg"),
+        currentScreen: null,
+        currentLevel: null,
+        levels: [],
+
+        // @description the provided changes to the matrix
+        applyChanges: (currentMatrix, changes = []) => {
+            const matrix = clone(currentMatrix);
+            changes.forEach(([x, y]) => {
+                [x - 1, x, x + 1].forEach(i => {
+                    [y - 1, y, y + 1].forEach(j => {
+                        if (matrix[i] && matrix[i][j] !== undefined) {
+                            matrix[i][j] = matrix[i][j] === 0 ? 1 : 0;
+                        }
+                    });
+                });
+            });
+            return matrix;
+        },
+
+        // @description play the game
+        play: level => {
+            $game.currentScreen = SCREENS.GAME;
+            $game.currentLevel = level; // save reference to the current level
+            const parent = $game.canvas.querySelector(`[data-role="game"]`);
+            // const targetMatrix = level.target;
+            level.moves = 0; // initialize number of moves
+            level.changes = []; // initialize changes history
+            level.matrix = $game.applyChanges(level.targetMatrix, clone(level.targetChanges).reverse());
+            // render the game
+            $game.renderMatrix(createSvgElement(parent, "g", {"data-role": "game:matrix:target"}), level.targetMatrix, BLOCK_COLORS);
+            $game.renderMatrix(createSvgElement(parent, "g", {"data-role": "game:matrix:current"}), level.matrix, BLOCK_COLORS);
+
+            // resize the screen
+            $game.resizeScreen();
+        },
+
+        // @description render the blocks matrix in the provided group element
+        renderMatrix: (parent, matrix, colors) => {
+            const rows = matrix.length, cols = matrix[0].length;
+            // 1. render the background of the blocks area
+            const bgOffsets = [BLOCKS_BORDER_WIDTH, 0];
+            const bgColors = [BLOCKS_BORDER_COLOR, BLOCKS_BACKGROUND];
+            [0, 1].forEach(index => {
+                createSvgElement(parent, "rect", {
+                    "x": 0,
+                    "y": bgOffsets[index],
+                    "width": cols * BLOCK_SIZE + (cols - 1) * BLOCK_GAP + 2 * BLOCKS_OFFSET,
+                    "height": rows * BLOCK_SIZE + (rows - 1) * BLOCK_GAP + 2 * BLOCKS_OFFSET,
+                    "fill": bgColors[index],
+                    "rx": BLOCKS_RADIUS,
+                });
+            });
+            // 2. render the blocks
+            matrix.forEach((row, i) => {
+                return row.forEach((value, j) => {
+                    createSvgElement(parent, "rect", {
+                        "data-row": i,
+                        "data-col": j,
+                        "x": j * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
+                        "y": i * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
+                        "width": BLOCK_SIZE,
+                        "height": BLOCK_SIZE,
+                        "fill": colors[value],
+                        "rx": BLOCK_RADIUS,
+                    });
+                });
+            });
+            // 3. set attributes to the parent container
+            parent.setAttribute("data-width", cols * BLOCK_SIZE + (cols - 1) * BLOCK_GAP + 2 * BLOCKS_OFFSET);
+            parent.setAttribute("data-height", rows * BLOCK_SIZE + (rows - 1) * BLOCK_GAP + 2 * BLOCKS_OFFSET);
+            return parent;
+        },
+
+        // @description resize screen
+        resizeScreen: () => {
+            if ($game.currentScreen === SCREENS.GAME) {
+                // 1. center the game area
+                const centerX = $game.width / 2, centerY = $game.height / 2;
+                ["target", "current"].forEach(role => {
+                    const group = $game.canvas.querySelector(`[data-role="game:matrix:${role}"]`);
+                    const width = parseInt(group.getAttribute("data-width"));
+                    const height = parseInt(group.getAttribute("data-height"));
+                    const y = role === "target" ? centerY - height - 10: centerY + 10;
+                    group.setAttribute("transform", `translate(${centerX - width / 2}, ${y})`);
+                });
+            }
+        },
+
+        // @description resize the game
+        handleResize: () => {
+            const {width, height} = $game.canvas.parentElement.getBoundingClientRect();
+            $game.width = Math.min(GAME_MAX_WIDTH, width);
+            $game.height = height;
+            $game.canvas.setAttribute("width", $game.width + "px");
+            $game.canvas.setAttribute("height", $game.height + "px");
+            // TODO: resize game elements
+        },
+
+        // @description initialize the game
+        init: () => {
+            $game.canvas.parentElement.style.backgroundColor = GAME_BACKGROUND;
+            $game.handleResize();
+            // window.addEventListener("resize", $game.handleResize);
+
+            $game.play({
+                size: 3,
+                targetMatrix: [[0, 1, 0], [1, 0, 1], [0, 1, 0]],
+                targetChanges: [[1, 1]],
+                maxMoves: 1,
+            });
+        },
+    };
+
+    // initialize the game
+    $game.init();
+</script>
