@@ -49,7 +49,7 @@ const getPages = (folder, type, parseContent) => {
             const content = fm(fs.readFileSync(file, "utf8"));
             return {
                 name: path.basename(file, type),
-                url: content.attributes?.permalink || path.join("/", path.basename(file, type)),
+                url: content.attributes?.permalink || path.join("/", path.basename(file, type) + ".html"),
                 data: content.attributes,
                 content: parseContent(content.body),
             };
@@ -86,7 +86,7 @@ const globalData = {
 
 // build stuff
 [...globalData.pages, ...globalData.posts].forEach(page => {
-    console.log(`[build] save ${page.url}.html`);
+    console.log(`[build] save ${page.url}`);
     globalData.page = page; // set current page in global data object
     const content = mikel(layout, globalData, {
         functions: {
@@ -98,10 +98,9 @@ const globalData = {
             content: page.content,
         },
     });
-    const pageUrl = page.url + ".html";
-    const pageFolder = path.join(output, path.dirname(pageUrl));
+    const pageFolder = path.join(output, path.dirname(page.url));
     if (!fs.existsSync(pageFolder)) {
         fs.mkdirSync(pageFolder, {recursive: true});
     }
-    fs.writeFileSync(path.join(output, pageUrl), content, "utf8");
+    fs.writeFileSync(path.join(output, page.url), content, "utf8");
 });
