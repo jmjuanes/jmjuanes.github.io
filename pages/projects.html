@@ -3,3 +3,7 @@ layout: "page"
 title: "Projects"
 description: "Here are the projects and experiments that I am maintaining."
 ---
+
+{{#each data.projects}}
+{{>link url=url title=title description=description}}
+{{/each}}
