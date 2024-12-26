@@ -1,3 +1,16 @@
+{{<link}}
+<div class="mb-3">
+    {{#if date}}
+    <div class="text-xs text-neutral-700">{{date}}</div>
+    {{/if}}
+    <a class="block font-medium hover:font-bold hover:text-neutral-950" href="{{url}}">
+        <span>{{title}}</span>
+    </a>
+    {{#if description}}
+    <div class="text-sm text-neutral-800">{{description}}</div>
+    {{/if}}
+</div>
+{{/link}}
 <!doctype html>
 <html lang="en" style="overscroll-behavior-x:none;" class="bg-neutral-50">
 <head>
