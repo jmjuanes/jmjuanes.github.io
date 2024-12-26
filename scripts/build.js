@@ -56,11 +56,6 @@ const getPages = (folder, type, parseContent) => {
         });
 };
 
-// read a partial file
-const readPartial = (folder = "partials", file) => {
-    return fs.readFileSync(path.join(process.cwd(), folder, file + ".html"), "utf8");
-};
-
 // global data object
 const globalData = {
     site: {
@@ -69,13 +64,14 @@ const globalData = {
         url: "https://www.josemi.xyz",
         navbar: {
             links: [
-                {text: "notes", url: "/notes"},
-                // {text: "Resume", url: "https://resume.josemi.xyz"},
+                {text: "projects", url: "/projects.html"},
+                {text: "notes", url: "/notes.html"},
             ],
         },
         footer: {
             text: "Hand-crafted with care by <b>Josemi</b>.",
             links: [
+                {text: "resume", url: "https://resume.josemi.xyz"},
                 {text: "github", url: "https://github.com/jmjuanes"},
                 {text: "linkedin", url: "https://www.linkedin.com/in/jmjuanes"},
             ],
@@ -100,8 +96,6 @@ const globalData = {
         },
         partials: {
             content: page.content,
-            postLink: readPartial("components", "link"),
-            link: readPartial("components", "link"),
         },
     });
     const pageUrl = page.url + ".html";
