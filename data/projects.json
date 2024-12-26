@@ -12,7 +12,7 @@
         "githubUrl": "https://github.com/jmjuanes/lowcss"
     },
     {
-        "title": "josemi/icons",
+        "title": "icons",
         "description": "An open source and hand-crafted SVG icons collection.",
         "url": "https://icons.josemi.xyz",
         "githubUrl": "https://github.com/jmjuanes/icons"
@@ -22,5 +22,11 @@
         "description": "Micro templating library with zero dependencies.",
         "url": "https://github.com/jmjuanes/mikel",
         "githubUrl": "https://github.com/jmjuanes/mikel"
+    },
+    {
+        "title": "codecake",
+        "description": "A tiny and lightweight code editor for web applications, that can be easily integrated into any web application for efficient and hassle-free code editing.",
+        "url": "https://josemi.xyz/codecake",
+        "githubUrl": "https://github.com/jmjuanes/codecake"
     }
 ]

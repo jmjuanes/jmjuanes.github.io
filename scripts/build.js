@@ -49,16 +49,11 @@ const getPages = (folder, type, parseContent) => {
             const content = fm(fs.readFileSync(file, "utf8"));
             return {
                 name: path.basename(file, type),
-                url: content.attributes?.permalink || path.join("/", path.basename(file, type)),
+                url: content.attributes?.permalink || path.join("/", path.basename(file, type) + ".html"),
                 data: content.attributes,
                 content: parseContent(content.body),
             };
         });
-};
-
-// read a partial file
-const readPartial = (folder = "partials", file) => {
-    return fs.readFileSync(path.join(process.cwd(), folder, file + ".html"), "utf8");
 };
 
 // global data object
@@ -69,13 +64,14 @@ const globalData = {
         url: "https://www.josemi.xyz",
         navbar: {
             links: [
-                {text: "notes", url: "/notes"},
-                // {text: "Resume", url: "https://resume.josemi.xyz"},
+                {text: "projects", url: "/projects.html"},
+                {text: "notes", url: "/notes.html"},
             ],
         },
         footer: {
             text: "Hand-crafted with care by <b>Josemi</b>.",
             links: [
+                {text: "resume", url: "https://resume.josemi.xyz"},
                 {text: "github", url: "https://github.com/jmjuanes"},
                 {text: "linkedin", url: "https://www.linkedin.com/in/jmjuanes"},
             ],
@@ -90,7 +86,7 @@ const globalData = {
 
 // build stuff
 [...globalData.pages, ...globalData.posts].forEach(page => {
-    console.log(`[build] save ${page.url}.html`);
+    console.log(`[build] save ${page.url}`);
     globalData.page = page; // set current page in global data object
     const content = mikel(layout, globalData, {
         functions: {
@@ -100,14 +96,11 @@ const globalData = {
         },
         partials: {
             content: page.content,
-            postLink: readPartial("components", "link"),
-            link: readPartial("components", "link"),
         },
     });
-    const pageUrl = page.url + ".html";
-    const pageFolder = path.join(output, path.dirname(pageUrl));
+    const pageFolder = path.join(output, path.dirname(page.url));
     if (!fs.existsSync(pageFolder)) {
         fs.mkdirSync(pageFolder, {recursive: true});
     }
-    fs.writeFileSync(path.join(output, pageUrl), content, "utf8");
+    fs.writeFileSync(path.join(output, page.url), content, "utf8");
 });

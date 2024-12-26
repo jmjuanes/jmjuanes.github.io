@@ -15,11 +15,11 @@
     },
     "dependencies": {
         "@josemi-icons/svg": "^0.6.1",
-        "lowcss": "^0.25.0"
+        "lowcss": "^0.26.0"
     },
     "devDependencies": {
         "front-matter": "^4.0.2",
         "marked": "^14.1.0",
-        "mikel": "^0.13.0"
+        "mikel": "^0.16.0"
     }
 }
