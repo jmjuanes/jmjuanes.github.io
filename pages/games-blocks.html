@@ -4,11 +4,11 @@ layout: "empty"
 permalink: "games/blocks.html"
 ---
 <div class="fixed top-0 left-0 w-full h-full min-h-0 flex items-center justify-center overflow-hidden">
-    <svg width="0px" height="0px">
-        <g data-role="game"></g>
-    </svg>
+    <svg width="0px" height="0px"></svg>
 </div>
-<script type="text/javascript">
+<script type="module">
+    import $pika from "/pika.js";
+
     const GAME_MAX_WIDTH = 400; // max width of the game
     const GAME_BACKGROUND = "#F7EADA";
     const BLOCK_SIZE = 50; // size of the block element
@@ -23,23 +23,8 @@ permalink: "games/blocks.html"
     const SCREENS = {
         GAME: "screen:game",
     };
-
-    // generate a clone of the provided object or array
-    const clone = obj => JSON.parse(JSON.stringify(obj));
-
-    // generate a new svg element
-    const createSvgElement = (parent, name, attributes = {}) => {
-        const element = document.createElementNS("http://www.w3.org/2000/svg", name);
-        Object.keys(attributes).forEach(key => {
-            element.setAttribute(key, attributes[key]);
-        });
-        if (parent) {
-            parent.appendChild(element);
-        }
-        return element;
-    };
-    
-    // game engine
+   
+    // game
     const $game = {
         width: 0,
         height: 0,
@@ -50,7 +35,7 @@ permalink: "games/blocks.html"
 
         // @description the provided changes to the matrix
         applyChanges: (currentMatrix, changes = []) => {
-            const matrix = clone(currentMatrix);
+            const matrix = $pika.utils.clone(currentMatrix);
             changes.forEach(([x, y]) => {
                 [x - 1, x, x + 1].forEach(i => {
                     [y - 1, y, y + 1].forEach(j => {
@@ -67,14 +52,18 @@ permalink: "games/blocks.html"
         play: level => {
             $game.currentScreen = SCREENS.GAME;
             $game.currentLevel = level; // save reference to the current level
-            const parent = $game.canvas.querySelector(`[data-role="game"]`);
+            const parent = $pika.svg.createElement($game.canvas, "g", {
+                "data-role": "screen",
+                "data-screen": SCREENS.GAME,
+                "data-resize": "true",
+            });
             // const targetMatrix = level.target;
             level.moves = 0; // initialize number of moves
             level.changes = []; // initialize changes history
             level.matrix = $game.applyChanges(level.targetMatrix, clone(level.targetChanges).reverse());
             // render the game
-            $game.renderMatrix(createSvgElement(parent, "g", {"data-role": "game:matrix:target"}), level.targetMatrix, BLOCK_COLORS);
-            $game.renderMatrix(createSvgElement(parent, "g", {"data-role": "game:matrix:current"}), level.matrix, BLOCK_COLORS);
+            $game.renderMatrix($pika.svg.createElement(parent, "g", {"data-role": "game:matrix:target"}), level.targetMatrix, BLOCK_COLORS);
+            $game.renderMatrix($pika.svg.createElement(parent, "g", {"data-role": "game:matrix:current"}), level.matrix, BLOCK_COLORS);
 
             // resize the screen
             $game.resizeScreen();
@@ -87,7 +76,7 @@ permalink: "games/blocks.html"
             const bgOffsets = [BLOCKS_BORDER_WIDTH, 0];
             const bgColors = [BLOCKS_BORDER_COLOR, BLOCKS_BACKGROUND];
             [0, 1].forEach(index => {
-                createSvgElement(parent, "rect", {
+                $pika.svg.createElement(parent, "rect", {
                     "x": 0,
                     "y": bgOffsets[index],
                     "width": cols * BLOCK_SIZE + (cols - 1) * BLOCK_GAP + 2 * BLOCKS_OFFSET,
@@ -99,7 +88,7 @@ permalink: "games/blocks.html"
             // 2. render the blocks
             matrix.forEach((row, i) => {
                 return row.forEach((value, j) => {
-                    createSvgElement(parent, "rect", {
+                    $pika.svg.createElement(parent, "rect", {
                         "data-row": i,
                         "data-col": j,
                         "x": j * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
