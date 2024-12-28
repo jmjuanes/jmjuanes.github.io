@@ -1,27 +1,47 @@
 ---
 title: "Blocks"
-layout: "empty"
+description: "Blocks game"
+layout: "page"
 permalink: "games/blocks.html"
 ---
-<div class="fixed top-0 left-0 w-full h-full min-h-0 flex items-center justify-center overflow-hidden">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap">
+<div class="w-full flex items-center justify-center rounded-xl bg-neutral-100 overflow-x-hidden">
     <svg width="0px" height="0px"></svg>
 </div>
-<script type="module">
-    import $pika from "/pika.js";
 
-    const GAME_MAX_WIDTH = 400; // max width of the game
+<script type="module">
+    const GAME_MAX_WIDTH = 600; // max width of the game
+    const GAME_MAX_HEIGHT = 350; // height of the game
     const GAME_BACKGROUND = "#F7EADA";
+    const GAME_SCREENS = {
+        MENU: "screen:menu",
+        GAME: "screen:game",
+    };
+    const GAME_TEXT_FONT = "Nunito";
+    const GAME_TEXT_WEIGHT = "800";
     const BLOCK_SIZE = 50; // size of the block element
     const BLOCK_GAP = 5; // gap between blocks
     const BLOCK_RADIUS = 10; // radius of the block element
     const BLOCK_COLORS = ["#E2356A", "#543F60"];
-    const BLOCKS_BACKGROUND = "#F1F1F2";
+    const BLOCKS_BACKGROUND = "#FFF";
     const BLOCKS_BORDER_COLOR = "#C4C4C4";
     const BLOCKS_BORDER_WIDTH = 3;
     const BLOCKS_RADIUS = 15;
     const BLOCKS_OFFSET = 10; // offset of the blocks area
-    const SCREENS = {
-        GAME: "screen:game",
+
+    const clone = value => {
+        return JSON.parse(JSON.stringify(value));
+    };
+
+    const createSvgElement = (parent, name, attributes = {}) => {
+        const element = document.createElementNS("http://www.w3.org/2000/svg", name);
+        Object.keys(attributes).forEach(key => {
+            element.setAttribute(key, attributes[key]);
+        });
+        if (parent) {
+            parent.appendChild(element);
+        }
+        return element;
     };
    
     // game
@@ -35,7 +55,7 @@ permalink: "games/blocks.html"
 
         // @description the provided changes to the matrix
         applyChanges: (currentMatrix, changes = []) => {
-            const matrix = $pika.utils.clone(currentMatrix);
+            const matrix = clone(currentMatrix);
             changes.forEach(([x, y]) => {
                 [x - 1, x, x + 1].forEach(i => {
                     [y - 1, y, y + 1].forEach(j => {
@@ -48,22 +68,80 @@ permalink: "games/blocks.html"
             return matrix;
         },
 
+        // @descript get differences between two maxixes
+        getMatrixDifferences: (matrix1, matrix2) => {
+            const differences = [];
+            matrix1.forEach((row, i) => {
+                return row.forEach((value, j) => {
+                    if (matrix2[i][j] !== value) {
+                        differences.push([i, j]);
+                    }
+                });
+            });
+            return differences;
+        },
+
         // @description play the game
         play: level => {
-            $game.currentScreen = SCREENS.GAME;
             $game.currentLevel = level; // save reference to the current level
-            const parent = $pika.svg.createElement($game.canvas, "g", {
+            const parent = createSvgElement($game.canvas, "g", {
                 "data-role": "screen",
-                "data-screen": SCREENS.GAME,
-                "data-resize": "true",
             });
             // const targetMatrix = level.target;
             level.moves = 0; // initialize number of moves
             level.changes = []; // initialize changes history
             level.matrix = $game.applyChanges(level.targetMatrix, clone(level.targetChanges).reverse());
+            // render the moves counter
+            const movesCounterParent = createSvgElement(parent, "g", {
+                "data-resize": "true",
+                "data-role": "game:moves",
+                "data-width": "50",
+                "data-height": "0",
+                "data-x": "0.6",
+                "data-y": "0",
+            });
+            createSvgElement(movesCounterParent, "text", {
+                "data-role": "game:moves:counter",
+                "x": "25",
+                "y": "25",
+                "text-anchor": "middle",
+                "dominant-baseline": "middle",
+                "font-size": "20",
+                "fill": "#000",
+                "font-family": GAME_TEXT_FONT,
+                "font-weight": GAME_TEXT_WEIGHT,
+            }).textContent = level.moves;
             // render the game
-            $game.renderMatrix($pika.svg.createElement(parent, "g", {"data-role": "game:matrix:target"}), level.targetMatrix, BLOCK_COLORS);
-            $game.renderMatrix($pika.svg.createElement(parent, "g", {"data-role": "game:matrix:current"}), level.matrix, BLOCK_COLORS);
+            const targetMatrixParent = createSvgElement(parent, "g", {
+                "data-resize": "true",
+                "data-role": "game:matrix:target",
+                "data-scale": "0.35",
+                "data-x": "0.2",
+                "data-y": "0.3",
+            });
+            const currentMatrixParent = createSvgElement(parent, "g", {
+                "data-resize": "true",
+                "data-role": "game:matrix:current",
+                "data-scale": "1",
+                "data-x": "0.6",
+                "data-y": "0.5",
+            });
+            $game.renderMatrix(targetMatrixParent, level.targetMatrix, BLOCK_COLORS);
+            $game.renderMatrix(currentMatrixParent, level.matrix, BLOCK_COLORS);
+            // register events listeners
+            Array.from(currentMatrixParent.querySelectorAll(`[data-role="block"]`)).forEach(block => {
+                block.addEventListener("click", () => {
+                    const row = parseInt(block.dataset.row), col = parseInt(block.dataset.col);
+                    const oldMatrix = clone(level.matrix);
+                    level.changes.push([row, col]);
+                    level.matrix = $game.applyChanges(level.matrix, [[row, col]]);
+                    level.moves++;
+                    // apply changes to the matrix
+                    $game.getMatrixDifferences(oldMatrix, level.matrix).forEach(([i, j]) => {
+                        currentMatrixParent.querySelector(`[data-row="${i}"][data-col="${j}"]`).setAttribute("fill", BLOCK_COLORS[level.matrix[i][j]]);
+                    });
+                });
+            });
 
             // resize the screen
             $game.resizeScreen();
@@ -76,7 +154,7 @@ permalink: "games/blocks.html"
             const bgOffsets = [BLOCKS_BORDER_WIDTH, 0];
             const bgColors = [BLOCKS_BORDER_COLOR, BLOCKS_BACKGROUND];
             [0, 1].forEach(index => {
-                $pika.svg.createElement(parent, "rect", {
+                createSvgElement(parent, "rect", {
                     "x": 0,
                     "y": bgOffsets[index],
                     "width": cols * BLOCK_SIZE + (cols - 1) * BLOCK_GAP + 2 * BLOCKS_OFFSET,
@@ -88,7 +166,8 @@ permalink: "games/blocks.html"
             // 2. render the blocks
             matrix.forEach((row, i) => {
                 return row.forEach((value, j) => {
-                    $pika.svg.createElement(parent, "rect", {
+                    createSvgElement(parent, "rect", {
+                        "data-role": "block",
                         "data-row": i,
                         "data-col": j,
                         "x": j * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
@@ -108,24 +187,23 @@ permalink: "games/blocks.html"
 
         // @description resize screen
         resizeScreen: () => {
-            if ($game.currentScreen === SCREENS.GAME) {
-                // 1. center the game area
-                const centerX = $game.width / 2, centerY = $game.height / 2;
-                ["target", "current"].forEach(role => {
-                    const group = $game.canvas.querySelector(`[data-role="game:matrix:${role}"]`);
-                    const width = parseInt(group.getAttribute("data-width"));
-                    const height = parseInt(group.getAttribute("data-height"));
-                    const y = role === "target" ? centerY - height - 10: centerY + 10;
-                    group.setAttribute("transform", `translate(${centerX - width / 2}, ${y})`);
-                });
-            }
+            // 1. center the game area
+            const centerX = $game.width / 2, centerY = $game.height / 2;
+            Array.from($game.canvas.querySelectorAll(`g[data-resize="true"]`)).forEach(group => {
+                const scale = parseFloat(group.getAttribute("data-scale") ?? 1);
+                const width = parseInt(group.getAttribute("data-width") ?? 0) * scale;
+                const height = parseInt(group.getAttribute("data-height") ?? 0) * scale;
+                const x = parseFloat(group.getAttribute("data-x") ?? 0) * $game.width;
+                const y = parseFloat(group.getAttribute("data-y") ?? 0) * $game.height;
+                group.setAttribute("transform", `scale(${scale}) translate(${x - width / 2}, ${y - height / 2})`);
+            });
         },
 
         // @description resize the game
         handleResize: () => {
             const {width, height} = $game.canvas.parentElement.getBoundingClientRect();
             $game.width = Math.min(GAME_MAX_WIDTH, width);
-            $game.height = height;
+            $game.height = GAME_MAX_HEIGHT;
             $game.canvas.setAttribute("width", $game.width + "px");
             $game.canvas.setAttribute("height", $game.height + "px");
             // TODO: resize game elements
@@ -133,7 +211,7 @@ permalink: "games/blocks.html"
 
         // @description initialize the game
         init: () => {
-            $game.canvas.parentElement.style.backgroundColor = GAME_BACKGROUND;
+            // $game.canvas.parentElement.style.backgroundColor = GAME_BACKGROUND;
             $game.handleResize();
             // window.addEventListener("resize", $game.handleResize);
 
