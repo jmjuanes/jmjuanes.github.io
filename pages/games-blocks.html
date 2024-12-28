@@ -100,17 +100,43 @@ permalink: "games/blocks.html"
                 "data-x": "0.6",
                 "data-y": "0",
             });
+            createSvgElement(movesCounterParent, "rect", {
+                "x": "0",
+                "y": "-10",
+                "width": "50",
+                "height": "60",
+                "rx": "10",
+                "fill": BLOCKS_BORDER_COLOR,
+            });
+            createSvgElement(movesCounterParent, "rect", {
+                "x": "0",
+                "y": "-10",
+                "width": "50",
+                "height": "57",
+                "rx": "10",
+                "fill": "#FFF",
+            });
             createSvgElement(movesCounterParent, "text", {
                 "data-role": "game:moves:counter",
                 "x": "25",
-                "y": "25",
+                "y": "32",
                 "text-anchor": "middle",
                 "dominant-baseline": "middle",
-                "font-size": "20",
-                "fill": "#000",
+                "font-size": "20px",
+                "fill": BLOCKS_BORDER_COLOR,
                 "font-family": GAME_TEXT_FONT,
                 "font-weight": GAME_TEXT_WEIGHT,
             }).textContent = level.moves;
+            createSvgElement(movesCounterParent, "text", {
+                "x": "25",
+                "y": "12",
+                "text-anchor": "middle",
+                "dominant-baseline": "middle",
+                "font-size": "12px",
+                "fill": BLOCKS_BORDER_COLOR,
+                "font-family": GAME_TEXT_FONT,
+                "font-weight": GAME_TEXT_WEIGHT,
+            }).textContent = "moves";
             // render the game
             const targetMatrixParent = createSvgElement(parent, "g", {
                 "data-resize": "true",
@@ -140,6 +166,8 @@ permalink: "games/blocks.html"
                     $game.getMatrixDifferences(oldMatrix, level.matrix).forEach(([i, j]) => {
                         currentMatrixParent.querySelector(`[data-row="${i}"][data-col="${j}"]`).setAttribute("fill", BLOCK_COLORS[level.matrix[i][j]]);
                     });
+                    // update the moves counter
+                    $game.canvas.querySelector(`[data-role="game:moves:counter"]`).textContent = level.moves;
                 });
             });
 
