@@ -10,24 +10,39 @@ permalink: "games/blocks.html"
 </div>
 
 <script type="module">
+    const COLORS = {
+        WHITE: "#FFF",
+        TRANSPARENT: "transparent",
+        DARK_GRAY: "#8A919B",
+        LIGHT_GRAY: "#D7D7D7",
+        DARK_RED: "#AE1946",
+        LIGHT_RED: "#E23267",
+        DARK_PURPLE: "#34263B",
+        LIGHT_PURPLE: "#5C4469",
+    };
     const GAME_MAX_WIDTH = 600; // max width of the game
     const GAME_MAX_HEIGHT = 350; // height of the game
-    const GAME_BACKGROUND = "#F7EADA";
     const GAME_SCREENS = {
         MENU: "screen:menu",
         GAME: "screen:game",
     };
     const GAME_TEXT_FONT = "Nunito";
     const GAME_TEXT_WEIGHT = "800";
-    const BLOCK_SIZE = 50; // size of the block element
+    const BLOCK_SIZE = 45; // size of the block element
     const BLOCK_GAP = 5; // gap between blocks
     const BLOCK_RADIUS = 10; // radius of the block element
-    const BLOCK_COLORS = ["#E2356A", "#543F60"];
-    const BLOCKS_BACKGROUND = "#FFF";
-    const BLOCKS_BORDER_COLOR = "#C4C4C4";
+    const BLOCK_COLORS = [COLORS.LIGHT_RED, COLORS.LIGHT_PURPLE];
+    const BLOCK_BORDER_COLORS = [COLORS.DARK_RED, COLORS.DARK_PURPLE];
+    const BLOCK_BORDER_WIDTH = 5;
+    const BLOCKS_BACKGROUND = COLORS.WHITE;
+    const BLOCKS_BORDER_COLOR = COLORS.LIGHT_GRAY;
     const BLOCKS_BORDER_WIDTH = 3;
     const BLOCKS_RADIUS = 15;
     const BLOCKS_OFFSET = 10; // offset of the blocks area
+    const BUTTON_HEIGHT = 40; // height of the button
+    const BUTTON_BORDER_WIDTH = 5; // border width of the button
+    const BUTTON_BORDER_RADIUS = 10; // border radius of the button
+    const BUTTON_TEXT_SIZE = "16px"; // font size of the button text
 
     const clone = value => {
         return JSON.parse(JSON.stringify(value));
@@ -119,21 +134,21 @@ permalink: "games/blocks.html"
             createSvgElement(movesCounterParent, "text", {
                 "data-role": "game:moves:counter",
                 "x": "25",
-                "y": "32",
+                "y": "20",
                 "text-anchor": "middle",
                 "dominant-baseline": "middle",
                 "font-size": "20px",
-                "fill": BLOCKS_BORDER_COLOR,
+                "fill": COLORS.DARK_GRAY,
                 "font-family": GAME_TEXT_FONT,
                 "font-weight": GAME_TEXT_WEIGHT,
             }).textContent = level.moves;
             createSvgElement(movesCounterParent, "text", {
                 "x": "25",
-                "y": "12",
+                "y": "35",
                 "text-anchor": "middle",
                 "dominant-baseline": "middle",
                 "font-size": "12px",
-                "fill": BLOCKS_BORDER_COLOR,
+                "fill": COLORS.DARK_GRAY,
                 "font-family": GAME_TEXT_FONT,
                 "font-weight": GAME_TEXT_WEIGHT,
             }).textContent = "moves";
@@ -141,19 +156,23 @@ permalink: "games/blocks.html"
             const targetMatrixParent = createSvgElement(parent, "g", {
                 "data-resize": "true",
                 "data-role": "game:matrix:target",
-                "data-scale": "0.35",
+                "data-scale": "0.5",
                 "data-x": "0.2",
-                "data-y": "0.3",
+                "data-y": "0.4",
             });
             const currentMatrixParent = createSvgElement(parent, "g", {
                 "data-resize": "true",
                 "data-role": "game:matrix:current",
                 "data-scale": "1",
                 "data-x": "0.6",
-                "data-y": "0.5",
+                "data-y": "0.55",
             });
             $game.renderMatrix(targetMatrixParent, level.targetMatrix, BLOCK_COLORS);
             $game.renderMatrix(currentMatrixParent, level.matrix, BLOCK_COLORS);
+            // render game buttons
+            $game.renderButton(parent, "Reset level", 0.2, 0.7, 150, [COLORS.WHITE, COLORS.LIGHT_GRAY, COLORS.DARK_GRAY], () => {
+                $game.play(level);
+            });
             // register events listeners
             Array.from(currentMatrixParent.querySelectorAll(`[data-role="block"]`)).forEach(block => {
                 block.addEventListener("click", () => {
@@ -164,7 +183,9 @@ permalink: "games/blocks.html"
                     level.moves++;
                     // apply changes to the matrix
                     $game.getMatrixDifferences(oldMatrix, level.matrix).forEach(([i, j]) => {
-                        currentMatrixParent.querySelector(`[data-row="${i}"][data-col="${j}"]`).setAttribute("fill", BLOCK_COLORS[level.matrix[i][j]]);
+                        const v = level.matrix[i][j];
+                        currentMatrixParent.querySelector(`[data-role="block:body"][data-block="${i},${j}"]`).setAttribute("fill", BLOCK_COLORS[v]);
+                        currentMatrixParent.querySelector(`[data-role="block:border"][data-block="${i},${j}"]`).setAttribute("fill", BLOCK_BORDER_COLORS[v]);
                     });
                     // update the moves counter
                     $game.canvas.querySelector(`[data-role="game:moves:counter"]`).textContent = level.moves;
@@ -176,7 +197,7 @@ permalink: "games/blocks.html"
         },
 
         // @description render the blocks matrix in the provided group element
-        renderMatrix: (parent, matrix, colors) => {
+        renderMatrix: (parent, matrix) => {
             const rows = matrix.length, cols = matrix[0].length;
             // 1. render the background of the blocks area
             const bgOffsets = [BLOCKS_BORDER_WIDTH, 0];
@@ -195,6 +216,26 @@ permalink: "games/blocks.html"
             matrix.forEach((row, i) => {
                 return row.forEach((value, j) => {
                     createSvgElement(parent, "rect", {
+                        "data-role": "block:border",
+                        "data-block": `${i},${j}`,
+                        "x": j * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
+                        "y": i * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
+                        "width": BLOCK_SIZE,
+                        "height": BLOCK_SIZE,
+                        "fill": BLOCK_BORDER_COLORS[value],
+                        "rx": BLOCK_RADIUS,
+                    });
+                    createSvgElement(parent, "rect", {
+                        "data-role": "block:body",
+                        "data-block": `${i},${j}`,
+                        "x": j * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
+                        "y": i * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
+                        "width": BLOCK_SIZE,
+                        "height": BLOCK_SIZE - BLOCK_BORDER_WIDTH,
+                        "fill": BLOCK_COLORS[value],
+                        "rx": BLOCK_RADIUS,
+                    });
+                    createSvgElement(parent, "rect", {
                         "data-role": "block",
                         "data-row": i,
                         "data-col": j,
@@ -202,8 +243,7 @@ permalink: "games/blocks.html"
                         "y": i * (BLOCK_SIZE + BLOCK_GAP) + BLOCKS_OFFSET,
                         "width": BLOCK_SIZE,
                         "height": BLOCK_SIZE,
-                        "fill": colors[value],
-                        "rx": BLOCK_RADIUS,
+                        "fill": COLORS.TRANSPARENT,
                     });
                 });
             });
@@ -211,6 +251,57 @@ permalink: "games/blocks.html"
             parent.setAttribute("data-width", cols * BLOCK_SIZE + (cols - 1) * BLOCK_GAP + 2 * BLOCKS_OFFSET);
             parent.setAttribute("data-height", rows * BLOCK_SIZE + (rows - 1) * BLOCK_GAP + 2 * BLOCKS_OFFSET);
             return parent;
+        },
+
+        // @description render a button
+        renderButton: (parent, text, x, y, width, colors, onClick) => {
+            const button = createSvgElement(parent, "g", {
+                "data-role": "button",
+                "data-resize": "true",
+                "data-x": x,
+                "data-y": y,
+                "data-width": width,
+                "data-height": BUTTON_HEIGHT,
+            });
+            createSvgElement(button, "rect", {
+                "data-role": "button:border",
+                "x": 0,
+                "y": BUTTON_BORDER_WIDTH,
+                "width": width,
+                "height": BUTTON_HEIGHT - BUTTON_BORDER_WIDTH,
+                "fill": colors[1],
+                "rx": BUTTON_BORDER_RADIUS
+            });
+            createSvgElement(button, "rect", {
+                "data-role": "button:main",
+                "x": 0,
+                "y": 0,
+                "width": width,
+                "height": BUTTON_HEIGHT - BUTTON_BORDER_WIDTH,
+                "fill": colors[0],
+                "rx": BUTTON_BORDER_RADIUS
+            });
+            createSvgElement(button, "text", {
+                "data-role": "button:text",
+                "x": width / 2,
+                "y": BUTTON_HEIGHT / 2,
+                "text-anchor": "middle",
+                "dominant-baseline": "middle",
+                "font-size": BUTTON_TEXT_SIZE,
+                "fill": colors[2],
+                "font-family": GAME_TEXT_FONT,
+                "font-weight": GAME_TEXT_WEIGHT,
+            }).textContent = text;
+            button.addEventListener("pointerdown", () => {
+                button.querySelector(`[data-role="button:main"]`).setAttribute("fill", COLORS.TRANSPARENT);
+                button.querySelector(`[data-role="button:text"]`).setAttribute("y", (BUTTON_HEIGHT / 2) + BUTTON_BORDER_WIDTH);
+            });
+            button.addEventListener("pointerup", () => {
+                button.querySelector(`[data-role="button:main"]`).setAttribute("fill", colors[0]);
+                button.querySelector(`[data-role="button:text"]`).setAttribute("y", BUTTON_HEIGHT / 2);
+                // onClick();
+            });
+            return button;
         },
 
         // @description resize screen
@@ -223,7 +314,7 @@ permalink: "games/blocks.html"
                 const height = parseInt(group.getAttribute("data-height") ?? 0) * scale;
                 const x = parseFloat(group.getAttribute("data-x") ?? 0) * $game.width;
                 const y = parseFloat(group.getAttribute("data-y") ?? 0) * $game.height;
-                group.setAttribute("transform", `scale(${scale}) translate(${x - width / 2}, ${y - height / 2})`);
+                group.setAttribute("transform", `translate(${x - width / 2}, ${y - height / 2}) scale(${scale})`);
             });
         },
 
@@ -244,8 +335,7 @@ permalink: "games/blocks.html"
             // window.addEventListener("resize", $game.handleResize);
 
             $game.play({
-                size: 3,
-                targetMatrix: [[0, 1, 0], [1, 0, 1], [0, 1, 0]],
+                targetMatrix: [[0, 1, 0, 1, 0], [1, 0, 1, 0, 1], [0, 1, 0, 1, 0], [1, 0, 1, 0, 1], [0, 1, 0, 1, 0]],
                 targetChanges: [[1, 1]],
                 maxMoves: 1,
             });
