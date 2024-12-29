@@ -13,12 +13,18 @@ permalink: "games/blocks.html"
     const COLORS = {
         WHITE: "#FFF",
         TRANSPARENT: "transparent",
-        DARK_GRAY: "#8A919B",
-        LIGHT_GRAY: "#D7D7D7",
-        DARK_RED: "#AE1946",
-        LIGHT_RED: "#E23267",
-        DARK_PURPLE: "#34263B",
-        LIGHT_PURPLE: "#5C4469",
+        RED: ["#ED5565", "#DA4453"],
+        ORANGE: ["#FC6E51", "#E9573F"],
+        YELLOW: ["#FFCE54", "#F6BB42"],
+        GREEN: ["#A0D468", "#8CC152"],
+        AQUA: ["#4FC1E9", "#3BAFDA"],
+        BLUE: ["#5D9CEC", "#4A89DC"],
+        PURPLE: ["#AC92EC", "#967ADC"],
+        PINK: ["#EC87C0", "#D770AD"],
+        MINT: ["#48CFAD", "#37BC9B"],
+        LIGHT_GRAY: ["#F5F7FA", "#E6E9ED"],
+        MEDIUM_GRAY: ["#CCD1D9", "#AAB2BD"],
+        DARK_GRAY: ["#656D78", "#434A54"],
     };
     const GAME_MAX_WIDTH = 600; // max width of the game
     const GAME_MAX_HEIGHT = 350; // height of the game
@@ -31,11 +37,11 @@ permalink: "games/blocks.html"
     const BLOCK_SIZE = 45; // size of the block element
     const BLOCK_GAP = 5; // gap between blocks
     const BLOCK_RADIUS = 10; // radius of the block element
-    const BLOCK_COLORS = [COLORS.LIGHT_RED, COLORS.LIGHT_PURPLE];
-    const BLOCK_BORDER_COLORS = [COLORS.DARK_RED, COLORS.DARK_PURPLE];
+    const BLOCK_COLORS = [COLORS.RED[0], COLORS.ORANGE[0]];
+    const BLOCK_BORDER_COLORS = [COLORS.RED[1], COLORS.ORANGE[1]];
     const BLOCK_BORDER_WIDTH = 5;
     const BLOCKS_BACKGROUND = COLORS.WHITE;
-    const BLOCKS_BORDER_COLOR = COLORS.LIGHT_GRAY;
+    const BLOCKS_BORDER_COLOR = COLORS.LIGHT_GRAY[1];
     const BLOCKS_BORDER_WIDTH = 3;
     const BLOCKS_RADIUS = 15;
     const BLOCKS_OFFSET = 10; // offset of the blocks area
@@ -43,9 +49,18 @@ permalink: "games/blocks.html"
     const BUTTON_BORDER_WIDTH = 5; // border width of the button
     const BUTTON_BORDER_RADIUS = 10; // border radius of the button
     const BUTTON_TEXT_SIZE = "16px"; // font size of the button text
+    const BASE_MATRIX = [
+        [[0, 1, 0], [1, 0, 1], [0, 1, 0]],
+        [[1, 0, 0, 1], [0, 1, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1]],
+    ];
 
     const clone = value => {
         return JSON.parse(JSON.stringify(value));
+    };
+
+    // generate a randon number between the provided range
+    const random = (min, max) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
     const createSvgElement = (parent, name, attributes = {}) => {
@@ -96,9 +111,26 @@ permalink: "games/blocks.html"
             return differences;
         },
 
+        // @description create a new level
+        createLevel: () => {
+            const level = {
+                targetMatrix: BASE_MATRIX[random(0, BASE_MATRIX.length - 1)],
+                targetChanges: [],
+            };
+            const maxRows = level.targetMatrix.length, maxCols = level.targetMatrix[0].length;
+            const maxChanges = random(1, maxRows - 1);
+            // TODO: optimize the generation of the target changes
+            for (let i = 0; i < maxChanges; i++) {
+                let row = random(0, maxRows - 1), col = random(0, maxCols - 1);
+                level.targetChanges.push([row, col]);
+            }
+            return level;
+        },
+
         // @description play the game
         play: level => {
             $game.currentLevel = level; // save reference to the current level
+            $game.canvas.replaceChildren(); // clear the canvas
             const parent = createSvgElement($game.canvas, "g", {
                 "data-role": "screen",
             });
@@ -121,7 +153,7 @@ permalink: "games/blocks.html"
                 "width": "50",
                 "height": "60",
                 "rx": "10",
-                "fill": BLOCKS_BORDER_COLOR,
+                "fill": COLORS.LIGHT_GRAY[1],
             });
             createSvgElement(movesCounterParent, "rect", {
                 "x": "0",
@@ -129,7 +161,7 @@ permalink: "games/blocks.html"
                 "width": "50",
                 "height": "57",
                 "rx": "10",
-                "fill": "#FFF",
+                "fill": COLORS.WHITE,
             });
             createSvgElement(movesCounterParent, "text", {
                 "data-role": "game:moves:counter",
@@ -138,17 +170,17 @@ permalink: "games/blocks.html"
                 "text-anchor": "middle",
                 "dominant-baseline": "middle",
                 "font-size": "20px",
-                "fill": COLORS.DARK_GRAY,
+                "fill": COLORS.DARK_GRAY[0],
                 "font-family": GAME_TEXT_FONT,
                 "font-weight": GAME_TEXT_WEIGHT,
-            }).textContent = level.moves;
+            }).textContent = `${level.moves}/${level.targetChanges.length}`;
             createSvgElement(movesCounterParent, "text", {
                 "x": "25",
                 "y": "35",
                 "text-anchor": "middle",
                 "dominant-baseline": "middle",
                 "font-size": "12px",
-                "fill": COLORS.DARK_GRAY,
+                "fill": COLORS.MEDIUM_GRAY[1],
                 "font-family": GAME_TEXT_FONT,
                 "font-weight": GAME_TEXT_WEIGHT,
             }).textContent = "moves";
@@ -170,8 +202,13 @@ permalink: "games/blocks.html"
             $game.renderMatrix(targetMatrixParent, level.targetMatrix, BLOCK_COLORS);
             $game.renderMatrix(currentMatrixParent, level.matrix, BLOCK_COLORS);
             // render game buttons
-            $game.renderButton(parent, "Reset level", 0.2, 0.7, 150, [COLORS.WHITE, COLORS.LIGHT_GRAY, COLORS.DARK_GRAY], () => {
-                $game.play(level);
+            $game.renderButton(parent, 0.2, 0.7, {
+                text: "Restart level",
+                width: 150,
+                colors: [COLORS.WHITE, COLORS.LIGHT_GRAY[1], COLORS.DARK_GRAY[0]],
+                onClick: () => {
+                    $game.play(level);
+                },
             });
             // register events listeners
             Array.from(currentMatrixParent.querySelectorAll(`[data-role="block"]`)).forEach(block => {
@@ -188,7 +225,7 @@ permalink: "games/blocks.html"
                         currentMatrixParent.querySelector(`[data-role="block:border"][data-block="${i},${j}"]`).setAttribute("fill", BLOCK_BORDER_COLORS[v]);
                     });
                     // update the moves counter
-                    $game.canvas.querySelector(`[data-role="game:moves:counter"]`).textContent = level.moves;
+                    $game.canvas.querySelector(`[data-role="game:moves:counter"]`).textContent = `${level.moves}/${level.targetChanges.length}`;
                 });
             });
 
@@ -254,52 +291,53 @@ permalink: "games/blocks.html"
         },
 
         // @description render a button
-        renderButton: (parent, text, x, y, width, colors, onClick) => {
+        renderButton: (parent, x = 0, y = 0, options = {}) => {
             const button = createSvgElement(parent, "g", {
                 "data-role": "button",
                 "data-resize": "true",
                 "data-x": x,
                 "data-y": y,
-                "data-width": width,
+                "data-width": options.width,
                 "data-height": BUTTON_HEIGHT,
             });
             createSvgElement(button, "rect", {
                 "data-role": "button:border",
                 "x": 0,
                 "y": BUTTON_BORDER_WIDTH,
-                "width": width,
+                "width": options.width,
                 "height": BUTTON_HEIGHT - BUTTON_BORDER_WIDTH,
-                "fill": colors[1],
+                "fill": options.colors[1],
                 "rx": BUTTON_BORDER_RADIUS
             });
             createSvgElement(button, "rect", {
                 "data-role": "button:main",
                 "x": 0,
                 "y": 0,
-                "width": width,
+                "width": options.width,
                 "height": BUTTON_HEIGHT - BUTTON_BORDER_WIDTH,
-                "fill": colors[0],
+                "fill": options.colors[0],
                 "rx": BUTTON_BORDER_RADIUS
             });
             createSvgElement(button, "text", {
                 "data-role": "button:text",
-                "x": width / 2,
+                "x": options.width / 2,
                 "y": BUTTON_HEIGHT / 2,
                 "text-anchor": "middle",
                 "dominant-baseline": "middle",
                 "font-size": BUTTON_TEXT_SIZE,
-                "fill": colors[2],
+                "fill": options.colors[2],
                 "font-family": GAME_TEXT_FONT,
                 "font-weight": GAME_TEXT_WEIGHT,
-            }).textContent = text;
+                "style": "user-select: none;",
+            }).textContent = options.text;
             button.addEventListener("pointerdown", () => {
                 button.querySelector(`[data-role="button:main"]`).setAttribute("fill", COLORS.TRANSPARENT);
                 button.querySelector(`[data-role="button:text"]`).setAttribute("y", (BUTTON_HEIGHT / 2) + BUTTON_BORDER_WIDTH);
             });
             button.addEventListener("pointerup", () => {
-                button.querySelector(`[data-role="button:main"]`).setAttribute("fill", colors[0]);
+                button.querySelector(`[data-role="button:main"]`).setAttribute("fill", options.colors[0]);
                 button.querySelector(`[data-role="button:text"]`).setAttribute("y", BUTTON_HEIGHT / 2);
-                // onClick();
+                options.onClick();
             });
             return button;
         },
@@ -334,11 +372,7 @@ permalink: "games/blocks.html"
             $game.handleResize();
             // window.addEventListener("resize", $game.handleResize);
 
-            $game.play({
-                targetMatrix: [[0, 1, 0, 1, 0], [1, 0, 1, 0, 1], [0, 1, 0, 1, 0], [1, 0, 1, 0, 1], [0, 1, 0, 1, 0]],
-                targetChanges: [[1, 1]],
-                maxMoves: 1,
-            });
+            $game.play($game.createLevel());
         },
     };
 
