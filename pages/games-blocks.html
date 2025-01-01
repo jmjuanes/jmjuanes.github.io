@@ -12,6 +12,7 @@ permalink: "games/blocks.html"
 <script type="module">
     const COLORS = {
         WHITE: "#FFF",
+        BLACK: "#000",
         TRANSPARENT: "transparent",
         RED: ["#ED5565", "#DA4453"],
         ORANGE: ["#FC6E51", "#E9573F"],
@@ -226,10 +227,19 @@ permalink: "games/blocks.html"
                     });
                     // update the moves counter
                     $game.canvas.querySelector(`[data-role="game:moves:counter"]`).textContent = `${level.moves}/${level.targetChanges.length}`;
+                    // check if the level is completed
+                    if ($game.getMatrixDifferences(level.matrix, level.targetMatrix).length === 0) {
+                        $game.renderSuccessScreen();
+                    }
+                    // check for game over
+                    if (level.moves >= level.targetChanges.length) {
+                        // $game.renderGameOverScreen();
+                    }
                 });
             });
 
             // resize the screen
+            $game.renderSuccessScreen();
             $game.resizeScreen();
         },
 
@@ -294,7 +304,7 @@ permalink: "games/blocks.html"
         renderButton: (parent, x = 0, y = 0, options = {}) => {
             const button = createSvgElement(parent, "g", {
                 "data-role": "button",
-                "data-resize": "true",
+                "data-resize": options?.resize || "true",
                 "data-x": x,
                 "data-y": y,
                 "data-width": options.width,
@@ -342,16 +352,172 @@ permalink: "games/blocks.html"
             return button;
         },
 
+        // @description render text
+        renderText: (parent, x, y, options = {}) => {
+            const lines = [options.text || options.lines || []].flat();
+            const group = createSvgElement(parent, "g", {
+                "data-resize": options.resize ?? "true",
+                "data-x": x,
+                "data-y": y,
+                "data-width": "0",
+                "data-height": (options.size ?? 16) * 1.25 * lines.length,
+            });
+            lines.forEach((text, index) => {
+                const textElement = createSvgElement(group, "text", {
+                    "x": 0,
+                    "y": index * (options.size ?? 16) * 1.25,
+                    "text-anchor": "middle",
+                    "dominant-baseline": "middle",
+                    "font-size": options.size ?? 16,
+                    "fill": options.color ?? COLORS.DARK_GRAY[0],
+                    "font-family": GAME_TEXT_FONT,
+                    "font-weight": GAME_TEXT_WEIGHT,
+                    "style": "user-select:none;",
+                });
+                textElement.textContent = text;
+            });
+            return group;
+        },
+
+        // render an overlay screen
+        renderOverlay: (parentCanvas, options = {}) => {
+            const OVERLAY_OPACITY = "0.75";
+            const OVERLAY_COLOR = COLORS.BLACK;
+            createSvgElement(parentCanvas ?? $game.canvas, "rect", {
+                "x": 0,
+                "y": 0,
+                "width": $game.width,
+                "height": $game.height,
+                "fill": options.color ?? OVERLAY_COLOR,
+                "opacity": options.opacity ?? OVERLAY_OPACITY,
+            });
+        },
+
+        // @description render a success screen
+        renderSuccessScreen: (options = {}) => {
+            $game.renderMessage($game.canvas, {
+                backgroundVisible: true,
+                buttons: Object.values({
+                    nextLevel: {
+                        text: "Next level",
+                        colors: [COLORS.BLUE[0], COLORS.BLUE[1], COLORS.WHITE],
+                        onClick: () => {
+                            $game.play($game.createLevel());
+                        },
+                    },
+                    restartLevel: {
+                        text: "Restart level",
+                        colors: [COLORS.RED[0], COLORS.RED[1], COLORS.WHITE],
+                        onClick: () => {
+                            $game.play($game.currentLevel);
+                        },
+                    },
+                }),
+                render: group => {
+                },
+            });
+            // $game.renderOverlay($game.canvas);
+            // $game.renderText($game.canvas, 0.5, 0.3, {
+            //     text: "Congratulations!",
+            //     size: 24,
+            // });
+            // $game.renderText($game.canvas, 0.5, 0.38, {
+            //     text: "You have completed the level.",
+            //     size: 16,
+            // });
+            // $game.renderButton($game.canvas, 0.5, 0.7, {
+            //     text: "Next level",
+            //     width: 150,
+            //     colors: [COLORS.BLUE[0], COLORS.BLUE[1], COLORS.WHITE],
+            //     onClick: () => {
+            //         $game.play($game.createLevel());
+            //     },
+            // });
+            // $game.renderButton($game.canvas, 0.5, 0.55, {
+            //     text: "Restart level",
+            //     width: 150,
+            //     colors: [COLORS.BLUE[0], COLORS.BLUE[1], COLORS.WHITE],
+            //     onClick: () => {
+            //         $game.play($game.createLevel());
+            //     },
+            // });
+        },
+
+        // render a message screen
+        renderMessage: (parentCanvas, options = {}) => {
+            const MESSAGE_WIDTH = 280;
+            const MESSAGE_HEIGHT = 260;
+            const MESSAGE_PADDING = 20;
+            const MESSAGE_BACKGROUND_COLOR = COLORS.WHITE;
+            const MESSAGE_BACKGROUND_RADIUS = 20;
+            // message overlay
+            $game.renderOverlay(parentCanvas);
+            const parent = createSvgElement(parentCanvas ?? $game.canvas, "g", {
+                "data-resize": "true",
+                "data-width": MESSAGE_WIDTH,
+                "data-height": MESSAGE_HEIGHT,
+                "data-x": "0.5",
+                "data-y": "0.5",
+            });
+            if (options?.backgroundVisible) {
+                createSvgElement(parent, "rect", {
+                    "x": 0,
+                    "y": 0,
+                    "width": MESSAGE_WIDTH,
+                    "height": MESSAGE_HEIGHT,
+                    "fill": options?.backgroundColor ?? MESSAGE_BACKGROUND_COLOR,
+                    "rx": options?.backgroundRadius ?? MESSAGE_BACKGROUND_RADIUS,
+                });
+            }
+            if (typeof options.render === "function") {
+                const renderHeight = MESSAGE_HEIGHT - MESSAGE_PADDING - BUTTON_HEIGHT;
+                const renderWidth = MESSAGE_WIDTH; //  - 2 * MESSAGE_PADDING;
+                options.render(createSvgElement(parent, "g", {
+                    "transform": `translate(${renderWidth / 2},${renderHeight / 2})`,
+                }));
+            }
+            // if (options.title) {
+            //     const textElement = createSvgElement(parent, "text", {
+            //         "x": MESSAGE_WIDTH / 2,
+            //         "y": 40,
+            //         "text-anchor": "middle",
+            //         "dominant-baseline": "middle",
+            //         "font-size": MESSAGE_TITLE_SIZE,
+            //         "fill": COLORS.DARK_GRAY[0],
+            //         "font-family": GAME_TEXT_FONT,
+            //         "font-weight": GAME_TEXT_WEIGHT,
+            //         "style": "user-select:none;",
+            //     });
+            //     textElement.textContent = options.title;
+            // }
+            const gap = 10;
+            (options.buttons ?? []).forEach((button, index, buttons) => {
+                const buttonWidth = (MESSAGE_WIDTH - 2 * MESSAGE_PADDING - gap * (buttons.length - 1)) / buttons.length;
+                const buttonX = MESSAGE_PADDING + index * (buttonWidth + gap) + (buttonWidth / 2);
+                const buttonY = MESSAGE_HEIGHT - (BUTTON_HEIGHT / 2) - MESSAGE_PADDING;
+                $game.renderButton(parent, buttonX + "px", buttonY + "px", {
+                    text: button.text,
+                    width: buttonWidth,
+                    colors: button.colors, // [COLORS.WHITE, COLORS.LIGHT_GRAY[1], COLORS.DARK_GRAY[0]],
+                    onClick: button.onClick,
+                });
+            });
+            $game.resizeScreen();
+        },
+
         // @description resize screen
         resizeScreen: () => {
+            const getPosition = (value, maxValue) => {
+                return value.endsWith("px") ? parseInt(value.replace("px", "")) : (parseFloat(value) * maxValue);
+            };
             // 1. center the game area
             const centerX = $game.width / 2, centerY = $game.height / 2;
-            Array.from($game.canvas.querySelectorAll(`g[data-resize="true"]`)).forEach(group => {
+            Array.from($game.canvas.querySelectorAll(`[data-resize="true"]`)).forEach(group => {
                 const scale = parseFloat(group.getAttribute("data-scale") ?? 1);
                 const width = parseInt(group.getAttribute("data-width") ?? 0) * scale;
                 const height = parseInt(group.getAttribute("data-height") ?? 0) * scale;
-                const x = parseFloat(group.getAttribute("data-x") ?? 0) * $game.width;
-                const y = parseFloat(group.getAttribute("data-y") ?? 0) * $game.height;
+                const x = getPosition(group.getAttribute("data-x") ?? "0", $game.width);
+                const y = getPosition(group.getAttribute("data-y") ?? "0", $game.height);
                 group.setAttribute("transform", `translate(${x - width / 2}, ${y - height / 2}) scale(${scale})`);
             });
         },
