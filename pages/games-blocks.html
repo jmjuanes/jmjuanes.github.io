@@ -414,6 +414,11 @@ permalink: "games/blocks.html"
                     },
                 }),
                 render: group => {
+                    $game.renderText(group, "0px", "0px", {
+                        text: "Level completed!",
+                        // color: COLORS.WHITE,
+                        size: 24,
+                    });
                 },
             });
             // $game.renderOverlay($game.canvas);
@@ -451,7 +456,9 @@ permalink: "games/blocks.html"
             const MESSAGE_BACKGROUND_COLOR = COLORS.WHITE;
             const MESSAGE_BACKGROUND_RADIUS = 20;
             // message overlay
-            $game.renderOverlay(parentCanvas);
+            $game.renderOverlay(parentCanvas, {
+                opacity: options?.overlayOpacity ?? "0.8",
+            });
             const parent = createSvgElement(parentCanvas ?? $game.canvas, "g", {
                 "data-resize": "true",
                 "data-width": MESSAGE_WIDTH,
@@ -470,11 +477,14 @@ permalink: "games/blocks.html"
                 });
             }
             if (typeof options.render === "function") {
-                const renderHeight = MESSAGE_HEIGHT - MESSAGE_PADDING - BUTTON_HEIGHT;
-                const renderWidth = MESSAGE_WIDTH; //  - 2 * MESSAGE_PADDING;
                 options.render(createSvgElement(parent, "g", {
-                    "transform": `translate(${renderWidth / 2},${renderHeight / 2})`,
+                    "data-resize": "true",
+                    "data-x": (MESSAGE_WIDTH / 2) + "px",
+                    "data-y": ((MESSAGE_HEIGHT - MESSAGE_PADDING - BUTTON_HEIGHT) / 2) + "px",
+                    "data-width": 0, // MESSAGE_WIDTH,
+                    "data-height": 0, // MESSAGE_HEIGHT - MESSAGE_PADDING - BUTTON_HEIGHT,
                 }));
+                // options.render(parent, MESSAGE_WIDTH, MESSAGE_HEIGHT);
             }
             // if (options.title) {
             //     const textElement = createSvgElement(parent, "text", {
