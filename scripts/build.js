@@ -8,6 +8,15 @@ import mikel from "mikel";
 const output = path.join(process.cwd(), "www");
 const layout = fs.readFileSync(path.join(process.cwd(), "layout.html"), "utf8");
 
+// utility method to save the provided file
+const saveFile = (filePath, fileContent) => {
+    const folder = path.join(output, path.dirname(filePath));
+    if (!fs.existsSync(folder)) {
+        fs.mkdirSync(folder, {recursive: true});
+    }
+    fs.writeFileSync(path.join(output, filePath), fileContent, "utf8");
+};
+
 // generate build info
 const getBuildInfo = () => {
     const now = new Date();
@@ -56,6 +65,20 @@ const getPages = (folder, type, parseContent) => {
         });
 };
 
+// get assets
+const getAssets = folder => {
+    const assetPaths = fs.readdirSync(folder, "utf8");
+    return assetPaths.map(file => {
+        const {body, attributes} = fm(fs.readFileSync(path.join(folder, file), "utf8"));
+        return {
+            name: path.basename(file, path.extname(file)),
+            url: attributes?.permalink || path.join("/", file),
+            data: attributes || {},
+            content: body,
+        };
+    });
+};
+
 // global data object
 const globalData = {
     site: {
@@ -81,26 +104,33 @@ const globalData = {
     data: getData(path.join(process.cwd(), "data")),
     pages: getPages(path.join(process.cwd(), "pages"), ".html", c => c),
     posts: sortPosts(getPages(path.join(process.cwd(), "posts"), ".md", marked.parse)),
+    assets: getAssets(path.join(process.cwd(), "assets")),
     page: null,
 };
 
-// build stuff
+// global options for mikel
+const globalOptions = {
+    functions: {
+        icon: args => {
+            return `<svg width="1em" height="1em"><use xlink:href="sprite.svg#${args.opt.icon}"></use></svg>`;
+        },
+    },
+};
+
+// build pages and posts
 [...globalData.pages, ...globalData.posts].forEach(page => {
     console.log(`[build] save ${page.url}`);
     globalData.page = page; // set current page in global data object
     const content = mikel(layout, globalData, {
-        functions: {
-            icon: args => {
-                return `<svg width="1em" height="1em"><use xlink:href="sprite.svg#${args.opt.icon}"></use></svg>`;
-            },
-        },
+        ...globalOptions,
         partials: {
             content: page.content,
         },
     });
-    const pageFolder = path.join(output, path.dirname(page.url));
-    if (!fs.existsSync(pageFolder)) {
-        fs.mkdirSync(pageFolder, {recursive: true});
-    }
-    fs.writeFileSync(path.join(output, page.url), content, "utf8");
+    return saveFile(page.url, content);
+});
+
+// build assets
+globalData.assets.forEach(asset => {
+    return saveFile(asset.url, asset.content);
 });
