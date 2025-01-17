@@ -31,7 +31,7 @@
 {{>content}}
 {{/eq}}
 {{#ne page.data.layout "empty"}}
-    <header class="w-full max-w-2xl mx-auto px-6 py-8 flex items-center justify-between">
+    <header class="w-full max-w-3xl mx-auto px-6 py-8 flex items-center justify-between">
         <a class="flex items-center hover:underline font-medium text-lg" href="/">
             <span>josemi</span>
         </a>
@@ -43,7 +43,7 @@
         </div>
         {{/if}}
     </header>
-    <main class="w-full max-w-2xl mx-auto px-6 py-8">
+    <main class="w-full max-w-3xl mx-auto px-6 py-8">
         {{#eq page.data.layout "post"}}
         <header class="mb-12">
             <div class="text-2xl font-bold leading-tight">{{page.data.title}}</div>
@@ -62,14 +62,14 @@
         </article>
     </main>
     {{#if site.socials}}
-    <div class="w-full max-w-2xl mx-auto px-6 py-12">
+    <div class="w-full max-w-3xl mx-auto px-6 py-12">
         <div class="text-xl font-bold mb-4">Let's Connect</div>
         <div class="mb-4">
             If you have any questions, feedback, or just want to chat, feel free to reach out to me on any of the following platforms:
         </div>
     </div>
     {{/if}}
-    <footer class="w-full max-w-2xl mx-auto px-6 py-12">
+    <footer class="w-full max-w-3xl mx-auto px-6 py-12">
         {{#if site.footer.links}}
         <div class="flex items-center gap-2 mb-6">
             {{#each site.footer.links}}
