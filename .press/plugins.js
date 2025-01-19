@@ -17,19 +17,21 @@ export const SourcePlugin = (options = {}) => {
 // @description data plugin
 export const DataPlugin = (options = {}) => {
     return context => {
-        const folder = path.resolve(options.source || "./data");
-        const files = readdir(folder, [".json"]).map(file => {
-            return [
-                path.basename(file, ".json"),
-                JSON.parse(read(path.join(folder, file))),
-            ];
+        context.hooks.beforeEmit.add(() => {
+            const folder = path.resolve(options.source || "./data");
+            const files = readdir(folder, [".json"]).map(file => {
+                return [
+                    path.basename(file, ".json"),
+                    JSON.parse(read(path.join(folder, file))),
+                ];
+            });
+            context.site.data = Object.fromEntries(files);
         });
-        context.site.data = Object.fromEntries(files);
     };
 };
 
 // @description markdown plugin
-export const MarkdownPagesPlugin = () => {
+export const MarkdownPlugin = () => {
     return context => {
         context.rules.add({
             test: /\.(md|markdown)$/,
@@ -44,7 +46,7 @@ export const MarkdownPagesPlugin = () => {
 };
 
 // @description HTML pages plugin
-export const HtmlPagesPlugin = () => {
+export const HtmlPlugin = () => {
     return context => {
         return context.rules.add({
             test: /\.(html|htm)$/,
