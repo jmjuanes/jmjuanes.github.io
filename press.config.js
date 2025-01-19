@@ -1,4 +1,4 @@
-import {dataPlugin, transformJsxPlugin, setMikelOptionsPlugin, progressPlugin, markdownPlugin} from "./scripts/plugins.js";
+import * as plugins from "./.press/plugins.js";
 
 // generate build info
 const getBuildInfo = () => {
@@ -35,16 +35,20 @@ export default {
     },
     build: getBuildInfo(),
     plugins: [
-        progressPlugin(),
-        dataPlugin(),
-        markdownPlugin(),
-        setMikelOptionsPlugin({
+        plugins.SourcePlugin(),
+        plugins.SourcePlugin({
+            source: path.resolve("./posts"),
+        }),
+        plugins.MarkdownPlugin(),
+        plugins.HtmlPlugin(),
+        plugins.TemplatePlugin({
+            template: path.resolve("./layout.html"),
             functions: {
                 icon: args => {
                     return `<svg width="1em" height="1em"><use xlink:href="sprite.svg#${args.opt.icon}"></use></svg>`;
                 },
             },
         }),
-        transformJsxPlugin(),
+        plugins.DataPlugin(),
     ],
 };
