@@ -1,62 +1,60 @@
 import * as path from "node:path";
-import mikel from "mikel";
-import siteConfig from "../press.config.js";
-import {createVirtualFile, read, write, readdir} from "./helpers.js";
-
-// list with all the available hooks
-const HOOKS = {
-    INITIALIZE: "initialize",
-    COMPILER: "compiler",
-    BEFORE_EMIT: "beforeEmit",
-    EMIT: "emit",
-    DONE: "done",
-};
+import config from "../press.config.js";
+import {write, copy} from "./util.js";
 
 // build site
 const build = () => {
-    const {source = "./content", destination = "./www", layout, plugins = [], ...otherSiteConfig} = siteConfig;
+    const {source, destination, plugins = [], ...otherConfig} = config;
     const context = {
-        source: path.resolve(source),
-        destination: path.resolve(destination),
-        extensions: [".html", ".htm"],
-        hooks: Object.fromEntries(Object.values(HOOKS).map(hook => {
+        config: otherConfig,
+        source: path.resolve(source || "./content"),
+        destination: path.resolve(destination || "./www"),
+        hooks: Object.fromEntries(["beforeLoad", "beforeEmit", "done"].map(hook => {
             return [hook, new Set()];
         })),
-        dispatch: (hookName, ...args) => {
-            return Array.from(context.hooks[hookName]).forEach(callback => callback(...args));
-        },
-        files: [],
-        site: Object.assign({}, otherSiteConfig, {pages: []}),
-        layout: createVirtualFile({
-            file: path.resolve(layout || "./layout.html"),
-        }),
+        nodes: new Map(),
+        rules: new Set(),
+        filters: new Set(),
+        emitters: new Map(),
     };
-    plugins.forEach(plugin => plugin(context)); // initialize plugins
-    context.dispatch(HOOKS.INITIALIZE);
-    // create compiler
-    const compiler = mikel.create(context.layout?.content || "");
-    context.dispatch(HOOKS.COMPILER, compiler);
-    // read site stuff
-    context.site.pages = readdir(context.source, [...context.extensions, ...context.staticExtensions]).map(filePath => {
-        const file = createVirtualFile({
-            file: path.join(context.source, filePath),
+    plugins.forEach(plugin => plugin(context));
+    // load nodes
+    Array.from(context.hooks.beforeLoad).forEach(fn => fn());
+    context.nodes.forEach(node => {
+        const rule = Array.from(context.rules).find(rule => {
+            if (typeof rule.test === "function") {
+                return rule.test(node);
+            }
+            if (Object.prototype.toString.call(rule.test) === "[object RegExp]") {
+                return rule.test.test(node.path);
+            }
+            return false;
         });
-        context.files.push(file);
-        return file;
-    });
-    context.dispatch(HOOKS.BEFORE_EMIT);
-    context.files.forEach(file => {
-        context.dispatch(HOOKS.EMIT, file);
-        let content = file.content;
-        if (path.extname(file.url) === ".html" || path.extname(file.url) === ".htm") {
-            compiler.addPartial("content", file.content);
-            content = compiler({site: context.site, layout: context.layout, page: file});
+        if (typeof rule === "object" && !!rule) {
+            node.type = rule.type || node.type; // change node type
+            (rule.loaders || []).forEach(loader => {
+                Array.isArray(loader) ? loader[0](node, loader[1]) : loader(node);
+            });
         }
-        // save file
-        write(path.join(context.destination, file.url), content);
+    });
+    // emit each node
+    Array.from(context.hooks.beforeEmit).forEach(fn => fn());
+    context.nodes.forEach(node => {
+        if (context.filters.size === 0 || Array.from(context.filters).every(fn => !!fn(node))) {
+            // check if we have registered an emmiter for this node type
+            if (context.emitters.has(node.type || "asset")) {
+                return context.emitters.get(node.type)(context, node);
+            }
+            // check if the node has a content associated
+            if (typeof node.content === "string") {
+                return write(path.resolve(context.destination, node.url || node.path), node.content)
+            }
+            // other case, just copy the file
+            copy(path.resolve(node.cwd, node.path), path.resolve(context.destination, node.url || node.path));
+        }
     });
     // done
-    context.dispatch(HOOKS.DONE);
+    Array.from(context.hooks.done).forEach(fn => fn());
 };
 
 // build site
