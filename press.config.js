@@ -1,3 +1,4 @@
+import * as path from "node:path";
 import * as plugins from "./.press/plugins.js";
 
 // generate build info

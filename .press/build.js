@@ -47,10 +47,10 @@ const build = () => {
             }
             // check if the node has a content associated
             if (typeof node.content === "string") {
-                return write(path.resolve(context.destination, node.url || node.path), node.content)
+                return write(path.join(context.destination, node.url || node.path), node.content)
             }
             // other case, just copy the file
-            copy(path.resolve(node.cwd, node.path), path.resolve(context.destination, node.url || node.path));
+            copy(path.join(node.cwd, node.path), path.join(context.destination, node.url || node.path));
         }
     });
     // done

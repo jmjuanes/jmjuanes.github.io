@@ -9,7 +9,7 @@ export const assetLoader = (node, options = {}) => {
         ...options,
         name: options.name || path.basename(options?.url || node.path),
         url: options.url || path.normalize("/" + node.path),
-        content: options.content || read(path.resolve(node.cwd, node.path)),
+        content: options.content || read(path.join(node.cwd, node.path)),
     });
 };
 

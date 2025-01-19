@@ -8,7 +8,7 @@
     "homepage": "https://www.josemi.xyz/",
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
-        "build": "mkdir -p www && node scripts/build.js",
+        "build": "mkdir -p www && node .press/build.js",
         "postbuild": "cp node_modules/lowcss/low.css www/ && cp node_modules/@josemi-icons/svg/sprite.svg www/ && cp assets/* www/",
         "clean": "rm -rf www",
         "serve": "serve www"

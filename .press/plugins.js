@@ -2,7 +2,7 @@ import * as path from "node:path";
 import mikel from "mikel";
 import {createNode} from "./helpers.js";
 import {frontmatterLoader, pageLoader, markdownLoader} from "./loaders.js";
-import {write, readdir} from "./util.js";
+import {write, read, readdir} from "./util.js";
 
 // @description source plugin
 export const SourcePlugin = (options = {}) => {
@@ -62,10 +62,10 @@ export const HtmlPlugin = () => {
 // @description template plugin
 export const TemplatePlugin = (options = {}) => {
     return context => {
-        context.site = Object.assign(context.site || {}, {});
+        context.site = Object.assign(context.site || {}, context.config);
         const template = createNode(context, {
-            path: options?.template || context.config.template,
-            cwd: context.source,
+            path: path.basename(options?.template || context.config.template),
+            cwd: path.dirname(options?.template || context.config.template),
         });
         // register pages emitter
         context.emitters.set("page", (_, node) => {
@@ -76,7 +76,7 @@ export const TemplatePlugin = (options = {}) => {
             };
             node.content = mikel(node.content, data, options);
             const content = mikel(template.content, data, options);
-            write(path.resolve(context.destination, page.url), content);
+            write(path.join(context.destination, node.url || node.path), content);
         });
         // add a filter to skip this node from emitters
         context.filters.add(node => {
