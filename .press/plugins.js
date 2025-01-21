@@ -58,7 +58,7 @@ export const DataPlugin = (options = {}) => {
 // @description content reader plugin
 export const ContentPlugin = (options = {}) => {
     return context => {
-        const extensions = options.extensions || "*";
+        const extensions = options.extensions || [".md", ".markdown", ".html"];
         context.hooks.transform.add(node => {
             // read the content of the node if it is not defined and the extension is valid
             if (typeof node.content === "undefined" && (extensions === "*" || extensions.includes(path.extname(node.path)))) {
