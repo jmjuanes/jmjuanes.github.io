@@ -1,7 +1,6 @@
 import * as path from "node:path";
 import config from "../press.config.js";
 import {assignHooks, dispatchHook, dispatchHookOnce} from "./helpers.js";
-import {write, copy, readdir} from "./util.js";
 
 // list of valid hooks
 const allHooks = ["load", "transform", "filter", "beforeEmit", "emit", "done"];
@@ -21,12 +20,6 @@ const build = () => {
         return plugin(context);
     });
     // load nodes
-    readdir(context.source, config.extensions || [".md", ".markdown", ".html"]).forEach(file => {
-        return createNode(context, {
-            cwd: context.source,
-            path: file,
-        });
-    });
     dispatchHook(context, "load");
     // transform nodes
     Array.from(context.nodes.values()).forEach(node => {
