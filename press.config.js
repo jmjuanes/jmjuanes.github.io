@@ -16,7 +16,6 @@ const getBuildInfo = () => {
 };
 
 export default {
-    source: path.join(process.cwd(), "pages"),
     title: "Josemi Juanes, Ph.D.",
     description: "React developer and Minimal Design lover.",
     url: "https://www.josemi.xyz",
