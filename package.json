@@ -19,7 +19,6 @@
     "devDependencies": {
         "front-matter": "^4.0.2",
         "marked": "^14.1.0",
-        "mikel": "^0.17.1",
-        "uid": "^2.0.2"
+        "mikel": "^0.17.1"
     }
 }
