@@ -3,6 +3,6 @@ layout: "page"
 title: "Notes"
 description: "A collection of notes on various topics."
 ---
-{{#each posts}}
+{{#each site.posts}}
 {{>link url=url title=data.title description=data.description date=data.date}}
 {{/each}}
