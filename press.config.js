@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import * as plugins from "./.press/plugins.js";
+import * as plugins from "#press/plugins";
 
 // generate build info
 const getBuildInfo = () => {

@@ -7,6 +7,10 @@
     "license": "MIT",
     "homepage": "https://www.josemi.xyz/",
     "author": "Josemi <hello@josemi.xyz>",
+    "imports": {
+        "#press/plugins": "./.press/plugins.js",
+        "#press/helpers": "./.press/helpers.js"
+    },
     "scripts": {
         "build": "mkdir -p www && node .press/build.js",
         "clean": "rm -rf www",
