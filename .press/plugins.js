@@ -86,7 +86,7 @@ export const MarkdownPlugin = () => {
         name: "MarkdownPlugin",
         transform: (_, node) => {
             if (path.extname(node.path) === ".md" || path.extname(node.path) === ".markdown") {
-                node.content = marked.parse(body);
+                node.content = marked.parse(node.content);
                 updateNode(node, {extname: ".html"});
             }
         },
@@ -110,18 +110,17 @@ export const TemplatePlugin = (options = {}) => {
         },
         emit: (context, nodesToEmit) => {
             const template = Array.from(context.nodes).find(n => n.label === label);
+            const compiler = mikel.create(template.content, options);
             nodesToEmit.forEach(node => {
                 if (path.extname(node.path) !== ".html") {
                     return;
                 }
-                // prepare data object to be used in templating engine
-                const data = {
-                    site: context.site,
+                compiler.addPartial("content", node.content);
+                const content = compiler({
+                    site: Object.assign({}, context.config, context.site),
                     page: node,
                     template: template,
-                };
-                node.content = mikel(node.content, data, options);
-                const content = mikel(template.content, data, options);
+                });
                 write(path.join(context.destination, node.path), content);
             });
         },
