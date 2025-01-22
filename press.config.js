@@ -36,20 +36,31 @@ export default {
     },
     build: getBuildInfo(),
     plugins: [
-        plugins.SourcePlugin(),
         plugins.SourcePlugin({
-            source: path.resolve("./posts"),
+            source: "./pages",
+            label: "pages",
         }),
+        plugins.SourcePlugin({
+            source: "./posts",
+            label: "posts",
+        }),
+        plugins.DataPlugin(),
+        plugins.FrontmatterPlugin(),
         plugins.MarkdownPlugin(),
-        plugins.HtmlPlugin(),
+        plugins.PermalinkPlugin(),
         plugins.TemplatePlugin({
-            template: path.resolve("./layout.html"),
+            template: "./layout.html",
             functions: {
                 icon: args => {
                     return `<svg width="1em" height="1em"><use xlink:href="sprite.svg#${args.opt.icon}"></use></svg>`;
                 },
             },
         }),
-        plugins.DataPlugin(),
+        plugins.CopyAssetsPlugin({
+            patterns: [
+                {from: path.resolve("node_modules/lowcss/low.css"), to: "low.css"},
+                {from: path.resolve("node_modules/@josemi-icons/svg/sprite.svg"), to: "sprite.svg"},
+            ],
+        }),
     ],
 };
