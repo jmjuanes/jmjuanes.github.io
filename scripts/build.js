@@ -19,6 +19,7 @@ const getBuildInfo = () => {
 };
 
 press.build({
+    ...websiteConfig,
     build: getBuildInfo(),
     plugins: [
         press.SourcePlugin({
@@ -41,14 +42,18 @@ press.build({
             layout: "./layout.html",
             functions: {
                 icon: args => {
-                    return `<svg width="1em" height="1em"><use xlink:href="/sprite.svg#${args.opt.icon}"></use></svg>`;
+                    return [
+                        `<svg width="1em" height="1em">`,
+                        `<use xlink:href="/icons.svg#${args.opt.icon}"></use>`,
+                        `</svg>`,
+                    ].join("");
                 },
             },
         }),
         press.CopyAssetsPlugin({
             patterns: [
                 {from: path.resolve("node_modules/lowcss/low.css"), to: "low.css"},
-                {from: path.resolve("node_modules/@josemi-icons/svg/sprite.svg"), to: "sprite.svg"},
+                {from: path.resolve("node_modules/@josemi-icons/svg/sprite.svg"), to: "icons.svg"},
             ],
         }),
     ],

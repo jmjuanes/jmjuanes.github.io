@@ -29,7 +29,7 @@ layout: "default"
 <section class="">
     <div class="text-xl font-bold mb-2">Notes</div>
     {{#each site.posts limit=5}}
-    {{>link url=url title=data.title description=data.description date=data.date}}
+    {{>link url=url title=attributes.title description=attributes.description date=attributes.date}}
     {{/each}}
     <div class="mt-4">
         <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline text-sm" href="/notes.html">
