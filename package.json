@@ -8,7 +8,7 @@
     "homepage": "https://www.josemi.xyz/",
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
-        "build": "mkdir -p www && node .press/build.js",
+        "build": "mkdir -p www && node scripts/build.js",
         "clean": "rm -rf www",
         "serve": "serve www"
     },
