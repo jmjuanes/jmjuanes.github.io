@@ -18,19 +18,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
     <meta name="title" content="{{site.title}}">
     <meta name="description" content="{{site.description}}">
-    <meta property="og:site_name" content="josemi.xyz">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{site.url}}">
     <meta property="og:description" content="{{site.description}}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
     <link rel="stylesheet" href="/low.css">
-    <title>{{page.data.title}} - josemi.xyz</title>
+    <title>{{page.attributes.title}} - josemi.xyz</title>
 </head>
 <body class="m-0 p-0 font-inter leading-normal text-neutral-900">
-{{#eq page.data.layout "empty"}}
+{{#eq page.attributes.layout "empty"}}
 {{>content}}
 {{/eq}}
-{{#ne page.data.layout "empty"}}
+{{#ne page.attributes.layout "empty"}}
     <header class="w-full max-w-3xl mx-auto px-6 py-8 flex items-center justify-between">
         <a class="flex items-center hover:underline font-medium text-lg" href="/">
             <span>josemi</span>
@@ -44,31 +43,23 @@
         {{/if}}
     </header>
     <main class="w-full max-w-3xl mx-auto px-6 py-8">
-        {{#eq page.data.layout "post"}}
+        {{#eq page.attributes.layout "post"}}
         <header class="mb-12">
-            <div class="text-2xl font-bold leading-tight">{{page.data.title}}</div>
-            <div class="font-medium mb-2">{{page.data.description}}</div>
-            <div class="text-sm text-neutral-700">{{page.data.date}}</div>
+            <div class="text-2xl font-bold leading-tight">{{page.attributes.title}}</div>
+            <div class="font-medium mb-2">{{page.attributes.description}}</div>
+            <div class="text-sm text-neutral-700">{{page.attributes.date}}</div>
         </header>
         {{/eq}}
-        {{#eq page.data.layout "page"}}
+        {{#eq page.attributes.layout "page"}}
         <header class="mb-12">
-            <div class="text-2xl font-bold leading-tight">{{page.data.title}}</div>
-            <div class="font-medium">{{page.data.description}}</div>
+            <div class="text-2xl font-bold leading-tight">{{page.attributes.title}}</div>
+            <div class="font-medium">{{page.attributes.description}}</div>
         </header>
         {{/eq}}
         <article class="block markup">
             {{>content}}
         </article>
     </main>
-    {{#if site.socials}}
-    <div class="w-full max-w-3xl mx-auto px-6 py-12">
-        <div class="text-xl font-bold mb-4">Let's Connect</div>
-        <div class="mb-4">
-            If you have any questions, feedback, or just want to chat, feel free to reach out to me on any of the following platforms:
-        </div>
-    </div>
-    {{/if}}
     <footer class="w-full max-w-3xl mx-auto px-6 py-12">
         {{#if site.footer.links}}
         <div class="flex items-center gap-2 mb-6">

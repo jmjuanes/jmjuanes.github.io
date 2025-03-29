@@ -7,22 +7,20 @@
     "license": "MIT",
     "homepage": "https://www.josemi.xyz/",
     "author": "Josemi <hello@josemi.xyz>",
-    "imports": {
-        "#press/plugins": "./.press/plugins.js",
-        "#press/helpers": "./.press/helpers.js"
-    },
     "scripts": {
-        "build": "mkdir -p www && node .press/build.js",
+        "build": "mkdir -p www && node scripts/build.js",
         "clean": "rm -rf www",
         "serve": "serve www"
     },
     "dependencies": {
         "@josemi-icons/svg": "^0.6.1",
-        "lowcss": "^0.27.1"
+        "lowcss": "^0.28.0"
     },
     "devDependencies": {
-        "front-matter": "^4.0.2",
+        "js-yaml": "^4.1.0",
         "marked": "^14.1.0",
-        "mikel": "^0.17.1"
+        "mikel": "^0.18.2",
+        "mikel-press": "^0.18.2",
+        "serve": "^14.2.4"
     }
 }
