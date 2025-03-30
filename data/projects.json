@@ -6,16 +6,16 @@
         "githubUrl": "https://github.com/jmjuanes/folio"
     },
     {
-        "title": "lowcss",
-        "description": "A low-level functional CSS toolkit for building modern and responsive websites.",
-        "url": "https://low.josemi.xyz",
-        "githubUrl": "https://github.com/jmjuanes/lowcss"
-    },
-    {
         "title": "icons",
         "description": "An open source and hand-crafted SVG icons collection.",
         "url": "https://icons.josemi.xyz",
         "githubUrl": "https://github.com/jmjuanes/icons"
+    },
+    {
+        "title": "lowcss",
+        "description": "A low-level functional CSS toolkit for building modern and responsive websites.",
+        "url": "https://low.josemi.xyz",
+        "githubUrl": "https://github.com/jmjuanes/lowcss"
     },
     {
         "title": "mikel",
