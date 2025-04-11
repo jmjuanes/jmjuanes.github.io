@@ -30,18 +30,22 @@
         {{/if}}
     </header>
     <main class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-8">
+        {{#eq page.attributes.layout "page"}}
         <header class="mb-12">
             <div class="text-3xl sm:text-4xl font-bold leading-tight">{{page.attributes.title}}</div>
-            <div class="text-xl sm:text-2xl font-medium">{{page.attributes.description}}</div>
+            {{#if page.attributes.description}}
+            <div class="text-xl sm:text-2xl font-medium">
+                <span>{{page.attributes.description}}</span>
+            </div>
+            {{/if}}
             {{#if page.attributes.date}}
             <div class="text-sm text-neutral-700 mt-4">
                 <span>{{page.attributes.date}}</span>
             </div>
             {{/if}}
         </header>
-        <main class="markup">
-            {{>content}}
-        </main>
+        {{/eq}}
+        {{>content}}
     </main>
     <footer class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-12">
         {{#if site.footer.links}}
