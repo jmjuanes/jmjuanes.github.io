@@ -4,6 +4,11 @@ import * as marked from "marked";
 import * as yaml from "js-yaml";
 import websiteConfig from "../website.config.json" with {type: "json"};
 
+// convert string to pascal case
+const pascalCase = str => {
+    return str.match(/[a-zA-Z0-9]+/g).map(w => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join("");
+};
+
 // generate build info
 const getBuildInfo = () => {
     const now = new Date();
@@ -16,6 +21,17 @@ const getBuildInfo = () => {
     };
     // Return build info
     return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
+};
+
+// get partials
+const getPartials = () => {
+    const folder = path.resolve("partials");
+    return Object.fromEntries(press.utils.walkdir(folder, [".html"]).map(file => {
+        return [
+            pascalCase(path.basename(file, ".html")),
+            press.utils.read(path.join(folder, file)),
+        ];
+    }));
 };
 
 press.build({
@@ -39,7 +55,7 @@ press.build({
         }),
         press.PermalinkPlugin(),
         press.ContentPlugin({
-            layout: "./layout.html",
+            layout: "./layouts/default.html",
             functions: {
                 icon: args => {
                     return [
@@ -49,6 +65,7 @@ press.build({
                     ].join("");
                 },
             },
+            partials: getPartials(),
         }),
         press.CopyAssetsPlugin({
             patterns: [

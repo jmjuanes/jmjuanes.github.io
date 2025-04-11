@@ -1,0 +1,11 @@
+<div class="mb-4" data-id="{{url}}">
+    {{#if date}}
+    <div class="text-sm text-neutral-600">{{date}}</div>
+    {{/if}}
+    <a class="underline block font-normal hover:font-medium text-neutral-950 text-xl decoration-neutral-400 hover:decoration-neutral-950" href="{{url}}">
+        <span>{{title}}</span>
+    </a>
+    {{#if description}}
+    <div class="text-base text-neutral-800">{{description}}</div>
+    {{/if}}
+</div>
