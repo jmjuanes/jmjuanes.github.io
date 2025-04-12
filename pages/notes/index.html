@@ -6,7 +6,9 @@
 }
 ---
 {{>>PageSection}}
-{{#each site.posts}}
+{{#getCollection "notes"}}
+{{#each @collection}}
     {{>Link url=path title=attributes.title description=attributes.description date=attributes.date}}
 {{/each}}
+{{/getCollection}}
 {{/PageSection}}

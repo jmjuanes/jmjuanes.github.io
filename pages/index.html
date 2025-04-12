@@ -13,8 +13,7 @@
         <span>You can also check the other <a class="hover:underline font-bold" href="https://www.josemi.xyz/projects.html">projects</a> that I maintain.</span>
     </div>
 </header>
-<section class="mb-16">
-    <div class="text-xl sm:text-3xl font-bold mb-2">Projects</div>
+{{>>PageSection title="Projects"}}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     {{#each site.data.projects limit=4}}
         <a href="{{url}}" class="group no-underline bg-neutral-100 rounded-xl p-6">
@@ -25,21 +24,22 @@
     {{/each}}
     </div>
     <div class="mt-4">
-        <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/projects.html">
+        <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/projects">
             <span>See all projects</span>
             {{=icon icon="arrow-right"}}
         </a>
     </div>
-</section>
-<section class="">
-    <div class="text-xl sm:text-3xl font-bold mb-2">Notes</div>
-    {{#each site.posts limit=5}}
-    {{>Link url=path title=attributes.title description=attributes.description date=attributes.date}}
+{{/PageSection}}
+{{>>PageSection title="Notes"}}
+    {{#getCollection "notes"}}
+    {{#each @collection limit=5}}
+        {{>Link url=path title=attributes.title description=attributes.description date=attributes.date}}
     {{/each}}
     <div class="mt-4">
-        <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes.html">
+        <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes">
             <span>See all notes</span>
             {{=icon icon="arrow-right"}}
         </a>
     </div>
-</section>
+    {{/getCollection}}
+{{/PageSection}}
