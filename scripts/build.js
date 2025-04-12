@@ -1,7 +1,6 @@
 import * as path from "node:path";
 import press from "mikel-press";
-import * as marked from "marked";
-import * as yaml from "js-yaml";
+import hljs from "highlight.js";
 import websiteConfig from "../website.config.json" with {type: "json"};
 
 // convert string to pascal case
@@ -42,20 +41,21 @@ press.build({
             source: "./pages",
             label: "pages",
         }),
-        press.SourcePlugin({
-            source: "./posts",
-            label: "posts",
-        }),
         press.DataPlugin(),
         press.FrontmatterPlugin({
-            parser: yaml.load,
-        }),
-        press.MarkdownPlugin({
-            parser: marked.parse,
+            parser: JSON.parse,
         }),
         press.PermalinkPlugin(),
         press.ContentPlugin({
             layout: "./layouts/default.html",
+            helpers: {
+                getCollection: params => {
+                    const items = (params.data?.site?.pages || []).filter(page => {
+                        return params.args[0] && page?.attributes?.collection === params.args[0];
+                    });
+                    return params.fn(params.data, {collection: items});
+                },
+            },
             functions: {
                 icon: args => {
                     return [
@@ -64,6 +64,9 @@ press.build({
                         `</svg>`,
                     ].join("");
                 },
+                highlight: params => {
+                    return hljs.highlight(params.opt.code.trim(), {language: params.opt.language}).value;
+                },
             },
             partials: getPartials(),
         }),
@@ -71,6 +74,10 @@ press.build({
             patterns: [
                 {from: path.resolve("node_modules/lowcss/low.css"), to: "low.css"},
                 {from: path.resolve("node_modules/@josemi-icons/svg/sprite.svg"), to: "icons.svg"},
+                {
+                    from: path.resolve("node_modules/highlight.js/styles/nord.css"),
+                    to: "highlight.css",
+                },
             ],
         }),
     ],
