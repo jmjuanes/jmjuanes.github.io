@@ -1,11 +1,13 @@
 ---
-layout: "page"
-title: "Projects"
-description: "Projects and experiments that I am maintaining."
+{
+    "title": "Projects",
+    "description": "Projects and experiments that I am maintaining.",
+    "layout": "page",
+}
 ---
 
-{{>>Section title="Open Source Work" description="Here are some of the open source projects that I have contributed to. They range from simple scripts to full-fledged applications."}}
+{{>>PageSection title="Open Source Work" description="Here are some of the open source projects that I have contributed to. They range from simple scripts to full-fledged applications."}}
     {{#each site.data.projects}}
     {{>Link url=url title=title description=description date=url}}
     {{/each}}
-{{/Section}}
+{{/PageSection}}

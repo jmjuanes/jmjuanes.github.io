@@ -1,0 +1,21 @@
+---
+{
+    "title": "React Hooks for Local and Session Storage",
+    "description": "A guide for creating React Hooks to access to the Local and Session Storage of the browser.",
+    "date": "September 24, 2023",
+    "layout": "page",
+    "collection": "notes",
+    "permalink": "/notes/react-hooks-for-storage"
+}
+---
+
+{{>>MarkupCode language="javascript"}}
+// Storing data in local storage
+localStorage.setItem("username", "John");
+
+// Retrieving data from local storage
+const username = localStorage.getItem("username"); // Returns "John"
+
+// Removing data from local storage
+localStorage.removeItem("username");
+{{/MarkupCode}}
