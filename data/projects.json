@@ -1,13 +1,13 @@
 [
     {
         "title": "folio",
-        "description": "A digital whiteboard for sketching, annotating and prototyping.",
+        "description": "A minimalist digital whiteboard for sketching, annotating and prototyping. Built using React and SVG.",
         "url": "https://folio.josemi.xyz",
         "githubUrl": "https://github.com/jmjuanes/folio"
     },
     {
         "title": "icons",
-        "description": "An open source and hand-crafted SVG icons collection.",
+        "description": "An open source and hand-crafted SVG icon library, designed to be simple and easy to integrate.",
         "url": "https://icons.josemi.xyz",
         "githubUrl": "https://github.com/jmjuanes/icons"
     },
@@ -19,7 +19,7 @@
     },
     {
         "title": "mikel",
-        "description": "Micro templating library with zero dependencies.",
+        "description": "Micro templating library with zero dependencies based on mustache.js with support for helpers, partials, and functions.",
         "url": "https://github.com/jmjuanes/mikel",
         "githubUrl": "https://github.com/jmjuanes/mikel"
     },

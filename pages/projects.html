@@ -1,38 +1,13 @@
 ---
-layout: "page"
-title: "Projects"
-description: "Here are the projects and experiments that I am maintaining."
+{
+    "title": "Projects",
+    "description": "Projects and experiments that I am maintaining.",
+    "layout": "page"
+}
 ---
-{{<projects.link}}
-<a href="{{url}}" class="group no-underline border border-neutral-200 p-3 mb-2 rounded-lg flex gap-2 justify-between items-center">
-    <div class="flex flex-col gap-0">
-        <div class="text-base font-medium mb-0 group-hover:underline leading-normal">{{title}}</div>
-        <div class="text-xs text-neutral-700">{{description}}</div>
-    </div>
-    <div class="shrink-0">
-    {{#if external}}
-        {{=icon icon="arrow-up-right"}}
-    {{/if}}
-    {{#unless external}}
-        {{=icon icon="chevron-right"}}
-    {{/unless}}
-    </div>
-</a>
-{{/projects.link}}
 
-{{<projects.section}}
-<section class="mb-4 mt-12">
-    <div class="text-lg font-bold">{{title}}</div>
-    <div class="text-sm">{{description}}</div>
-</section>
-{{/projects.section}}
-
-{{>projects.section title="Open Source Work" description="Here are some of the open source projects that I have contributed to. They range from simple scripts to full-fledged applications."}}
-{{#each site.data.projects}}
-{{>projects.link url=url title=title description=description external=true}}
-{{/each}}
-
-{{>projects.section title="Games" description="Extremely simple games that I have built just for fun using SVG and JavaScript. They are not meant to be taken seriously."}}
-{{#each site.data.games}}
-{{>projects.link url=url title=title description=description}}
-{{/each}}
+{{>>PageSection title="Open Source Work" description="Here are some of the open source projects that I have contributed to. They range from simple scripts to full-fledged applications."}}
+    {{#each site.data.projects}}
+    {{>Link url=url title=title description=description date=url}}
+    {{/each}}
+{{/PageSection}}

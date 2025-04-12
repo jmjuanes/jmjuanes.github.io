@@ -4,8 +4,8 @@
     "url": "https://www.josemi.xyz",
     "navbar": {
         "links": [
-            {"text": "projects", "url": "/projects.html"},
-            {"text": "notes", "url": "/notes.html"}
+            {"text": "projects", "url": "/projects"},
+            {"text": "notes", "url": "/notes"}
         ]
     },
     "footer": {
