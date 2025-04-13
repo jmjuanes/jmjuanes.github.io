@@ -4,10 +4,18 @@
     "layout": "default"
 }
 ---
-<div class="" data-role="root"></div>
+<div id="root"></div>
 <script type="text/babel">
     import React from "react";
     import ReactDOM from "react-dom/client";
+    import mikel from "mikel";
+
+    // @description resume template
+    
+
+    const PreviewResume = ({data}) => {
+
+    };
 
     const App = () => {
         return (
@@ -18,5 +26,5 @@
         );
     };
 
-    ReactDOM.createRoot(document.querySelector(`[data-role="root"]`)).render(<App />);
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
