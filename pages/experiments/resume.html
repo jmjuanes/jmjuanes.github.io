@@ -1,0 +1,22 @@
+---
+{
+    "title": "Resume builder",
+    "layout": "default"
+}
+---
+<div class="" data-role="root"></div>
+<script type="text/babel">
+    import React from "react";
+    import ReactDOM from "react-dom/client";
+
+    const App = () => {
+        return (
+            <div>
+                <h1>Resume Builder</h1>
+                <p>This is a simple resume builder application.</p>
+            </div>
+        );
+    };
+
+    ReactDOM.createRoot(document.querySelector(`[data-role="root"]`)).render(<App />);
+</script>
