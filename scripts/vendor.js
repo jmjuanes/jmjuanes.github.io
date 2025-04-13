@@ -8,12 +8,12 @@ import {rollup} from "rollup";
 // @description build vendor files
 const vendor = async patterns => {
     const destination = path.resolve("www/vendor");
-    if (!fs.exitsSync(destination)) {
+    if (!fs.existsSync(destination)) {
         fs.mkdirSync(destination, {recursive: true});
     }
     // process patterns
     for (let i = 0; i < patterns.length; i++) {
-        item = patterns[i];
+        const item = patterns[i];
         if (typeof item.from === "string") {
             fs.cpSync(path.resolve(item.from), path.join(destination, item.to), {
                 force: true,
@@ -43,11 +43,11 @@ const vendor = async patterns => {
 // build vendor files
 vendor([
     {
-        virtual: `export {default} from "react";`,
+        virtual: `import * as React from "react"; export default React;`,
         to: "react.esm.js",
     },
     {
-        virtual: `export {default} from "react-dom";`,
+        virtual: `import * as ReactDOM from "react-dom"; export default ReactDOM;`,
         to: "react-dom.esm.js",
     },
     {
