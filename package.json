@@ -21,6 +21,9 @@
         "react-dom": "^19.1.0"
     },
     "devDependencies": {
+        "@rollup/plugin-commonjs": "^28.0.3",
+        "@rollup/plugin-node-resolve": "^16.0.1",
+        "@rollup/plugin-virtual": "^3.0.2",
         "mikel-press": "^0.19.1",
         "rollup": "^4.40.0",
         "serve": "^14.2.4"
