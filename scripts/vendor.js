@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import replace from "@rollup/plugin-replace";
 import virtual from "@rollup/plugin-virtual";
 import {rollup} from "rollup";
 
@@ -27,6 +28,10 @@ const vendor = async patterns => {
                     virtual({
                         entry: item.virtual,
                     }),
+                    replace({
+                        preventAssignment: true,
+                        "process.env.NODE_ENV": JSON.stringify("production"),
+                    }),
                     resolve(),
                     commonjs(),
                 ],
@@ -49,6 +54,10 @@ vendor([
     {
         virtual: `import * as ReactDOM from "react-dom"; export default ReactDOM;`,
         to: "react-dom.esm.js",
+    },
+    {
+        virtual: `import * as ReactDOMClient from "react-dom/client"; export default ReactDOMClient;`,
+        to: "react-dom-client.esm.js",
     },
     {
         from: "node_modules/lowcss/low.css",
