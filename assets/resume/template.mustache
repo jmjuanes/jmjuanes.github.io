@@ -1,0 +1,26 @@
+<div class="max-w-3xl mx-auto w-full px-4 flex flex-col gap-4">
+    <div class="flex gap-4 items-center">
+        {{#if cv.profileImage}}
+        <div class="shrink-0 w-96">
+            <img src="{{cv.profileImage}}" class="rounded-full w-96 h-96" />
+        </div>
+        {{/if}}
+        <div class="flex-col gap-1">
+            <div class="text-xl text-neutral-950 font-medium">{{cv.displayName}}</div>
+            {{#if cv.profession}}
+            <div class="text-base text-neutral-600">
+                <span class="text-neutral-950">{{cv.profession}}</span>
+                {{#if cv.currentCompany}}
+                <span> in </span>
+                <span class="text-neutral-950">{{cv.currentCompany}}</span>
+                {{/if}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    {{#each cv.sections}}
+    <div class="">
+        <div class="text-lg text-neutral-950 font-medium">{{title}}</div
+    </div>
+    {{/each}}
+</div>
