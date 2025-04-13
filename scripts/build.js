@@ -1,6 +1,7 @@
 import * as path from "node:path";
 import press from "mikel-press";
 import hljs from "highlight.js";
+import {AssetsPlugin, BabelJSXPlugin} from "./plugins.js";
 import websiteConfig from "../website.config.json" with {type: "json"};
 
 // convert string to pascal case
@@ -41,11 +42,13 @@ press.build({
             source: "./pages",
             label: "pages",
         }),
+        AssetsPlugin({}),
         press.DataPlugin(),
         press.FrontmatterPlugin({
             parser: JSON.parse,
         }),
         press.PermalinkPlugin(),
+        BabelJSXPlugin(),
         press.ContentPlugin({
             layout: "./layouts/default.html",
             helpers: {
