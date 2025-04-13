@@ -60,7 +60,7 @@ press.build({
                 icon: args => {
                     return [
                         `<svg width="1em" height="1em">`,
-                        `<use xlink:href="/icons.svg#${args.opt.icon}"></use>`,
+                        `<use xlink:href="/vendor/icons.svg#${args.opt.icon}"></use>`,
                         `</svg>`,
                     ].join("");
                 },
@@ -70,15 +70,15 @@ press.build({
             },
             partials: getPartials(),
         }),
-        press.CopyAssetsPlugin({
-            patterns: [
-                {from: path.resolve("node_modules/lowcss/low.css"), to: "low.css"},
-                {from: path.resolve("node_modules/@josemi-icons/svg/sprite.svg"), to: "icons.svg"},
-                {
-                    from: path.resolve("node_modules/highlight.js/styles/nord.css"),
-                    to: "highlight.css",
-                },
-            ],
-        }),
+        // press.CopyAssetsPlugin({
+        //     patterns: [
+        //         {from: path.resolve("node_modules/lowcss/low.css"), to: "low.css"},
+        //         {from: path.resolve("node_modules/@josemi-icons/svg/sprite.svg"), to: "icons.svg"},
+        //         {
+        //             from: path.resolve("node_modules/highlight.js/styles/nord.css"),
+        //             to: "highlight.css",
+        //         },
+        //     ],
+        // }),
     ],
 });
