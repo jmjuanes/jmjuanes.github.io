@@ -16,10 +16,13 @@
         "@josemi-icons/svg": "^0.7.0",
         "highlight.js": "^11.11.1",
         "lowcss": "^0.28.0",
-        "mikel": "^0.19.1"
+        "mikel": "^0.19.1",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0"
     },
     "devDependencies": {
         "mikel-press": "^0.19.1",
+        "rollup": "^4.40.0",
         "serve": "^14.2.4"
     }
 }
