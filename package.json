@@ -16,7 +16,7 @@
         "@josemi-icons/svg": "^0.7.0",
         "highlight.js": "^11.11.1",
         "lowcss": "^0.28.0",
-        "mikel": "^0.19.1",
+        "mikel": "^0.20.0",
         "react": "^19.1.0",
         "react-dom": "^19.1.0"
     },
@@ -27,7 +27,8 @@
         "@rollup/plugin-node-resolve": "^16.0.1",
         "@rollup/plugin-replace": "^6.0.2",
         "@rollup/plugin-virtual": "^3.0.2",
-        "mikel-press": "^0.19.1",
+        "mikel-markdown": "^0.20.0",
+        "mikel-press": "^0.20.0",
         "rollup": "^4.40.0",
         "serve": "^14.2.4"
     }
