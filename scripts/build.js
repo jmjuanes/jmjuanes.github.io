@@ -44,6 +44,7 @@ press({
     },
     plugins: [
         press.SourcePlugin({folder: "./posts", basePath: "notes"}),
+        press.SourcePlugin({folder: "./experiments"}),
         press.DataPlugin(),
         press.PartialsPlugin(),
         press.AssetsPlugin({basePath: "assets"}),
