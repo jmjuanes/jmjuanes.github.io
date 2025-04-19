@@ -25,7 +25,7 @@
 </head>
 <body class="m-0 p-0 font-inter leading-normal text-neutral-900">
 {{#eq page.attributes.layout "empty"}}
-{{>content}}
+{{!@content}}
 {{/eq}}
 {{#ne page.attributes.layout "empty"}}
     <header class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-8 flex items-center justify-between">
@@ -42,9 +42,9 @@
     </header>
     <main class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-8">
         {{#eq page.attributes.layout "page"}}
-        {{>PageHeader title=page.attributes.title description=page.attributes.description date=page.attributes.date}}
+        {{>page-header.html title=page.attributes.title description=page.attributes.description date=page.attributes.date}}
         {{/eq}}
-        {{>content}}
+        {{!@content}}
     </main>
     <footer class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-12">
         {{#if site.footer.links}}
