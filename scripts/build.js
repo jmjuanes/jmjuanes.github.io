@@ -1,13 +1,7 @@
-import * as path from "node:path";
 import press from "mikel-press";
 import hljs from "highlight.js";
 import {AssetsPlugin, BabelJSXPlugin} from "./plugins.js";
 import websiteConfig from "../website.config.json" with {type: "json"};
-
-// convert string to pascal case
-const pascalCase = str => {
-    return str.match(/[a-zA-Z0-9]+/g).map(w => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join("");
-};
 
 // generate build info
 const getBuildInfo = () => {
@@ -23,56 +17,39 @@ const getBuildInfo = () => {
     return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
 };
 
-// get partials
-const getPartials = () => {
-    const folder = path.resolve("partials");
-    return Object.fromEntries(press.utils.walkdir(folder, [".html"]).map(file => {
-        return [
-            pascalCase(path.basename(file, ".html")),
-            press.utils.read(path.join(folder, file)),
-        ];
-    }));
-};
-
-press.build({
+press({
     ...websiteConfig,
     build: getBuildInfo(),
+    mikelOptions: {
+        helpers: {
+            getCollection: params => {
+                const items = (params.data?.site?.pages || []).filter(page => {
+                    return params.args[0] && page?.attributes?.collection === params.args[0];
+                });
+                return params.fn(params.data, {collection: items});
+            },
+        },
+        functions: {
+            icon: args => {
+                return [
+                    `<svg width="1em" height="1em">`,
+                    `<use xlink:href="/vendor/icons.svg#${args.opt.icon}"></use>`,
+                    `</svg>`,
+                ].join("");
+            },
+            highlight: params => {
+                return hljs.highlight(params.opt.code.trim(), {language: params.opt.language}).value;
+            },
+        },
+    },
     plugins: [
-        press.SourcePlugin({
-            source: "./pages",
-            label: "pages",
-        }),
+        press.SourcePlugin({folder: "./posts", basePath: "notes"}),
         AssetsPlugin({}),
-        press.DataPlugin(),
-        press.FrontmatterPlugin({
-            parser: JSON.parse,
-        }),
-        press.PermalinkPlugin(),
+        press.DataLoaderPlugin(),
+        press.PartialsLoaderPlugin(),
+        press.FrontmatterPlugin(),
         BabelJSXPlugin(),
-        press.ContentPlugin({
-            layout: "./layouts/default.html",
-            helpers: {
-                getCollection: params => {
-                    const items = (params.data?.site?.pages || []).filter(page => {
-                        return params.args[0] && page?.attributes?.collection === params.args[0];
-                    });
-                    return params.fn(params.data, {collection: items});
-                },
-            },
-            functions: {
-                icon: args => {
-                    return [
-                        `<svg width="1em" height="1em">`,
-                        `<use xlink:href="/vendor/icons.svg#${args.opt.icon}"></use>`,
-                        `</svg>`,
-                    ].join("");
-                },
-                highlight: params => {
-                    return hljs.highlight(params.opt.code.trim(), {language: params.opt.language}).value;
-                },
-            },
-            partials: getPartials(),
-        }),
+        press.ContentPagePlugin(),
         // press.CopyAssetsPlugin({
         //     patterns: [
         //         {from: path.resolve("node_modules/lowcss/low.css"), to: "low.css"},
