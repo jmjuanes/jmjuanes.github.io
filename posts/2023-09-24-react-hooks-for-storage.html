@@ -8,70 +8,71 @@
     "permalink": "/notes/react-hooks-for-storage.html"
 }
 ---
+{{>>layout.html}}
 
-{{>>MarkupHeading}}
+{{>>markup-heading.html}}
 What is Local and Session storage?
-{{/MarkupHeading}}
+{{/markup-heading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 <b>Local</b> storage and <b>Session</b> storage are two web storage options available in 
 JavaScript that allow you to store data on the client-side (in the user's browser) 
 for a specific web domain. They are part of the Web Storage API and provide a way 
 to store key-value pairs persistently (local storage) or for the duration of a page 
 session (session storage).
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 On the one side, data stored using local storage persists even after the browser is 
 closed, and is available across multiple browser sessions. It is suitable for storing 
 user preferences, cached data, or application state. 
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 On the other side, data stored with session storage is automatically cleared when the 
 session ends (e.g., when the user closes the browser tab or window). It is suitable 
 for temporary data that is needed only while the user is interacting with the current 
 page, such as shopping cart items, form data, or temporary user authentication tokens.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupHeading}}
+{{>>markup-heading.html}}
 API for local and session storage
-{{/MarkupHeading}}
+{{/markup-heading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 The API for local ans session storage is exactly the same. Local storage API can be 
 accessed from <code>window.localStorage</code>, and session storage API can be accessed 
 from <code>window.sessionStorage</code>.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 Both session storage and local storage offer similar methods for managing stored data. 
 Here are the key methods available for both:
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupSubheading}}setItem(key, value){{/MarkupSubheading}}
+{{>>markup-subheading.html}}setItem(key, value){{/markup-subheading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 Use this method to store a key-value pair in either session storage or local storage. 
 The <b>key</b> argument is a string that acts as the identifier, and <b>value</b> can 
 be any data type, but it will be automatically converted to a string.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupSubheading}}getItem(key){{/MarkupSubheading}}
+{{>>markup-subheading.html}}getItem(key){{/markup-subheading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 Use this method to retrieve the value associated with a specific key. It returns the 
 stored value as a string.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupSubheading}}removeItem(key){{/MarkupSubheading}}
+{{>>markup-subheading.html}}removeItem(key){{/markup-subheading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 Use this method to remove a specific key-value pair from either session storage or 
 local storage.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupCode language="javascript"}}
+{{>>markup-code.html language="javascript"}}
 // Storing data in local storage
 localStorage.setItem("username", "John");
 
@@ -80,20 +81,20 @@ const username = localStorage.getItem("username"); // Returns "John"
 
 // Removing data from local storage
 localStorage.removeItem("username");
-{{/MarkupCode}}
+{{/markup-code.html}}
 
 
-{{>>MarkupHeading}}
+{{>>markup-heading.html}}
 Creating the React Hook
-{{/MarkupHeading}}
+{{/markup-heading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 Now, let's create a custom React hook to simplify working with local storage or 
 session storage in React components, by encapsulating the logic for reading and 
 writing values.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupCode language="javascript"}}
+{{>>markup-code.html language="javascript"}}
 import {useState, useEffect} from "react";
 
 export const useStorage = (store, key, defaultValue) => {
@@ -116,41 +117,41 @@ export const useStorage = (store, key, defaultValue) => {
     // Return the pair [currentValue, setCurrentValue]
     return [currentValue, setCurrentValue];
 };
-{{/MarkupCode}}
+{{/markup-code.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 This hook follows these steps:
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupSubheading}}1. Initializes the state{{/MarkupSubheading}}
+{{>>markup-subheading.html}}1. Initializes the state{{/markup-subheading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 It initializes the state (<code>currentValue</code>) with the value from storage 
 if it exists, or uses the default value provided as the third argument of the hook.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupSubheading}}2. Sets up an effect{{/MarkupSubheading}}
+{{>>markup-subheading.html}}2. Sets up an effect{{/markup-subheading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 It sets up an effect that runs whenever <code>currentValue</code> changes.
 This effect serializes the new value and stores it in the chosen storage (either 
 local or session).
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupSubheading}}3. Returns the pair [currentValue, setCurrentValue]{{/MarkupSubheading}}
+{{>>markup-subheading.html}}3. Returns the pair [currentValue, setCurrentValue]{{/markup-subheading.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 It returns the pair <code>[currentValue, setCurrentValue]</code>, allowing
 you to read and update the value in storage.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 We can improve the previous code by creating two wrappers for using directly 
 local or session storage, without having to provide this value as an argument 
 to the hook:
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupCode language="javascript"}}
+{{>>markup-code.html language="javascript"}}
 export const useLocalStorage = (key, defaultValue) => {
     return useStorage(window.localStorage, key, defaultValue);
 };
@@ -158,14 +159,14 @@ export const useLocalStorage = (key, defaultValue) => {
 export const useSessionStorage = (key, defaultValue) => {
     return useStorage(window.sessionStorage, key, defaultValue);
 };
-{{/MarkupCode}}
+{{/markup-code.html}}
 
-{{>>MarkupParagraph}}
+{{>>markup-paragraph.html}}
 This way, we can use the <code>useLocalStorage</code> and <code>useSessionStorage</code> 
 hooks without having to pass the storage object as an argument.
-{{/MarkupParagraph}}
+{{/markup-paragraph.html}}
 
-{{>>MarkupCode language="javascript"}}
+{{>>markup-code.html language="javascript"}}
 import React from "react";
 import {useLocalStorage} from "./useStorage.js";
 
@@ -185,4 +186,6 @@ export const MyCounter = () => {
         </div>
     );
 };
-{{/MarkupCode}}
+{{/markup-code.html}}
+
+{{/layout.html}}
