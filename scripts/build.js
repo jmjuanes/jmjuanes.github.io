@@ -1,6 +1,6 @@
 import press from "mikel-press";
 import hljs from "highlight.js";
-import {AssetsPlugin, BabelJSXPlugin} from "./plugins.js";
+import {BabelJSXPlugin} from "./plugins.js";
 import websiteConfig from "../website.config.json" with {type: "json"};
 
 // generate build info
@@ -44,21 +44,11 @@ press({
     },
     plugins: [
         press.SourcePlugin({folder: "./posts", basePath: "notes"}),
-        AssetsPlugin({}),
-        press.DataLoaderPlugin(),
-        press.PartialsLoaderPlugin(),
+        press.DataPlugin(),
+        press.PartialsPlugin(),
+        press.AssetsPlugin({basePath: "assets"}),
         press.FrontmatterPlugin(),
         BabelJSXPlugin(),
         press.ContentPagePlugin(),
-        // press.CopyAssetsPlugin({
-        //     patterns: [
-        //         {from: path.resolve("node_modules/lowcss/low.css"), to: "low.css"},
-        //         {from: path.resolve("node_modules/@josemi-icons/svg/sprite.svg"), to: "icons.svg"},
-        //         {
-        //             from: path.resolve("node_modules/highlight.js/styles/nord.css"),
-        //             to: "highlight.css",
-        //         },
-        //     ],
-        // }),
     ],
 });
