@@ -1,0 +1,16 @@
+---
+{
+    "title": "Notes",
+    "description": "A collection of notes on various topics.",
+    "layout": "page"
+}
+---
+{{>>layout.html}}
+{{>>page-section.html}}
+{{#getCollection "notes"}}
+    {{#each @collection}}
+        {{>link.html url=path title=attributes.title description=attributes.description date=attributes.date}}
+    {{/each}}
+{{/getCollection}}
+{{/page-section.html}}
+{{/layout.html}}
