@@ -72,6 +72,20 @@ vendor([
         to: "icons.svg",
     },
     {
+        from: "node_modules/@josemi-icons/react/index.js",
+        to: "icons.esm.js",
+    },
+    {
+        virtual: `import cn from "classnames; export default cn;`,
+        to: "classnames.esm.js",
+    },
+    {
+        from: "node_modules/codecake/codecake.js",
+    },
+    {
+        from: "node_modules/codecake/codecake.css",
+    },
+    {
         from: "node_modules/highlight.js/styles/nord.css",
         to: "highlight.css",
     },
