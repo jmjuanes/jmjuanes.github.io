@@ -1,13 +1,16 @@
 ---
 {
     "title": "React ESM bundle",
-    "description": "Creating ESM Bundles of React and ReactDOM for Browser Usage with Import Maps.",
+    "description": "Creating ESM bundles of React and ReactDOM to use in the browser with Import Maps.",
+    "date": "April 20, 2025",
     "layout": "page",
     "collection": "notes",
     "permalink": "/notes/react-esm-bundle.html"
 }
 ---
 {{>>layout.html}}
+
+{{>>markup-heading.html}}Introduction{{/markup-heading.html}}
 
 {{>>markup-paragraph.html}}
 React and ReactDOM are distributed as CommonJS modules by default. But what if you want to use 
@@ -35,7 +38,7 @@ npm install react react-dom
 npm install --save-dev rollup @rollup/plugin-node-resolve @rollup/plugin-commonjs
 {{/markup-code.html}}
 
-{{>>markup-heading}}Step 2: Entry Files for React and ReactDOM{{/markup-heading.html}}
+{{>>markup-heading.html}}Step 2: Entry Files for React and ReactDOM{{/markup-heading.html}}
 
 {{>>markup-paragraph.html}}
 Since we want to treat React as a module, we will create two small entry files:
