@@ -24,13 +24,14 @@ const vendor = async patterns => {
         else if (typeof item.virtual === "string") {
             const bundle = await rollup({
                 input: "entry",
+                external: item.external || [],
                 plugins: [
                     virtual({
                         entry: item.virtual,
                     }),
                     replace({
                         preventAssignment: true,
-                        "process.env.NODE_ENV": JSON.stringify("production"),
+                        "process.env.NODE_ENV": JSON.stringify("development"),
                     }),
                     resolve(),
                     commonjs(),
@@ -53,10 +54,12 @@ vendor([
     },
     {
         virtual: `import * as ReactDOM from "react-dom"; export default ReactDOM;`,
+        external: ["react"],
         to: "react-dom.esm.js",
     },
     {
         virtual: `import * as ReactDOMClient from "react-dom/client"; export default ReactDOMClient;`,
+        external: ["react"],
         to: "react-dom-client.esm.js",
     },
     {
@@ -73,17 +76,20 @@ vendor([
     },
     {
         from: "node_modules/@josemi-icons/react/index.js",
+        external: ["react"],
         to: "icons.esm.js",
     },
     {
-        virtual: `import cn from "classnames; export default cn;`,
+        virtual: `import cn from "classnames"; export default cn;`,
         to: "classnames.esm.js",
     },
     {
         from: "node_modules/codecake/codecake.js",
+        to: "codecake.js",
     },
     {
         from: "node_modules/codecake/codecake.css",
+        to: "codecake.css",
     },
     {
         from: "node_modules/highlight.js/styles/nord.css",
