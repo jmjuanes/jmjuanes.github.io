@@ -11,299 +11,213 @@
 <script type="text/babel">
     import React from "react";
     import ReactDOM from "react-dom/client";
-    import classNames from "classnames";
-    import * as codeCake from "codecake";
-    import {renderIcon} from "@josemi-icons/react";
+    import {CodeBlockIcon, ExclamationTriangleIcon} from "@josemi-icons/react";
+    import {Button, Dialog, Overlay, Center} from "@josemihq/ui";
+    import {useDialog} from "@josemihq/ui";
+    import {Form, FORM_OPTIONS} from "@josemihq/form";
+    import {RouterProvider, Switch, Route, useRouter} from "@josemihq/router";
+    import {FiddleLayout, FiddleCode, FiddleOutput, FiddleProvider, useFiddle} from "@josemihq/fiddle";
+    import {exportFiddle, importFiddle} from "@josemihq/fiddle";
 
-    export const LANGUAGES = {
-        HTML: "html",
-        CSS: "css",
-        JS: "javascript"
-    };
-
-    export const LANGUAGES_CONFIG = {
-        [LANGUAGES.HTML]: {name: "HTML", icon: "html5"},
-        [LANGUAGES.CSS]: {name: "CSS", icon: "css"},
-        [LANGUAGES.JS]: {name: "JavaScript", icon: "javascript"},
-    };
-
-    // list of default sanbox attributes
-    export const SANDBOX_ATTRIBUTES = [
-        "allow-downloads",
-        "allow-forms",
-        "allow-modals",
-        "allow-pointer-lock",
-        "allow-popups",
-        "allow-presentation",
-        "allow-same-origin",
-        "allow-scripts",
-    ];
-
-    // @description create a new element with the given tag name and attributes
-    const createElement = (tag, attributes = {}, content = "") => {
-        const attributesArray = Object.keys(attributes).map(key => {
-            return `${key}="${attributes[key]}"`;
-        });
-        return `<${tag} ${attributesArray.join(" ")}>${content}</${tag}>`;
-    };
-
-    // @description wrap javascript code
-    const wrapJavaScriptCode = (code = "") => { 
-        return `
-            console.clear();
-            const __execute = () => {
-                const scriptTag = document.createElement("script");
-                scriptTag.innerHTML = ${JSON.stringify(code)};
-                document.body.appendChild(scriptTag);
-            };
-            document.addEventListener("DOMContentLoaded", __execute);
-        `;
-    };
-
-    // @description run the code in the iframe
-    const generateHtml = async (code = {}, options = {}) => {
-        // TODO: we have apply transforms to the code before running it
-        // 1. generate head tags
-        const head = [
-            createElement("style", {}, code.css || ""),
-            createElement("script", {}, wrapJavaScriptCode(code.javascript || "")),
-        ].join("");
-        // 2. generate body content
-        const body = code.html || "";
-        // generate the html document
-        return `<!doctype html><html><head>${head}</head><body>${body}</body></html>`;
-    };
-
-    // @description button component
-    // @params {string} props.icon - icon name
-    // @params {string} props.text - button text
-    // @params {function} props.onClick - click handler
-    const Button = props => {
-        const buttonClassName = classNames({
-            "flex items-center justify-center gap-1 cursor-pointer px-3 py-2 rounded-lg": true,
-            "bg-neutral-950 hover:bg-neutral-900 text-white": props.variant === "primary" || props.primary,
-            "bg-neutral-100 hover:bg-neutral-200 text-neutral-900": props.variant === "secondary",
-            "opacity-60 pointer-events-none": props.disabled,
-        }, props.className);
-        return (
-            <div className={buttonClassName} onClick={props.onClick}>
-                {props.icon && (
-                    <span className="flex items-center text-lg">
-                        {renderIcon(props.icon)}
-                    </span>
-                )}
-                <span className="text-sm leading-none font-medium">{props.text}</span>
-            </div>
-        );
-    };
-
-    // fiddle editor context
-    export const FiddleContext = React.createContext({});
-
-    // use fiddle context
-    export const useFiddle = () => {
-        return React.useContext(FiddleContext);
-    };
-
-    // fiddle provider
-    export const FiddleProvider = ({children, ...props}) => {
-        const [state, setState] = React.useState(() => {
-            return {
-                activeCode: "html",
-                code: {
-                    html: props.code?.html || "",
-                    css: props.code?.css || "",
-                    js: props.code?.javascript || props.code?.js || "",
-                },
-            };
-        });
-        const actions = React.useMemo(() => ({
-            updateCode: (language, code) => {
-                return setState(prevState => ({
-                    ...prevState,
-                    code: {
-                        ...prevState.code,
-                        [language]: code,
-                    },
-                }));
-            },
-            setActiveCode: language => {
-                setState(prevState => ({...prevState, activeCode: language}));
-            },
-        }), [setState]);
-
-        return (
-            <FiddleContext value={{...state, ...actions}}>
-                {children}
-            </FiddleContext>
-        );
-    };
-
-    // @description base layout component
-    export const FiddleLayout = props => {
-        return (
-            <div className={classNames("flex-auto flex min-h-0", props.className)}>
-                {props.children}
-            </div>
-        );
-    };
-
-    const CodeEditor = props => {
-        const parentRef = React.useRef(null);
-        const editorRef = React.useRef(null);
-        const codePanelClass = classNames({
-            "w-full h-full overflow-y-auto": true,
-            // "CodeCake-dark": props.theme === "dark",
-            // "CodeCake-light bg-cool-50": !props.theme || props.theme === "light",
-        });
-
-        // on mount, initialize editor
-        React.useEffect(() => {
-            editorRef.current = codeCake.create(parentRef.current, {
-                language: props.language || "html",
-                className: "codecake-light h-full bg-white",
-                lineNumbers: true,
-                highlight: codeCake.highlight,
-            });
-            // initialize the code
-            if (props.initialCode) {
-                editorRef.current.setCode(props.initialCode);
+    // @description fiddle client to get/save fiddles
+    const fiddleClient = {
+        get: async id => {
+            const data = localStorage.getItem(`fiddle-${id}`);
+            if (!data) {
+                throw new Error(`The fiddle with id '${id}' does not exist.`);
             }
-            // register on change method
-            editorRef.current.onChange(code => {
-                return props.onChange(props.language, code);
-            });
-        }, [props.onChange]);
-
-        return (
-            <div className={codePanelClass} ref={parentRef}></div>
-        );
+            return JSON.parse(data);
+        },
+        save: async (id, data) => {
+            localStorage.setItem(`fiddle-${id}`, JSON.stringify(data));
+        },
+        delete: async id => {
+            localStorage.removeItem(`fiddle-${id}`);
+        },
     };
 
-    // export code editor component
-    export const FiddleCodeEditor = () => {
-        const fiddle = useFiddle();
-        const availableCodeEditors = Object.values(LANGUAGES);
-        const tabs = React.useMemo(() => {
-            return availableCodeEditors.map(key => {
-                const tabActive = key === fiddle.activeCode;
-                const tabClassName = classNames({
-                    "flex items-center gap-1 cursor-pointer px-3 py-1": true,
-                    "text-neutral-950 bg-white rounded-md shadow-sm font-bold": tabActive,
-                    "text-neutral-700 hover:text-neutral-950 font-medium": !tabActive
-                });
-                const tabClick = () => fiddle.setActiveCode(key);
-                return (
-                    <div key={"tab:" + key} className={tabClassName} onClick={tabClick}>
-                        <span className="flex items-center text-lg">
-                            {renderIcon(LANGUAGES_CONFIG[key].icon)}
-                        </span>
-                        <span className="text-sm">{LANGUAGES_CONFIG[key].name}</span>
-                    </div>
-                );
-            });
-        }, [fiddle.activeCode, fiddle.setActiveCode, availableCodeEditors.join(",")]);
+    // @description logo of the app
+    const Logo = props => (
+        <div className="flex items-center gap-1" onClick={props.onClick}>
+            <span className="flex items-center text-3xl">
+                <CodeBlockIcon />
+            </span>
+            <span className="text-2xl font-extrabold leading-none">fiddle.</span>
+        </div>
+    );
 
-        return (
-            <div className="w-full h-full flex flex-col bg-white">
-                <div className="w-full flex items-center justify-between gap-2 select-none py-2 px-3">
-                    <div className="flex p-1 bg-neutral-100 rounded-lg">{tabs}</div>
+    // @description loading screen
+    const LoadingScreen = () => (
+        <Center className="fixed top-0 left-0 z-50">
+            <div className="flex text-9xl animation-pulse text-neutral-200">
+                <CodeBlockIcon />
+            </div>
+        </Center>
+    );
+
+    // @description error screen
+    const ErrorScreen = props => (
+        <Center className="fixed top-0 left-0 z-50">
+            <div className="w-full max-w-md flex flex-col items-center gap-2 border border-neutral-200 bg-white rounded-lg p-8 shadow-md">
+                <div className="flex items-center text-4xl text-neutral-600">
+                    <ExclamationTriangleIcon />
                 </div>
-                {availableCodeEditors.map(tab => (
-                    <div key={tab} className={classNames("flex-auto", {"hidden": !(tab === fiddle.activeCode)})}>
-                        <CodeEditor
-                            key={"editor:" + tab}
-                            language={tab}
-                            initialCode={fiddle.code[tab]}
-                            onChange={fiddle.updateCode}
-                        />
-                    </div>
-                ))}
+                {props.title && (
+                    <div className="text-center text-base text-neutral-900 font-medium leading-none">{props.title}</div>
+                )}
+                {props.message && (
+                    <div className="text-center text-sm text-neutral-800">{props.message}</div>
+                )}
             </div>
-        );
-    };
-
-    // @description output fiddle
-    export const FiddleOutput = props => {
-        const fiddle = useFiddle();
-        const [iframeExecutionId, setIframeExecutionId] = React.useState(0);
-        const currentExecutionId = React.useRef(iframeExecutionId);
-        const iframeRef = React.useRef(null);
-
-        // delay the update of the iframe
-        // useDebounce(
-        //     () => setIframeExecutionId(iframeExecutionId + 1),
-        //     props.executionDelay || 1000,
-        //     [fiddle.code?.html, fiddle.code?.css, fiddle.code?.javascript],
-        // );
-        React.useEffect(() => {
-            const delayedFnTimer = window.setTimeout(() => {
-                setIframeExecutionId(iframeExecutionId + 1);
-            }, props.execitionDelay || 1000);
-            return () => {
-                window.clearTimeout(delayedFnTimer);
-            };
-        }, [fiddle?.code?.html, fiddle?.code?.css, fiddle?.code?.javascript]);
-
-        // effect to update the iframe content
-        React.useEffect(() => {
-            currentExecutionId.current = iframeExecutionId; // store the current execution id
-            if (iframeRef.current && fiddle.code) {
-                generateHtml(fiddle.code, {}).then(html => {
-                    // if the execution id has changed, do not continue
-                    if (currentExecutionId.current !== iframeExecutionId) {
-                        return;
-                    }
-                    // write the html content to the iframe
-                    iframeRef.current.contentWindow.document.open();
-                    iframeRef.current.contentWindow.document.write(html);
-                    iframeRef.current.contentWindow.document.close();
-                });
-            }
-        }, [iframeExecutionId]);
-
-        return (
-            <div className="w-full h-full relative">
-                <iframe
-                    key={iframeExecutionId}
-                    ref={iframeRef}
-                    className="w-full h-full border-0 bg-white"
-                    scrolling="yes"
-                    sandbox={SANDBOX_ATTRIBUTES.join(" ")}
-                />
-            </div>
-        );
-    };
+        </Center>
+    );
 
     // @description fiddle main bar
     const FiddleBar = () => {
+        const fiddle = useFiddle();
+        const {showDialog} = useDialog();
+
+        // handle click on the settings button
+        const handleSettingsClick = React.useCallback(() => {
+            showDialog({
+                component: FiddleSettings,
+                props: {
+                    title: fiddle.title,
+                    autorun: fiddle.autorun,
+                    onChange: data => {
+                        fiddle.update(data);
+                    },
+                },
+            });
+        }, [fiddle, showDialog]);
+
         return (
             <div className="flex-none flex items-center justify-between py-4 px-3 bg-white text-neutral-950 border-b border-neutral-200">
-                <div className="flex items-center gap-1">
-                    <span class="flex items-center text-3xl">
-                        {renderIcon("code-block")}
-                    </span>
-                    <span className="text-xl font-bold">Fiddle</span>
+                <div className="flex items-center gap-2">
+                    <Logo />
+                    <div className="text-base font-medium text-neutral-600">{fiddle.title}</div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button primary icon="reload" text="Run" />
+                    <Button primary icon="reload" text="Run" disabled={fiddle.autorun} onClick={() => fiddle.run()} />
+                    <Button variant="secondary" icon="sliders" onClick={handleSettingsClick} />
                 </div>
             </div>
         );
     };
 
-    // @description main app component
-    const App = () => {
-        const initialCode = {
-            html: "<div>Hello, world!</div>",
-        };
+    // @description fiddle settings menu
+    const FiddleSettings = props => {
+        const [state, setState] = React.useState({
+            title: props.title,
+            autorun: props.autorun,
+        });
+        const {hideDialog} = useDialog();
+        const fields = React.useMemo(() => {
+            return {
+                title: {
+                    type: FORM_OPTIONS.TEXT,
+                    title: "Title",
+                    placeholder: "Your amazing title",
+                },
+                autorun: {
+                    type: FORM_OPTIONS.CHECKBOX,
+                    title: "Auto run",
+                    helper: "Run code automatically after every change.",
+                },
+            };
+        }, []);
+
+        // handle change in the form
+        const handleChange = React.useCallback((key, value) => {
+            setState(prev => ({...prev, [key]: value}));
+        },[setState]);
+
+        // after each change in the form, call the props.onChange with the new state
+        React.useEffect(() => {
+            props.onChange(state);
+        }, [state, props]);
 
         return (
+            <Center className="top-0 left-0 fixed z-50">
+                <Dialog.Content className="w-full max-w-lg">
+                    <Dialog.Header>
+                        <Dialog.Title>Settings</Dialog.Title>
+                        <Dialog.Close onClick={hideDialog} />
+                    </Dialog.Header>
+                    <Dialog.Body>
+                        <Form items={fields} data={state} onChange={handleChange} />
+                    </Dialog.Body>
+                </Dialog.Content>
+            </Center>
+        );
+    };
+
+    // @description dashboard route
+    const DashboardRoute = () => {
+        return (
+            <Center className="top-0 left-0 fixed z-50">
+                <div className="fixed top-0 left-0 right-0 py-4 px-3">
+                    <Logo />
+                </div>
+                <div className="w-full max-w-3xl flex flex-col my-20">
+                    <div className="text-5xl font-medium leading-none text-neutral-950">Welcome 👋</div>
+                </div>
+            </Center>
+        );
+    };
+
+    // @description editor route
+    const EditorRoute = () => {
+        const [fiddle, setFiddle] = React.useState(null);
+        const [error, setError] = React.useState(null);
+        const {currentPath} = useRouter();
+
+        // capture any change in the fiddle and save it to the local storage
+        const handleChange = React.useCallback(code => {
+            return null;
+        }, [fiddle?.data, fiddle?.id]);
+
+        // on mount, get the file data
+        React.useEffect(() => {
+            const params = new URLSearchParams(currentPath.split("?")?.[1] || "");
+            if (params.has("id")) {
+                fiddleClient.get(params.get("id"))
+                    .then(data => {
+                        setFiddle({data: data, id: params.get("id")});
+                    })
+                    .catch(error => setError(error));
+            }
+            else if (params.has("d")) {
+                // note: by default imported fiddles from the url are always readonly
+                // this is to prevent users from modifying the original fiddle. They can save a copy to edit it.
+                importFiddle(params.get("d"), {readonly: true})
+                    .then(data => setFiddle({data: data, id: null}))
+                    .catch(error => setError(error));
+            }
+            else {
+                setError(new Error("Missing fiddle id or data in the URL."));
+            }
+        }, []);
+
+        // no fiddle data and error: display the loading screen
+        if (!fiddle?.data && !error) {
+            return <LoadingScreen />;
+        }
+
+        // error loading fiddle data: display the error message
+        if (error) {
+            return (
+                <ErrorScreen title="Error loading fiddle" message={error?.message || error} />
+            );
+        }
+
+        // if we have the fiddle data, render the editor
+        return (
             <div className="fixed top-0 left-0 bg-white text-neutral-900 text-base flex flex-col flex-none w-full h-screen">
-                <FiddleProvider code={initialCode}>
+                <FiddleProvider key={fiddle?.id || "f"} data={fiddle?.data} onChange={handleChange}>
                     <FiddleBar />
                     <FiddleLayout className="h-full w-full">
-                        <FiddleCodeEditor />
+                        <FiddleCode />
                         <div className="h-full border-l border-neutral-200" />
                         <FiddleOutput />
                     </FiddleLayout>
@@ -312,9 +226,31 @@
         );
     };
 
+    // @description main app component
+    const App = () => {
+        const {currentPath} = useRouter();
+        return (
+            <Switch>
+                <Route test={/(^#$)|(^#dashboard$)/} render={() => (
+                    <DashboardRoute key={currentPath} />
+                )} />
+                <Route test={/^#editor/} render={() => (
+                    <EditorRoute key={currentPath} />
+                )} />
+                <Route test="*" render={() => (
+                    <ErrorScreen title="Not found" message="The requested page does not exist." />
+                )} />
+            </Switch>
+        );
+    };
+
     // render app
     ReactDOM.createRoot(document.getElementById("root")).render((
-        <App />
+        <RouterProvider>
+            <Dialog.Provider>
+                <App />
+            </Dialog.Provider>
+        </RouterProvider>
     ));
 </script>
 {{/layout.html}}
