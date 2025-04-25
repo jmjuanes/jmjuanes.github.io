@@ -63,6 +63,10 @@ vendor([
         to: "react-dom-client.esm.js",
     },
     {
+        virtual: `import lz from "lz-string"; export default lz;`,
+        to: "lz-string.esm.js",
+    },
+    {
         from: "node_modules/lowcss/low.css",
         to: "low.css",
     },
