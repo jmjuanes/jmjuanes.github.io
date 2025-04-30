@@ -2,19 +2,19 @@
 {
     "title": "Fiddle",
     "description": "Minimal HTML, CSS, and JavaScript playground.",
-    "layout": "empty",
     "permalink": "/lab/fiddle.html"
 }
 ---
-{{>>layout.html}}
+{{>>layout.app.html}}
 <div id="root"></div>
 <script type="text/babel">
     import React from "react";
     import ReactDOM from "react-dom/client";
     import {CodeBlockIcon, ExclamationTriangleIcon} from "@josemi-icons/react";
-    import {Button, Dialog, Overlay, Center} from "@josemihq/ui";
+    import {DatabaseProvider, useDatabase, uid} from "@josemihq/db";
+    import {Button, Dialog, Overlay, Center, Tabs, EmptyState} from "@josemihq/ui";
     import {useDialog} from "@josemihq/ui";
-    import {Form, FORM_OPTIONS} from "@josemihq/form";
+    import {Form, useFormData, FORM_OPTIONS} from "@josemihq/form";
     import {RouterProvider, Switch, Route, useRouter} from "@josemihq/router";
     import {FiddleLayout, FiddleCode, FiddleOutput, FiddleProvider, useFiddle} from "@josemihq/fiddle";
     import {exportFiddle, importFiddle} from "@josemihq/fiddle";
@@ -105,6 +105,69 @@
         );
     };
 
+    // @description fiddle create dialog
+    const FiddleCreateDialog = props => {
+        const {hideDialog} = useDialog();
+        const [state, setState] = useFormData({});
+        const fields = React.useMemo(() => {
+            return {
+                title: {
+                    type: FORM_OPTIONS.TEXT,
+                    title: "Name your fiddle",
+                    placeholder: "My fiddle",
+                },
+                template: {
+                    type: FORM_OPTIONS.RADIO,
+                    title: "Start your fiddle with one of our templates:",
+                    className: "grid grid-cols-3 gap-1 w-full",
+                    values: [
+                        {value: "default", text: "Simple HTML", icon: "html5", iconClass: "text-orange-500 text-4xl mb-1"},
+                    ],
+                },
+            };
+        }, []);
+
+        // handle create a new fiddle
+        const handleCreate = React.useCallback(() => {
+            if (!state.template) {
+                return;
+            }
+            const data = {
+                id: uid(8),
+                title: state.title || "My fiddle",
+                autorun: true,
+            };
+            fiddleClient.save(data.id, data)
+                .then(() => {
+                    hideDialog();
+                    window.location.hash = `#editor?id=${id}`;
+                })
+                .catch(error => console.error(error));
+        }, [state, hideDialog]);
+
+        return (
+            <Center className="top-0 left-0 fixed z-50">
+                <Dialog.Content className="w-full max-w-lg">
+                    <Dialog.Header>
+                        <Dialog.Title>Create Fiddle</Dialog.Title>
+                        <Dialog.Close onClick={hideDialog} />
+                    </Dialog.Header>
+                    <Dialog.Body>
+                        <Form items={fields} data={state} onChange={setState} />
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                        <Button
+                            variant="primary"
+                            text="Create Fiddle"
+                            disabled={!state.template}
+                            onClick={handleCreate}
+                        />
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Center>
+        );
+    };
+
     // @description fiddle settings menu
     const FiddleSettings = props => {
         const [state, setState] = React.useState({
@@ -154,13 +217,74 @@
 
     // @description dashboard route
     const DashboardRoute = () => {
+        const db = useDatabase();
+        const {showDialog} = useDialog();
+        const [activeTab, setActiveTab] = React.useState("local");
+        const [localFiddles, setLocalFiddles] = React.useState(null);
+        const availableTabs = {
+            local: "Local Fiddles",
+        };
+
+        // on mount get the local fiddles to display
+        React.useEffect(() => {
+            const items = [];
+            Promise.resolve(true)
+                .then(() => {
+                    return db.forEach(item => {
+                        items.push({title: item.title, id: item.id});
+                    });
+                })
+                .then(() => setLocalFiddles(items))
+                .catch(error => console.error(error));
+        }, []);
+
+        // handle create a new fiddle
+        const handleCreate = React.useCallback(() => {
+            return showDialog({
+                component: FiddleCreateDialog,
+                props: {
+                },
+            });
+        }, [showDialog]);
+
+        // no local fiddles available yet: display the loading screen
+        if (!localFiddles) {
+            return <LoadingScreen />;
+        }
+
         return (
             <Center className="top-0 left-0 fixed z-50">
                 <div className="fixed top-0 left-0 right-0 py-4 px-3">
                     <Logo />
                 </div>
                 <div className="w-full max-w-3xl flex flex-col my-20">
-                    <div className="text-5xl font-medium leading-none text-neutral-950">Welcome 👋</div>
+                    <div className="text-5xl font-bold leading-none text-quartz-800 mb-10">Welcome 👋</div>
+                    {/*
+                    <Tabs.Container className="mb-4">
+                        {Object.keys(availableTabs).map(key => (
+                            <Tabs.Item
+                                key={key}
+                                active={activeTab === key}
+                                text={availableTabs[key]}
+                                onClick={() => setActiveTab(key)}
+                            />
+                        ))}
+                    </Tabs.Container>
+                    */}
+                    {activeTab === "local" && (
+                        <React.Fragment>
+                            {localFiddles.length === 0 && (
+                                <EmptyState
+                                    icon="code-block"
+                                    title="No local fiddles"
+                                    description="Create a new blank fiddle to start coding o use a template."
+                                    actionIcon="plus"
+                                    actionText="Create fiddle"
+                                    onActionClick={handleCreate}
+                                />
+                            )}
+                        </React.Fragment>
+                    )}
                 </div>
             </Center>
         );
@@ -246,11 +370,13 @@
 
     // render app
     ReactDOM.createRoot(document.getElementById("root")).render((
-        <RouterProvider>
-            <Dialog.Provider>
-                <App />
-            </Dialog.Provider>
-        </RouterProvider>
+        <DatabaseProvider dbName="josemi-fiddle" storeName="fiddle" renderLoading={() => <LoadingScreen />}>
+            <RouterProvider>
+                <Dialog.Provider>
+                    <App />
+                </Dialog.Provider>
+            </RouterProvider>
+        </DatabaseProvider>
     ));
 </script>
-{{/layout.html}}
+{{/layout.app.html}}

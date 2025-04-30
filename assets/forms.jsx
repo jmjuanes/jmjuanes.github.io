@@ -49,10 +49,10 @@ const optionTypes = {
                 }
                 const active = checkIsActive(item.value, props.value, props.isActive, props.data);
                 const itemClass = classNames({
-                    "flex flex-col justify-center items-center rounded-md py-2 grow": true,
+                    "flex flex-col justify-center items-center rounded-md p-3 grow": true,
                     "cursor-pointer": !active,
-                    "bg-neutral-900 text-white": active,
-                    "bg-neutral-100 hover:bg-neutral-200": !active,
+                    "bg-quartz-800 text-white": active,
+                    "bg-neutral-200 text-quartz-800": !active,
                 });
                 return (
                     <div key={item.value} className={itemClass} onClick={() => props.onChange(item.value)}>
@@ -63,7 +63,7 @@ const optionTypes = {
                         )}
                         {!!item.text && (
                             <div className={classNames("flex items-center", item.textClass)}>
-                                <span className="font-bold text-xs">{item.text}</span>
+                                <span className="font-bold text-sm">{item.text}</span>
                             </div>
                         )}
                     </div>
@@ -120,9 +120,8 @@ const optionTypes = {
         <input
             type="text"
             className={classNames({
-                "w-full px-2 py-0 h-8 rounded-md outline-0 text-xs": true,
-                "bg-white border border-neutral-200 text-neutral-900": true,
-            })}
+                "w-full px-4 py-3 rounded-lg outline-0 text-current bg-neutral-200": true,
+            }, props.className)}
             defaultValue={props.value}
             placeholder={props.placeholder}
             onChange={event => props.onChange(event.target.value)}
@@ -131,9 +130,8 @@ const optionTypes = {
     [FORM_OPTIONS.TEXTAREA]: props => (
         <textarea
             className={classNames({
-                "w-full px-2 py-1 rounded-md outline-0 text-xs": true,
-                "bg-white border border-neutral-200 text-neutral-900": true,
-            })}
+                "w-full px-4 py-3 rounded-lg outline-0 text-current bg-neutral-200": true,
+            }, props.className)}
             defaultValue={props.value}
             placeholder={props.placeholder}
             rows={props.rows ?? 3}
@@ -142,9 +140,8 @@ const optionTypes = {
     ),
     [FORM_OPTIONS.SELECT]: props => {
         const selectClass = classNames({
-            "w-full px-2 py-1 rounded-md outline-0 text-xs": true,
-            "bg-neutral-100 border border-neutral-200 text-neutral-900": true,
-        });
+            "w-full px-4 py-3 rounded-lg outline-0 text-current bg-neutral-200": true,
+        }, props.className);
         return (
             <select className={selectClass} defaultValue={props.value} onChange={e => props.onChange(e.target.value)}>
                 {(props.values || []).map(item => {
@@ -164,14 +161,14 @@ const optionTypes = {
         return props.render?.(props);
     },
     [FORM_OPTIONS.SEPARATOR]: () => (
-        <div className="w-full h-px shrink-0 bg-current opacity-40" />
+        <div className="w-full h-1 shrink-0 bg-neutral-200" />
     ),
 };
 
 export const Option = props => (
-    <div className={props.className}>
+    <div className="">
         {(!optionsWithInlineTitle.has(props.type)) && !!props.title && (
-            <div className="text-sm mb-1 select-none font-bold">
+            <div className="text-quartz-800 mb-1 select-none font-bold">
                 {props.title}
             </div>
         )}
@@ -179,7 +176,7 @@ export const Option = props => (
             {optionTypes[props.type](props)}
         </div>
         {!!props.helper && (
-            <div className="text-2xs mt-0 select-none opacity-60">
+            <div className="text-sm mt-0 select-none opacity-60">
                 {props.helper}
             </div>
         )}
@@ -220,3 +217,15 @@ export const Form = props => (
         ))}
     </div>
 );
+
+// @description hook to use formdata
+export const useFormData = (initialData = {}) => {
+    const [formData, setFormData] = React.useState(initialData);
+    const setFormField = React.useCallback((field, value) => {
+        setFormData(prevData => ({
+            ...prevData,
+            [field]: value,
+        }));
+    }, [setFormData]);
+    return [formData, setFormField];
+};

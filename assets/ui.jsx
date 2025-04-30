@@ -8,20 +8,20 @@ import {renderIcon, CloseIcon} from "@josemi-icons/react";
 // @params {function} props.onClick - click handler
 export const Button = props => {
     const buttonClassName = classNames({
-        "flex items-center justify-center gap-1 cursor-pointer px-3 py-2 rounded-lg": true,
-        "bg-neutral-950 hover:bg-neutral-900 text-white": props.variant === "primary" || props.primary,
-        "bg-neutral-100 hover:bg-neutral-200 text-neutral-900": props.variant === "secondary",
+        "flex items-center justify-center gap-1 cursor-pointer px-6 py-3 rounded-lg select-none": true,
+        "bg-quartz-800 hover:bg-quartz-900 text-white": props.variant === "primary" || props.primary,
+        "bg-neutral-200 hover:bg-neutral-300": props.variant === "secondary" || props.secondary,
         "opacity-60 pointer-events-none": props.disabled,
     }, props.className);
     return (
         <div className={buttonClassName} onClick={props.onClick}>
             {props.icon && (
-                <span className="flex items-center text-lg">
+                <span className="flex items-center text-xl">
                     {renderIcon(props.icon)}
                 </span>
             )}
             {props.text && (
-                <span className="text-sm leading-none font-medium">{props.text}</span>
+                <span className="font-medium">{props.text}</span>
             )}
         </div>
     );
@@ -36,27 +36,24 @@ export const Center = ({className, ...props}) => (
 export const Dialog = {
     Context: React.createContext(null),
     Content: ({className, ...props}) => (
-        <div className={classNames("relative bg-white border border-neutral-200 shadow-sm rounded-xl", className)} {...props} />
+        <div className={classNames("relative bg-white shadow-sm rounded-lg", className)} {...props} />
     ),
     Title: ({className, ...props}) => (
-        <div className={classNames("font-bold text-xl text-neutral-950", className)} {...props} />
-    ),
-    Description: ({className, ...props}) => (
-        <div className={classNames("text-sm text-neutral-800", className)} {...props} />
+        <div className={classNames("font-bold text-2xl text-quartz-800", className)} {...props} />
     ),
     Close: ({className, ...props}) => (
-        <div className={classNames("flex cursor-pointer text-2xl absolute top-0 right-0 mt-6 mr-5 text-neutral-700 hover:text-neutral-900", className)} {...props}>
+        <div className={classNames("ml-auto flex cursor-pointer text-2xl text-current bg-neutral-200 rounded-lg p-2", className)} {...props}>
             <CloseIcon />
         </div>
     ),
     Header: ({className, ...props}) => (
-        <div className={classNames("flex flex-col select-none px-6 pt-6", className)} {...props} />
+        <div className={classNames("flex flex-row items-center select-none px-8 pt-8", className)} {...props} />
     ),
     Body: ({className, ...props}) => (
-        <div className={classNames("px-6 py-6", className)} {...props} />
+        <div className={classNames("p-8", className)} {...props} />
     ),
     Footer: ({className, ...props}) => (
-        <div className={classNames("flex flex-col-reverse sm:flex-row sm:justify-end gap-2 px-6 pb-6", className)} {...props} />
+        <div className={classNames("flex flex-col-reverse sm:flex-row sm:justify-end gap-2 px-8 pb-8", className)} {...props} />
     ),
     // Provider for the dialog component
     Provider: ({children}) => {
@@ -115,9 +112,54 @@ export const Dialog = {
 
 // @description overlay component
 export const Overlay = ({className, ...props}) => (
-    <div className={classNames("fixed top-0 left-0 bottom-0 right-0 bg-neutral-900 opacity-70", className)} {...props} />
+    <div className={classNames("fixed top-0 left-0 bottom-0 right-0 bg-quartz-900 opacity-80", className)} {...props} />
 );
 
+// @description tabs component
+export const Tabs = {
+    Container: ({className, ...props}) => (
+        <div className={classNames("flex flex-row align-center justify-stretch w-full bg-neutral-200 rounded-lg p-2", className)} {...props} />
+    ),
+    Item: ({className, active, children, text, ...props}) => {
+        const itemClassName = classNames({
+            "flex items-center justify-center cursor-pointer px-4 py-2 rounded-md w-full": true,
+            "bg-white text-quartz-800": active,
+            "hover:text-quartz-800 cursor-pointer": !active,
+        }, className);
+        return (
+            <div className={itemClassName} {...props}>{text || children}</div>
+        );
+    },
+};
+
+// @description empty state component
+// @param {object} props
+// @param {string} props.icon icon name
+// @param {string} props.title title text
+// @param {string} props.description description text
+// @param {string} props.actionText action button text
+// @param {string} props.actionIcon action button icon
+// @param {function} props.onActionClick action button click handler
+export const EmptyState = ({icon, title, description, actionText, actionIcon, onActionClick}) => {
+    return (
+        <div className="flex flex-col items-center justify-center w-full p-10 text-center bg-white rounded-lg">
+            {icon && (
+                <div className="flex items-center justify-center text-7xl mb-2 text-quartz-800">
+                    {renderIcon(icon)}
+                </div>
+            )}
+            {title && (
+                <div className="text-2xl font-bold text-quartz-800 mb-0">{title}</div>
+            )}
+            {description && (
+                <div className="mb-4">{description}</div>
+            )}
+            {actionText && onActionClick && (
+                <Button variant="primary" icon={actionIcon} text={actionText} onClick={onActionClick} />
+            )}
+        </div>
+    );
+};
 
 // @description hook to access to dialog
 // @returns {object} dialog object
