@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import {renderIcon, CloseIcon} from "@josemi-icons/react";
+import {renderIcon, CloseIcon, ExclamationTriangleIcon} from "@josemi-icons/react";
 
 // @description button component
 // @params {string} props.icon - icon name
@@ -160,6 +160,32 @@ export const EmptyState = ({icon, title, description, actionText, actionIcon, on
         </div>
     );
 };
+
+// @description loading screen
+export const LoadingScreen = props => (
+    <Center className="fixed top-0 left-0 z-50">
+        <div className="flex text-9xl animation-pulse text-neutral-200">
+            {renderIcon(props.icon)}
+        </div>
+    </Center>
+);
+
+// @description error screen
+export const ErrorScreen = props => (
+    <Center className="fixed top-0 left-0 z-50">
+        <div className="w-full max-w-md flex flex-col items-center gap-2 border border-neutral-200 bg-white rounded-lg p-8 shadow-md">
+            <div className="flex items-center text-4xl text-neutral-600">
+                <ExclamationTriangleIcon />
+            </div>
+            {props.title && (
+                <div className="text-center text-base text-neutral-900 font-medium leading-none">{props.title}</div>
+            )}
+            {props.message && (
+                <div className="text-center text-sm text-neutral-800">{props.message}</div>
+            )}
+        </div>
+    </Center>
+);
 
 // @description hook to access to dialog
 // @returns {object} dialog object
