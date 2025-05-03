@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import * as codeCake from "codecake";
-import {renderIcon} from "@josemi-icons/react";
+import {renderIcon, CodeBlockIcon} from "@josemi-icons/react";
 import {Button, LoadingScreen} from "@josemihq/ui";
 import {Dialog, Center, useDialog} from "@josemihq/ui";
 import {Form, FORM_OPTIONS, useFormData} from "@josemihq/form";
@@ -123,7 +123,7 @@ const CodeEditor = props => {
 };
 
 // @description internal wrapper for the preview iframe
-const Preview = () => {
+const Preview = props => {
     const iframeRef = React.useRef(null);
 
     // effect to update the iframe content
@@ -408,16 +408,14 @@ export const FiddlePreview = props => {
     const generateBundle = React.useCallback(() => bundler(fiddle), [fiddle?.version]);
 
     // if version is 0, means that the fiddle is not ready to be executed
-    if (fiddle?.version === 0) {
-        return null;
-    }
-
     return (
         <div className="w-full h-full relative">
-            <Preview
-                key={"preview:" + fiddle.version}
-                generateBundle={generateBundle}
-            />
+            {fiddle.version > 0 && (
+                <Preview
+                    key={"preview:" + fiddle.version}
+                    generateBundle={generateBundle}
+                />
+            )}
         </div>
     );
 };
