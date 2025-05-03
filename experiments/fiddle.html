@@ -10,339 +10,51 @@
 <script type="text/babel">
     import React from "react";
     import ReactDOM from "react-dom/client";
-    import {CodeBlockIcon, ExclamationTriangleIcon} from "@josemi-icons/react";
-    import {DatabaseProvider, useDatabase, uid} from "@josemihq/db";
-    import {Button, Dialog, Overlay, Center, Tabs, EmptyState} from "@josemihq/ui";
-    import {useDialog} from "@josemihq/ui";
-    import {Form, useFormData, FORM_OPTIONS} from "@josemihq/form";
-    import {RouterProvider, Switch, Route, useRouter} from "@josemihq/router";
-    import {FiddleLayout, FiddleCode, FiddleOutput, FiddleProvider, useFiddle} from "@josemihq/fiddle";
-    import {exportFiddle, importFiddle} from "@josemihq/fiddle";
+    import lz from "lz-string";
+    import {ErrorScreen} from "@josemihq/ui";
+    import {RouterProvider, useRouter} from "@josemihq/router";
+    import {FiddleLayout, FiddleCode, FiddlePreview, FiddleBar, FiddleProvider} from "@josemihq/fiddle";
 
-    // @description fiddle client to get/save fiddles
-    const fiddleClient = {
-        get: async id => {
-            const data = localStorage.getItem(`fiddle-${id}`);
-            if (!data) {
-                throw new Error(`The fiddle with id '${id}' does not exist.`);
-            }
-            return JSON.parse(data);
-        },
-        save: async (id, data) => {
-            localStorage.setItem(`fiddle-${id}`, JSON.stringify(data));
-        },
-        delete: async id => {
-            localStorage.removeItem(`fiddle-${id}`);
-        },
-    };
-
-    // @description logo of the app
-    const Logo = props => (
-        <div className="flex items-center gap-1" onClick={props.onClick}>
-            <span className="flex items-center text-3xl">
-                <CodeBlockIcon />
-            </span>
-            <span className="text-2xl font-extrabold leading-none">fiddle.</span>
-        </div>
-    );
-
-    // @description loading screen
-    const LoadingScreen = () => (
-        <Center className="fixed top-0 left-0 z-50">
-            <div className="flex text-9xl animation-pulse text-neutral-200">
-                <CodeBlockIcon />
-            </div>
-        </Center>
-    );
-
-    // @description error screen
-    const ErrorScreen = props => (
-        <Center className="fixed top-0 left-0 z-50">
-            <div className="w-full max-w-md flex flex-col items-center gap-2 border border-neutral-200 bg-white rounded-lg p-8 shadow-md">
-                <div className="flex items-center text-4xl text-neutral-600">
-                    <ExclamationTriangleIcon />
-                </div>
-                {props.title && (
-                    <div className="text-center text-base text-neutral-900 font-medium leading-none">{props.title}</div>
-                )}
-                {props.message && (
-                    <div className="text-center text-sm text-neutral-800">{props.message}</div>
-                )}
-            </div>
-        </Center>
-    );
-
-    // @description fiddle main bar
-    const FiddleBar = () => {
-        const fiddle = useFiddle();
-        const {showDialog} = useDialog();
-
-        // handle click on the settings button
-        const handleSettingsClick = React.useCallback(() => {
-            showDialog({
-                component: FiddleSettings,
-                props: {
-                    title: fiddle.title,
-                    autorun: fiddle.autorun,
-                    onChange: data => {
-                        fiddle.update(data);
-                    },
-                },
-            });
-        }, [fiddle, showDialog]);
-
-        return (
-            <div className="flex-none flex items-center justify-between py-4 px-3 bg-white text-neutral-950 border-b border-neutral-200">
-                <div className="flex items-center gap-2">
-                    <Logo />
-                    <div className="text-base font-medium text-neutral-600">{fiddle.title}</div>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Button primary icon="reload" text="Run" disabled={fiddle.autorun} onClick={() => fiddle.run()} />
-                    <Button variant="secondary" icon="sliders" onClick={handleSettingsClick} />
-                </div>
-            </div>
-        );
-    };
-
-    // @description fiddle create dialog
-    const FiddleCreateDialog = props => {
-        const {hideDialog} = useDialog();
-        const [state, setState] = useFormData({});
-        const fields = React.useMemo(() => {
-            return {
-                title: {
-                    type: FORM_OPTIONS.TEXT,
-                    title: "Name your fiddle",
-                    placeholder: "My fiddle",
-                },
-                template: {
-                    type: FORM_OPTIONS.RADIO,
-                    title: "Start your fiddle with one of our templates:",
-                    className: "grid grid-cols-3 gap-1 w-full",
-                    values: [
-                        {value: "default", text: "Simple HTML", icon: "html5", iconClass: "text-orange-500 text-4xl mb-1"},
-                    ],
-                },
-            };
-        }, []);
-
-        // handle create a new fiddle
-        const handleCreate = React.useCallback(() => {
-            if (!state.template) {
-                return;
-            }
-            const data = {
-                id: uid(8),
-                title: state.title || "My fiddle",
-                autorun: true,
-            };
-            fiddleClient.save(data.id, data)
-                .then(() => {
-                    hideDialog();
-                    window.location.hash = `#editor?id=${id}`;
-                })
-                .catch(error => console.error(error));
-        }, [state, hideDialog]);
-
-        return (
-            <Center className="top-0 left-0 fixed z-50">
-                <Dialog.Content className="w-full max-w-lg">
-                    <Dialog.Header>
-                        <Dialog.Title>Create Fiddle</Dialog.Title>
-                        <Dialog.Close onClick={hideDialog} />
-                    </Dialog.Header>
-                    <Dialog.Body>
-                        <Form items={fields} data={state} onChange={setState} />
-                    </Dialog.Body>
-                    <Dialog.Footer>
-                        <Button
-                            variant="primary"
-                            text="Create Fiddle"
-                            disabled={!state.template}
-                            onClick={handleCreate}
-                        />
-                    </Dialog.Footer>
-                </Dialog.Content>
-            </Center>
-        );
-    };
-
-    // @description fiddle settings menu
-    const FiddleSettings = props => {
-        const [state, setState] = React.useState({
-            title: props.title,
-            autorun: props.autorun,
-        });
-        const {hideDialog} = useDialog();
-        const fields = React.useMemo(() => {
-            return {
-                title: {
-                    type: FORM_OPTIONS.TEXT,
-                    title: "Title",
-                    placeholder: "Your amazing title",
-                },
-                autorun: {
-                    type: FORM_OPTIONS.CHECKBOX,
-                    title: "Auto run",
-                    helper: "Run code automatically after every change.",
-                },
-            };
-        }, []);
-
-        // handle change in the form
-        const handleChange = React.useCallback((key, value) => {
-            setState(prev => ({...prev, [key]: value}));
-        },[setState]);
-
-        // after each change in the form, call the props.onChange with the new state
-        React.useEffect(() => {
-            props.onChange(state);
-        }, [state, props]);
-
-        return (
-            <Center className="top-0 left-0 fixed z-50">
-                <Dialog.Content className="w-full max-w-lg">
-                    <Dialog.Header>
-                        <Dialog.Title>Settings</Dialog.Title>
-                        <Dialog.Close onClick={hideDialog} />
-                    </Dialog.Header>
-                    <Dialog.Body>
-                        <Form items={fields} data={state} onChange={handleChange} />
-                    </Dialog.Body>
-                </Dialog.Content>
-            </Center>
-        );
-    };
-
-    // @description dashboard route
-    const DashboardRoute = () => {
-        const db = useDatabase();
-        const {showDialog} = useDialog();
-        const [activeTab, setActiveTab] = React.useState("local");
-        const [localFiddles, setLocalFiddles] = React.useState(null);
-        const availableTabs = {
-            local: "Local Fiddles",
-        };
-
-        // on mount get the local fiddles to display
-        React.useEffect(() => {
-            const items = [];
-            Promise.resolve(true)
-                .then(() => {
-                    return db.forEach(item => {
-                        items.push({title: item.title, id: item.id});
-                    });
-                })
-                .then(() => setLocalFiddles(items))
-                .catch(error => console.error(error));
-        }, []);
-
-        // handle create a new fiddle
-        const handleCreate = React.useCallback(() => {
-            return showDialog({
-                component: FiddleCreateDialog,
-                props: {
-                },
-            });
-        }, [showDialog]);
-
-        // no local fiddles available yet: display the loading screen
-        if (!localFiddles) {
-            return <LoadingScreen />;
-        }
-
-        return (
-            <Center className="top-0 left-0 fixed z-50">
-                <div className="fixed top-0 left-0 right-0 py-4 px-3">
-                    <Logo />
-                </div>
-                <div className="w-full max-w-3xl flex flex-col my-20">
-                    <div className="text-5xl font-bold leading-none text-quartz-800 mb-10">Welcome 👋</div>
-                    {/*
-                    <Tabs.Container className="mb-4">
-                        {Object.keys(availableTabs).map(key => (
-                            <Tabs.Item
-                                key={key}
-                                active={activeTab === key}
-                                text={availableTabs[key]}
-                                onClick={() => setActiveTab(key)}
-                            />
-                        ))}
-                    </Tabs.Container>
-                    */}
-                    {activeTab === "local" && (
-                        <React.Fragment>
-                            {localFiddles.length === 0 && (
-                                <EmptyState
-                                    icon="code-block"
-                                    title="No local fiddles"
-                                    description="Create a new blank fiddle to start coding o use a template."
-                                    actionIcon="plus"
-                                    actionText="Create fiddle"
-                                    onActionClick={handleCreate}
-                                />
-                            )}
-                        </React.Fragment>
-                    )}
-                </div>
-            </Center>
-        );
-    };
-
-    // @description editor route
-    const EditorRoute = () => {
-        const [fiddle, setFiddle] = React.useState(null);
-        const [error, setError] = React.useState(null);
+    // @description main app component
+    const App = () => {
         const {currentPath} = useRouter();
 
-        // capture any change in the fiddle and save it to the local storage
-        const handleChange = React.useCallback(code => {
-            return null;
-        }, [fiddle?.data, fiddle?.id]);
-
-        // on mount, get the file data
-        React.useEffect(() => {
+        // get fiddle props by the given path
+        const [initialProps, error] = React.useMemo(() => {
             const params = new URLSearchParams(currentPath.split("?")?.[1] || "");
-            if (params.has("id")) {
-                fiddleClient.get(params.get("id"))
-                    .then(data => {
-                        setFiddle({data: data, id: params.get("id")});
-                    })
-                    .catch(error => setError(error));
-            }
-            else if (params.has("d")) {
+            if (params.has("d")) {
                 // note: by default imported fiddles from the url are always readonly
                 // this is to prevent users from modifying the original fiddle. They can save a copy to edit it.
-                importFiddle(params.get("d"), {readonly: true})
-                    .then(data => setFiddle({data: data, id: null}))
-                    .catch(error => setError(error));
+                try {
+                    const data = JSON.parse(lz.decompressFromBase64(params.get("d")));
+                    return [{data, readonly: true}, null];
+                }
+                catch (error) {
+                    return [null, error];
+                }
             }
-            else {
-                setError(new Error("Missing fiddle id or data in the URL."));
-            }
-        }, []);
-
-        // no fiddle data and error: display the loading screen
-        if (!fiddle?.data && !error) {
-            return <LoadingScreen />;
-        }
+            // other case, no initial fiddle to apply
+            return [{}, null];
+        }, [currentPath]);
 
         // error loading fiddle data: display the error message
         if (error) {
             return (
-                <ErrorScreen title="Error loading fiddle" message={error?.message || error} />
+                <ErrorScreen
+                    title="Error loading fiddle"
+                    message={error?.message || error}
+                />
             );
         }
 
         // if we have the fiddle data, render the editor
         return (
-            <div className="fixed top-0 left-0 bg-white text-neutral-900 text-base flex flex-col flex-none w-full h-screen">
-                <FiddleProvider key={fiddle?.id || "f"} data={fiddle?.data} onChange={handleChange}>
+            <div className="fixed top-0 left-0 flex flex-col flex-none w-full h-screen">
+                <FiddleProvider key={currentPath} {...initialProps}>
                     <FiddleBar />
                     <FiddleLayout className="h-full w-full">
                         <FiddleCode />
-                        <div className="h-full border-l border-neutral-200" />
+                        <div className="h-full border-l border-neutral-100" />
                         <FiddleOutput />
                     </FiddleLayout>
                 </FiddleProvider>
@@ -350,33 +62,11 @@
         );
     };
 
-    // @description main app component
-    const App = () => {
-        const {currentPath} = useRouter();
-        return (
-            <Switch>
-                <Route test={/(^#$)|(^#dashboard$)/} render={() => (
-                    <DashboardRoute key={currentPath} />
-                )} />
-                <Route test={/^#editor/} render={() => (
-                    <EditorRoute key={currentPath} />
-                )} />
-                <Route test="*" render={() => (
-                    <ErrorScreen title="Not found" message="The requested page does not exist." />
-                )} />
-            </Switch>
-        );
-    };
-
     // render app
     ReactDOM.createRoot(document.getElementById("root")).render((
-        <DatabaseProvider dbName="josemi-fiddle" storeName="fiddle" renderLoading={() => <LoadingScreen />}>
-            <RouterProvider>
-                <Dialog.Provider>
-                    <App />
-                </Dialog.Provider>
-            </RouterProvider>
-        </DatabaseProvider>
+        <RouterProvider>
+            <App />
+        </RouterProvider>
     ));
 </script>
 {{/layout.app.html}}
