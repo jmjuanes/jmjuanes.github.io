@@ -1,0 +1,55 @@
+---
+{
+    "title": "Fiddle",
+    "description": "Minimal HTML, CSS, and JavaScript playground.",
+    "permalink": "/fiddle.html"
+}
+---
+{{>>layout.app.html}}
+<div id="root"></div>
+<script type="text/babel">
+    import React from "react";
+    import ReactDOM from "react-dom/client";
+    import {RouterProvider, useRouter} from "@josemihq/router";
+    import {FiddleLayout, FiddleCode, FiddlePreview, FiddleBar, FiddleProvider} from "@josemihq/fiddle";
+
+    // @description main app component
+    const App = () => {
+        const {currentPath} = useRouter();
+
+        // get fiddle props by the given path
+        const initialProps = React.useMemo(() => {
+            const initialProps = {};
+            const params = new URLSearchParams(currentPath.split("?")?.[1] || "");
+            if (params.has("d")) {
+                // note: by default imported fiddles from the url are always readonly
+                // this is to prevent users from modifying the original fiddle. They can save a copy to edit it.
+                initialProps.readonly = true;
+                initialProps.data = params.get("d");
+            }
+            // return the initial props object
+            return initialProps;
+        }, [currentPath]);
+
+        // if we have the fiddle data, render the editor
+        return (
+            <div className="fixed top-0 left-0 flex flex-col flex-none w-full h-screen">
+                <FiddleProvider key={currentPath} {...initialProps}>
+                    <FiddleBar />
+                    <FiddleLayout className="h-full w-full">
+                        <FiddleCode />
+                        <FiddlePreview />
+                    </FiddleLayout>
+                </FiddleProvider>
+            </div>
+        );
+    };
+
+    // render app
+    ReactDOM.createRoot(document.getElementById("root")).render((
+        <RouterProvider>
+            <App />
+        </RouterProvider>
+    ));
+</script>
+{{/layout.app.html}}
