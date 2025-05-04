@@ -27,6 +27,24 @@ export const Button = props => {
     );
 };
 
+// @description icon button component
+// @params {string} props.icon - icon name
+// @params {function} props.onClick - click handler
+// @params {string} props.className - additional class name
+export const IconButton = props => {
+    const buttonClassName = classNames({
+        "flex items-center justify-center cursor-pointer text-2xl select-none p-2 bg-neutral-200 rounded-lg": true,
+        "text-quartz-500 hover:text-quartz-800": !props.active,
+        "text-quartz-800": props.active,
+        "opacity-60 pointer-events-none": props.disabled,
+    }, props.className);
+    return (
+        <div className={buttonClassName} onClick={props.onClick}>
+            {renderIcon(props.icon)}
+        </div>
+    );
+};
+
 // @description simple component that centers content in the screen
 export const Center = ({className, ...props}) => (
     <div className={classNames("flex items-center justify-center w-full h-full", className)} {...props} />
