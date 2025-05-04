@@ -96,10 +96,10 @@ const optionTypes = {
     ),
     [FORM_OPTIONS.CHECKBOX]: props => {
         const inputClass = classNames({
-            "cursor-pointer border rounded-full p-px w-8 flex": true,
+            "cursor-pointer rounded-full p-1 w-10 flex": true,
             "justify-end": !!props.value,
-            "bg-neutral-900 border-neutral-900": !!props.value,
-            "bg-neutral-200 border-neutral-200": !props.value,
+            "bg-quartz-800": !!props.value,
+            "bg-neutral-200": !props.value,
             "cursor-not-allowed opacity-60": props.disabled,
         });
         const handleClick = () => {
@@ -107,7 +107,7 @@ const optionTypes = {
         };
         return (
             <div className="flex items-center justify-between select-none">
-                <div className="text-sm font-bold select-none">
+                <div className="text-quartz-800 font-bold">
                     {props.title}
                 </div>
                 <div className={inputClass} onClick={handleClick}>
