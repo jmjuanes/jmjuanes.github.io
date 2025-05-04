@@ -1,8 +1,9 @@
 import React from "react";
 import classNames from "classnames";
 import * as codeCake from "codecake";
+import lz from "lz-string";
 import {renderIcon, CodeBlockIcon} from "@josemi-icons/react";
-import {Button, LoadingScreen} from "@josemihq/ui";
+import {Button, IconButton, Tabs, LoadingScreen} from "@josemihq/ui";
 import {Dialog, Center, useDialog} from "@josemihq/ui";
 import {Form, FORM_OPTIONS, useFormData} from "@josemihq/form";
 
@@ -84,8 +85,7 @@ export const exportFiddle = (fiddle, options = {}) => {
     return new Promise(resolve => {
         const data = JSON.stringify({
             title: fiddle.title || "Untitled",
-            preset: fiddle.preset,
-            files: fiddle.files,
+            description: fiddle.description || "",
         });
         return resolve(lz.compressToBase64(data));
     });
@@ -95,15 +95,12 @@ export const exportFiddle = (fiddle, options = {}) => {
 const CodeEditor = props => {
     const parentRef = React.useRef(null);
     const editorRef = React.useRef(null);
-    const codePanelClass = classNames({
-        "w-full h-full overflow-y-auto": true,
-    });
 
     // on mount, initialize editor
     React.useEffect(() => {
         editorRef.current = codeCake.create(parentRef.current, {
             language: LANGUAGES_CONFIG[props.language].highlight,
-            className: "codecake-light h-full bg-white px-2 py-4",
+            className: "codecake-light h-full bg-neutral-200 px-2 py-4",
             lineNumbers: true,
             highlight: codeCake.highlight,
         });
@@ -118,7 +115,7 @@ const CodeEditor = props => {
     }, [props.onChange]);
 
     return (
-        <div className={codePanelClass} ref={parentRef} />
+        <div className="w-full h-full overflow-auto rounded-lg bg-neutral-200" ref={parentRef} />
     );
 };
 
@@ -169,6 +166,11 @@ const SettingsDialog = props => {
                 title: "Title",
                 placeholder: "Give a title to your fiddle",
             },
+            description: {
+                type: FORM_OPTIONS.TEXTAREA,
+                title: "Description",
+                placeholder: "Write a description for your fiddle",
+            },
             autorun: {
                 type: FORM_OPTIONS.CHECKBOX,
                 title: "Auto run",
@@ -195,7 +197,10 @@ const SettingsDialog = props => {
                     <Button
                         variant="primary"
                         text="Save Settings"
-                        onClick={() => props.onSave(formData)}
+                        onClick={() => {
+                            props.onSave(formData);
+                            hideDialog();
+                        }}
                     />
                 </Dialog.Footer>
             </Dialog.Content>
@@ -205,11 +210,11 @@ const SettingsDialog = props => {
 
 // @description logo of the app
 const Logo = props => (
-    <div className="flex items-center gap-1" onClick={props.onClick}>
-        <span className="flex items-center text-3xl">
+    <div className="flex items-center gap-1 text-quartz-500" onClick={props.onClick}>
+        <span className="flex items-center text-4xl">
             <CodeBlockIcon />
         </span>
-        <span className="text-2xl font-extrabold leading-none">fiddle.</span>
+        <span className="text-3xl font-extrabold leading-none">fiddle.</span>
     </div>
 );
 
@@ -223,7 +228,14 @@ export const useFiddle = () => {
 
 // @description generate initial state from the given props
 const getInitialFiddleStateFromProps = async props => {
-    let data = props?.data || {}; // initialize data object to fill the rest of options
+    let data = {}; // initialize data object to fill the rest of options
+    // 0.1 check if the data is a string or an object
+    if (typeof props?.data === "string" && !!props.data) {
+        data = JSON.parse(lz.decompressFromBase64(props.data));
+    }
+    else if (typeof props?.data === "object" && !!props.data) {
+        data = props.data;
+    }
     // 1. initialize code object
     const initialCode = {
         [LANGUAGES.HTML]: data?.[LANGUAGES.HTML] || "",
@@ -280,6 +292,7 @@ export const FiddleProvider = ({children, ...props}) => {
         return <LoadingScreen icon="code-block" />;
     }
 
+    // TODO: check for error loading fiddle data
     return (
         <FiddleContext value={{...state, ...actions}}>
             <Dialog.Provider>
@@ -292,7 +305,7 @@ export const FiddleProvider = ({children, ...props}) => {
 // @description base layout component
 export const FiddleLayout = props => {
     return (
-        <div className={classNames("flex-auto flex min-h-0", props.className)}>
+        <div className={classNames("flex-auto flex min-h-0 p-6 gap-6", props.className)}>
             {props.children}
         </div>
     );
@@ -319,25 +332,22 @@ export const FiddleBar = () => {
     }, [fiddle, showDialog]);
 
     return (
-        <div className="flex-none flex items-center justify-between py-4 px-3 bg-white text-neutral-950 border-b border-neutral-200">
-            <div className="flex items-center gap-2">
+        <div className="flex-none flex items-center justify-between p-6 bg-white shadow-sm">
+            <div className="flex items-center gap-4">
                 <Logo />
                 {fiddle?.title && (
-                    <div className="text-base font-medium text-neutral-600">
+                    <div className="text-xl font-medium">
                         <span>{fiddle.title}</span>
                     </div>
                 )}
             </div>
             <div className="flex items-center gap-2">
-                <Button
-                    variant="primary"
+                <IconButton
                     icon="reload"
-                    text="Run"
                     disabled={fiddle.autorun}
                     onClick={() => fiddle.run()}
                 />
-                <Button
-                    variant="secondary"
+                <IconButton
                     icon="sliders"
                     onClick={handleSettingsClick}
                 />
@@ -352,28 +362,25 @@ export const FiddleCode = () => {
     const tabs = React.useMemo(() => {
         return fiddle.visibleCodes.map(language => {
             const tabActive = language === fiddle.activeCode;
-            const tabClassName = classNames({
-                "flex items-center gap-1 cursor-pointer p-3 font-medium text-neutral-950": true,
-                "bg-white": tabActive,
-                "opacity-60 hover:opacity-90": !tabActive
-            });
             const tabClick = () => fiddle.setActiveCode(language);
             return (
-                <div key={"tab:" + language} className={tabClassName} onClick={tabClick}>
-                    <span className={classNames("flex items-center text-lg", LANGUAGES_CONFIG[language].display.iconClass)}>
+                <Tabs.Item key={"tab:" + language} active={tabActive} className="gap-1" onClick={tabClick}>
+                    <span className="flex items-center text-xl">
                         {renderIcon(LANGUAGES_CONFIG[language].display.icon)}
                     </span>
-                    <span className="text-sm">{LANGUAGES_CONFIG[language].name}</span>
-                </div>
+                    <span className="text-base font-bold">
+                        {LANGUAGES_CONFIG[language].name}
+                    </span>
+                </Tabs.Item>
             );
         });
     }, [fiddle.activeCode, fiddle.setActiveCode]);
 
     return (
-        <div className="w-full h-full flex flex-col bg-white">
-            <div className="w-full flex items-center justify-between gap-2 select-none bg-neutral-100">
-                <div className="flex">{tabs}</div>
-            </div>
+        <div className="w-full h-full flex flex-col">
+            <Tabs.Container className="mb-4">
+                {tabs}
+            </Tabs.Container>
             {fiddle.visibleCodes.map(language => (
                 <div key={language} className={classNames("flex-auto", {"hidden": !(language === fiddle.activeCode)})}>
                     <CodeEditor
@@ -409,7 +416,7 @@ export const FiddlePreview = props => {
 
     // if version is 0, means that the fiddle is not ready to be executed
     return (
-        <div className="w-full h-full relative">
+        <div className="w-full h-full relative rounded-lg overflow-hidden bg-white">
             {fiddle.version > 0 && (
                 <Preview
                     key={"preview:" + fiddle.version}

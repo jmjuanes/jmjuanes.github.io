@@ -10,8 +10,6 @@
 <script type="text/babel">
     import React from "react";
     import ReactDOM from "react-dom/client";
-    import lz from "lz-string";
-    import {ErrorScreen} from "@josemihq/ui";
     import {RouterProvider, useRouter} from "@josemihq/router";
     import {FiddleLayout, FiddleCode, FiddlePreview, FiddleBar, FiddleProvider} from "@josemihq/fiddle";
 
@@ -20,32 +18,18 @@
         const {currentPath} = useRouter();
 
         // get fiddle props by the given path
-        const [initialProps, error] = React.useMemo(() => {
+        const initialProps = React.useMemo(() => {
+            const initialProps = {};
             const params = new URLSearchParams(currentPath.split("?")?.[1] || "");
             if (params.has("d")) {
                 // note: by default imported fiddles from the url are always readonly
                 // this is to prevent users from modifying the original fiddle. They can save a copy to edit it.
-                try {
-                    const data = JSON.parse(lz.decompressFromBase64(params.get("d")));
-                    return [{data, readonly: true}, null];
-                }
-                catch (error) {
-                    return [null, error];
-                }
+                initialProps.readonly = true;
+                initialProps.data = params.get("d");
             }
-            // other case, no initial fiddle to apply
-            return [{}, null];
+            // return the initial props object
+            return initialProps;
         }, [currentPath]);
-
-        // error loading fiddle data: display the error message
-        if (error) {
-            return (
-                <ErrorScreen
-                    title="Error loading fiddle"
-                    message={error?.message || error}
-                />
-            );
-        }
 
         // if we have the fiddle data, render the editor
         return (
@@ -54,7 +38,6 @@
                     <FiddleBar />
                     <FiddleLayout className="h-full w-full">
                         <FiddleCode />
-                        <div className="h-full border-l border-neutral-100" />
                         <FiddlePreview />
                     </FiddleLayout>
                 </FiddleProvider>
