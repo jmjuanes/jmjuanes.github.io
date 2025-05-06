@@ -8,8 +8,9 @@
     "homepage": "https://www.josemi.xyz/",
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
-        "build": "mkdir -p www && yarn build:site && yarn build:vendor",
-        "build:site": "node scripts/build.js",
+        "build": "yarn build:all",
+        "build:all": "yarn build:vendor && yarn build:site",
+        "build:site": "node press.js",
         "build:vendor": "node scripts/vendor.js",
         "clean": "rm -rf www",
         "serve": "serve www -p 8080"
@@ -22,7 +23,6 @@
         "highlight.js": "^11.11.1",
         "lowcss": "^0.29.0",
         "lz-string": "^1.5.0",
-        "mikel": "^0.20.1",
         "react": "^19.1.0",
         "react-dom": "^19.1.0"
     },
@@ -33,8 +33,9 @@
         "@rollup/plugin-node-resolve": "^16.0.1",
         "@rollup/plugin-replace": "^6.0.2",
         "@rollup/plugin-virtual": "^3.0.2",
-        "mikel-markdown": "^0.20.1",
-        "mikel-press": "^0.20.1",
+        "mikel": "^0.20.2",
+        "mikel-markdown": "^0.20.2",
+        "mikel-press": "^0.20.2",
         "rollup": "^4.40.0",
         "serve": "^14.2.4"
     }

@@ -8,7 +8,7 @@ import {rollup} from "rollup";
 
 // @description build vendor files
 const vendor = async patterns => {
-    const destination = path.resolve("www/vendor");
+    const destination = path.resolve(".cache/vendor");
     if (!fs.existsSync(destination)) {
         fs.mkdirSync(destination, {recursive: true});
     }
@@ -67,36 +67,7 @@ vendor([
         to: "lz-string.esm.js",
     },
     {
-        from: "node_modules/lowcss/low.css",
-        to: "low.css",
-    },
-    {
-        from: "node_modules/mikel/index.js",
-        to: "mikel.esm.js",
-    },
-    {
-        from: "node_modules/@josemi-icons/svg/sprite.svg",
-        to: "icons.svg",
-    },
-    {
-        from: "node_modules/@josemi-icons/react/index.js",
-        external: ["react"],
-        to: "icons.esm.js",
-    },
-    {
         virtual: `import cn from "classnames"; export default cn;`,
         to: "classnames.esm.js",
-    },
-    {
-        from: "node_modules/codecake/codecake.js",
-        to: "codecake.js",
-    },
-    {
-        from: "node_modules/codecake/codecake.css",
-        to: "codecake.css",
-    },
-    {
-        from: "node_modules/highlight.js/styles/nord.css",
-        to: "highlight.css",
     },
 ]);
