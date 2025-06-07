@@ -15,7 +15,7 @@
     "dependencies": {
         "@josemi-icons/svg": "^0.7.0",
         "highlight.js": "^11.11.1",
-        "lowcss": "^0.29.0"
+        "lowcss": "^0.30.0"
     },
     "devDependencies": {
         "mikel": "^0.22.2",
