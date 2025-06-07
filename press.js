@@ -1,6 +1,7 @@
 import * as path from "node:path";
-import * as babel from "@babel/core";
+// import * as babel from "@babel/core";
 import press from "mikel-press";
+import markdown from "mikel-markdown";
 import hljs from "highlight.js";
 import websiteConfig from "./website.config.json" with {type: "json"};
 
@@ -21,15 +22,15 @@ const getBuildInfo = () => {
 // @description babel plugin for parsing JSX content in HTML files
 const BabelJSXPlugin = () => {
     const regex = /<script\s+type=["']text\/babel["']>([\s\S]*?)<\/script>/g;
-    const transform = code => {
-        const result = babel.transformSync(code, {
-            presets: [
-                "@babel/preset-react",
-            ],
-            filename: "inline.jsx", // needed for Babel to recognize JSX
-        });
-        return result.code;
-    };
+    // const transform = code => {
+    //     const result = babel.transformSync(code, {
+    //         presets: [
+    //             "@babel/preset-react",
+    //         ],
+    //         filename: "inline.jsx", // needed for Babel to recognize JSX
+    //     });
+    //     return result.code;
+    // };
     return {
         name: "BabelJSXPlugin",
         transform: (context, node) => {
@@ -50,7 +51,9 @@ const BabelJSXPlugin = () => {
 
 press({
     ...websiteConfig,
-    build: getBuildInfo(),
+    build: {
+        date: getBuildInfo(),
+    },
     mikelOptions: {
         helpers: {
             getCollection: params => {
@@ -78,27 +81,16 @@ press({
         press.SourcePlugin({folder: "./content"}),
         press.DataPlugin(),
         press.PartialsPlugin(),
-        press.AssetsPlugin({basePath: "assets"}),
         press.CopyAssetsPlugin({
             basePath: "vendor",
             patterns: [
-                // 1. copy vendor files from .cache/vendor folder
-                {from: ".cache/vendor/react.esm.js"},
-                {from: ".cache/vendor/react-dom.esm.js"},
-                {from: ".cache/vendor/react-dom-client.esm.js"},
-                {from: ".cache/vendor/lz-string.esm.js"},
-                {from: ".cache/vendor/classnames.esm.js"},
-                // 2. copy vendor files from node_modules
                 {from: "node_modules/lowcss/low.css"},
                 {from: "node_modules/@josemi-icons/svg/sprite.svg", to: "icons.svg"},
-                {from: "node_modules/@josemi-icons/react/index.js", to: "icons.esm.js"},
-                {from: "node_modules/codecake/codecake.js"},
-                {from: "node_modules/codecake/codecake.css"},
                 {from: "node_modules/highlight.js/styles/nord.css", to: "highlight.css"},
             ],
         }),
+        press.UsePlugin(markdown({})),
         press.FrontmatterPlugin(),
-        BabelJSXPlugin(),
         press.ContentPagePlugin(),
     ],
 });
