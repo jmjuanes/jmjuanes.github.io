@@ -1,5 +1,6 @@
 import * as path from "node:path";
 // import * as babel from "@babel/core";
+import mikel from "mikel";
 import press from "mikel-press";
 import markdown from "mikel-markdown";
 import hljs from "highlight.js";
@@ -54,7 +55,7 @@ press({
     build: {
         date: getBuildInfo(),
     },
-    mikelOptions: {
+    template: mikel.create({
         helpers: {
             getCollection: params => {
                 const items = (params.data?.site?.pages || []).filter(page => {
@@ -75,7 +76,7 @@ press({
                 return hljs.highlight(params.opt.code.trim(), {language: params.opt.language}).value;
             },
         },
-    },
+    }),
     plugins: [
         press.SourcePlugin({folder: "./posts", basePath: "notes"}),
         press.SourcePlugin({folder: "./content"}),
