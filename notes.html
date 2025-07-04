@@ -1,0 +1,17 @@
+---
+{
+    "title": "Notes",
+    "description": "Notes on React, minimal design, and games."
+}
+---
+{{>>layout-notes.html}}
+{{>>page-section.html}}
+{{#getCollection "notes"}}
+<div class="flex flex-col gap-8">
+    {{#each @collection}}
+        {{>link.html url=path title=attributes.title description=attributes.description subtitle=attributes.date}}
+    {{/each}}
+</div>
+{{/getCollection}}
+{{/page-section.html}}
+{{/layout-notes.html}}
