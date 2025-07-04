@@ -4,44 +4,56 @@
 }
 ---
 {{>>layout.html}}
-<header class="mb-16">
-    <div class="text-2xl sm:text-3xl md:text-4xl leading-snug">
-        <span>Hi 👋 I'm <b>Josemi</b>, a passionate <b>mathematician</b> turned <b>React</b> developer </span>
-        <span>that loves to craft minimal, beautiful, and performant user interfaces.</span>
-    </div>
-    <div class="hidden">
-        <span>Currently I am building <a class="hover:underline font-bold" href="https://folio.josemi.xyz" target="_blank">folio</a>, a minimalistic digital whiteboard. </span>
-        <span>You can also check the other <a class="hover:underline font-bold" href="https://www.josemi.xyz/projects.html">projects</a> that I maintain.</span>
-    </div>
-</header>
-{{>>page-section.html title="Projects"}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    {{#each site.data.projects limit=4}}
-        <a href="{{url}}" class="group no-underline bg-gray-100 rounded-xl p-6">
-            <div class="text-2xl font-bold group-hover:underline leading-none mb-2">{{title}}</div>
-            <div class="text-base text-gray-700 mb-1">{{description}}</div>
-            <div class="text-sm text-gray-500">{{url}}</div>
-        </a>
-    {{/each}}
-    </div>
-    <div class="mt-4">
-        <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/projects.html">
-            <span>See all projects</span>
-            {{=icon icon="arrow-right"}}
-        </a>
-    </div>
-{{/page-section.html}}
-{{>>page-section.html title="Notes"}}
-    {{#getCollection "notes"}}
-    {{#each @collection limit=5}}
-        {{>link.html url=path title=attributes.title description=attributes.description date=attributes.date}}
-    {{/each}}
-    <div class="mt-4">
-        <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes.html">
-            <span>See all notes</span>
-            {{=icon icon="arrow-right"}}
-        </a>
-    </div>
-    {{/getCollection}}
-{{/page-section.html}}
+<div class="w-full max-w-7xl mx-auto p-6">
+    <header class="py-28">
+        <div class="text-7xl sm:text-9xl font-black mb-8">Josemi.</div>
+        <div class="text-2xl sm:text-3xl leading-snug mb-6">
+            <span>Hola 👋! I'm <b>Josemi</b>, a passionate <b>mathematician</b> turned <b>React</b> developer </span>
+            <span>that loves to craft minimal, modular, beautiful, and performant user interfaces.</span>
+        </div>
+        <div class="text-2xl sm:text-3xl leading-snug">
+            <span>Currently I am building <a class="hover:underline font-bold" href="https://folio.josemi.xyz" target="_blank">folio</a>, a minimalistic digital whiteboard. </span>
+        </div>
+    </header>
+    {{>>page-section.html title="Projects"}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        {{#each site.data.projects}}
+        {{>link.html title=title subtitle=url description=description url=url}}
+        {{/each}}
+        </div>
+    {{/page-section.html}}
+    {{>>page-section.html title="Notes"}}
+        {{#getCollection "notes"}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        {{#each @collection limit=6}}
+            {{>link.html url=path title=attributes.title description=attributes.description subtitle=attributes.date}}
+        {{/each}}
+        </div>
+        <div class="mt-8">
+            <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes.html">
+                <span>See all notes</span>
+                {{=icon icon="arrow-right"}}
+            </a>
+        </div>
+        {{/getCollection}}
+    {{/page-section.html}}
+    <footer class="py-32">
+        {{#if site.footer.links}}
+        <div class="flex items-center gap-4 mb-8">
+            {{#each site.footer.links}}
+            <a class="hover:underline text-gray-950" href="{{url}}" target="_blank">
+                <span>{{text}}</span>
+            </a>
+            {{#unless @last}}
+            <div class="text-gray-950 text-xs">•</div>
+            {{/unless}}
+            {{/each}}
+        </div>
+        {{/if}}
+        <div class="text-sm mb-1">{{!site.footer.text}}</div>
+        <div class="text-xs">
+            <span>Last built on <b>{{site.build.date}}</b>.</span>
+        </div>
+    </footer>
+</div>
 {{/layout.html}}
