@@ -1,16 +1,29 @@
 ---
 {
-    "title": "not found"
+    "title": "not found",
+    "links": [
+        {"text": "home", "url": "/"},
+        {"text": "notes", "url": "/notes.html"}
+    ]
 }
 ---
 {{>>layout.html}}
-<section class="">
-    <div class="text-4xl text-gray-950 mb-4">
-        <span><b>404</b> | not found</span>
+<div class="w-full h-screen flex items-center justify-center">
+    <div class="">
+        <div class="text-4xl sm:text-5xl mb-4">
+            <span><b>404</b> | not found</span>
+        </div>
+        <div class="mb-8 max-w-xl">
+            It looks like you have followed a broken link or entered a URL 
+            that does not exist in my website.
+        </div>
+        <div class="flex items-center gap-4">
+        {{#each page.attributes.links}}
+            <a href="{{url}}" class="hover:underline text-gray-950">
+                <span class="font-medium leading-none">{{text}}</span>
+            </a>
+        {{/each}}
+        </div>
     </div>
-    <div class="text-gray-800 mb-8 max-w-xl">
-        It looks like you have followed a broken link or entered a URL 
-        that does not exist in my website.
-    </div>
-</section>
+</div>
 {{/layout.html}}

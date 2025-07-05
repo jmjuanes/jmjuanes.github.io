@@ -9,9 +9,9 @@
         ]
     },
     "footer": {
-        "text": "Hand-crafted with care by <b>Josemi</b>.",
+        "text": "Made by <b>Josemi</b>.",
         "links": [
-            {"text": "resume", "url": "https://resume.josemi.xyz"},
+            {"text": "home", "url": "/"},
             {"text": "github", "url": "https://github.com/jmjuanes"},
             {"text": "linkedin", "url": "https://www.linkedin.com/in/jmjuanes"}
         ]

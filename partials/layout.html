@@ -14,47 +14,7 @@
     <link rel="stylesheet" href="/vendor/low.css">
     <title>{{page.attributes.title}} - josemi.xyz</title>
 </head>
-<body class="m-0 p-0 font-sans leading-normal text-gray-900">
-{{#eq page.attributes.layout "empty"}}
-{{!@content}}
-{{/eq}}
-{{#ne page.attributes.layout "empty"}}
-    <header class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-8 flex items-center justify-between">
-        <a class="flex items-center hover:underline font-medium text-lg" href="/">
-            <span>josemi</span>
-        </a>
-        {{#if site.navbar.links}}
-        <div class="flex items-center gap-4">
-            {{#each site.navbar.links}}
-            <a class="hover:underline" href="{{url}}">{{text}}</a>
-            {{/each}}
-        </div>
-        {{/if}}
-    </header>
-    <main class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-8">
-        {{#eq page.attributes.layout "page"}}
-        {{>page-header.html title=page.attributes.title description=page.attributes.description date=page.attributes.date}}
-        {{/eq}}
-        {{!@content}}
-    </main>
-    <footer class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-12">
-        {{#if site.footer.links}}
-        <div class="flex items-center gap-2 mb-6">
-            {{#each site.footer.links}}
-            <a class="hover:underline text-gray-700" href="{{url}}" target="_blank">
-                <span>{{text}}</span>
-            </a>
-            {{#unless @last}}
-            <div class="text-gray-700 text-xs">•</div>
-            {{/unless}}
-            {{/each}}
-        </div>
-        {{/if}}
-        <div class="text-sm mb-1">{{!site.footer.text}}</div>
-        <div class="text-xs text-gray-600">
-            <span>Last built on <b>{{site.build.date}}</b>.</span>
-        </div>
-    </footer>
-{{/ne}}
+<body class="m-0 p-0 font-sans leading-normal text-gray-950">
+    {{!@content}}
 </body>
 </html>
