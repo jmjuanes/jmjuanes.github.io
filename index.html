@@ -1,42 +1,115 @@
 ---
 {
-    "title": "Josemi Juanes"
+    "title": "Josemi Juanes | React Developer and Minimal Design Lover",
+    "links": [
+        {"text": "github", "url": "https://github.com/jmjuanes"},
+        {"text": "linkedin", "url": "https://linkedin.com/in/jmjuanes"}
+    ]
 }
 ---
 {{>>layout.html}}
 <div class="w-full max-w-7xl mx-auto p-8">
-    <header class="py-32">
-        <div class="text-7xl sm:text-9xl font-black mb-12 tracking-tight leading-none">Josemi.</div>
-        <div class="text-2xl sm:text-3xl leading-snug mb-6">
-            <span>A passionate <b>mathematician</b> turned <b>React</b> developer </span>
-            <span>that loves to craft minimal, modular, beautiful, and performant user interfaces.</span>
+    <header class="py-24 sm:py-40">
+        <div class="text-4xl sm:text-6xl lg:text-8xl font-black mb-8 sm:mb-12 tracking-tight leading-none">
+            <span>hey, I'm Josemi.</span>
         </div>
-        <div class="text-2xl sm:text-3xl leading-snug">
-            <span>Currently building <a class="hover:underline font-bold" href="https://folio.josemi.xyz" target="_blank">folio</a>, a minimalistic digital whiteboard. </span>
+        <div class="text-5xl leading-snug mb-6">
+            <span>I'm a passionate <b>mathematician</b> turned <b>React</b> developer </span>
+            <span>that loves to craft minimal, beautiful, and performant user interfaces.</span>
         </div>
-    </header>
-    {{>>page-section.html title="Projects"}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-        {{#each site.data.projects}}
-        {{>link.html title=title subtitle=url description=description url=url}}
-        {{/each}}
-        </div>
-    {{/page-section.html}}
-    {{>>page-section.html title="Notes"}}
-        {{#getCollection "notes"}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-        {{#each @collection limit=6}}
-            {{>link.html url=path title=attributes.title description=attributes.description subtitle=attributes.date}}
-        {{/each}}
-        </div>
-        <div class="mt-8">
-            <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes.html">
-                <span class="font-medium">See all notes</span>
-                {{=icon icon="arrow-right"}}
+        {{#if page.attributes.links}}
+        <div class="flex flex-col md:flex-row flex-wrap gap-8 mt-10">
+            {{#each page.attributes.links}}
+            <a class="flex items-center gap-1 hover:underline decoration-4 underline-offset-2" href="{{url}}">
+                <span class="text-4xl font-bold lowercase">{{text}}</span>
+                <div class="flex items-center text-5xl">{{=icon icon="arrow-right"}}</div>
             </a>
+            {{/each}}
         </div>
-        {{/getCollection}}
-    {{/page-section.html}}
-    {{>footer.html}}
+        {{/if}}
+    </header>
+    {{#each site.data.projects}}
+        {{#if featured}}
+            {{>>section.html title="Featured Project"}}
+                <div class="text-6xl sm:text-7xl font-bold leading-none tracking-tight mb-4">{{name}}</div>
+                <div class="text-2xl leading-snug font-medium mb-16 max-w-3xl">{{description}}</div>
+                {{#if content}}
+                <div class="w-full">
+                    {{#each content}}
+                    <p class="mb-8 text-gray-800 text-xl text-justify leading-relaxed">{{.}}</p>
+                    {{/each}}
+                </div>
+                {{/if}}
+                {{#if links}}
+                <div class="flex flex-wrap gap-4 mt-10">
+                    {{#each links}}
+                    <a class="flex items-center gap-1 hover:underline decoration-2 underline-offset-1" href="{{url}}">
+                        <span class="text-xl lowercase font-bold">{{text}}</span>
+                        <div class="flex items-center text-2xl">{{=icon icon="arrow-right"}}</div>
+                    </a>
+                    {{/each}}
+                </div>
+                {{/if}}
+            {{/section.html}}
+        {{/if}}
+    {{/each}}
+    {{>>section.html title="Open Source Projects"}}
+        <div class="flex flex-col gap-12">
+        {{#each site.data.projects}}
+            {{#unless featured}}
+            <div class="flex flex-col md:flex-row items-start gap-4">
+                <div class="w-full md:max-w-56 shrink-0">
+                    <div class="text-2xl font-bold leading-tight mb-2">{{name}}</div>
+                    {{#if date}}
+                    <div class="text-base text-gray-800 italic">{{date}}</div>
+                    {{/if}}
+                </div>
+                <div class="grow-1">
+                    <div class="text-gray-800 text-xl text-justify leading-relaxed">{{description}}</div>
+                    {{#if links}}
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-4 mt-6">
+                        {{#each links}}
+                        <a class="flex items-center gap-1 hover:underline decoration-2 underline-offset-1" href="{{url}}">
+                            <span class="text-lg font-bold lowercase">{{text}}</span>
+                            <div class="flex items-center text-xl">
+                                {{=icon icon="arrow-right"}}
+                            </div>
+                        </a>
+                        {{/each}}
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+            {{/unless}}
+        {{/each}}
+        </div>
+    {{/section.html}}
+    {{#each site.collections}}
+        {{>>section.html title=title}}
+            {{#getCollection collection}}
+            <div class="flex flex-col gap-8">
+                {{#each @collection}}
+                <div class="flex flex-col md:flex-row items-start gap-4">
+                    <div class="w-full md:max-w-96 shrink-0">
+                        <a href="{{url}}" class="block text-2xl font-bold leading-tight hover:underline decoration-4 underline-offset-2 mb-2">{{attributes.title}}</a>
+                        <div class="text-base text-gray-800 italic">{{attributes.date}}</div>
+                    </div>
+                    <div class="grow-1">
+                        <div class="text-gray-800 text-xl text-justify leading-relaxed">{{attributes.description}}</div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            {{/getCollection}}
+        {{/section.html}}
+    {{/each}}
+    <footer class="py-20">
+        <div class="mb-1 text-gray-800 text-sm">
+            <span>Handcrafted by <b>Josemi</b> in Valencia, Spain.</span>
+        </div>
+        <div class="text-gray-600 text-xs">
+            <span>Last built on <b>{{site.build.date}}</b>.</span>
+        </div>
+    </footer>
 </div>
 {{/layout.html}}
