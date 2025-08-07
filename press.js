@@ -61,7 +61,7 @@ press({
                 const items = (params.data?.site?.pages || []).filter(page => {
                     return params.args[0] && page?.attributes?.collection === params.args[0];
                 });
-                return params.fn(params.data, {collection: items});
+                return params.fn(params.data, {collection: items.reverse()});
             },
         },
         functions: {
@@ -78,8 +78,7 @@ press({
         },
     }),
     plugins: [
-        press.SourcePlugin({folder: "./posts", basePath: "notes"}),
-        press.SourcePlugin({folder: "./content"}),
+        press.SourcePlugin({folder: "./posts" }),
         press.DataPlugin(),
         press.PartialsPlugin(),
         press.CopyAssetsPlugin({
