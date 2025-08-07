@@ -84,22 +84,24 @@
         {{/each}}
         </div>
     {{/section.html}}
-    {{>>section.html title="Notes - Thoughts and Ideas"}}
-        {{#getCollection "notes"}}
-        <div class="flex flex-col gap-8">
-            {{#each @collection}}
-            <div class="flex flex-col md:flex-row items-start gap-4">
-                <div class="w-full md:max-w-96 shrink-0">
-                    <a href="{{url}}" class="block text-2xl font-bold leading-tight hover:underline decoration-4 underline-offset-2 mb-2">{{attributes.title}}</a>
-                    <div class="text-base text-gray-800 italic">{{attributes.date}}</div>
+    {{#each site.collections}}
+        {{>>section.html title=title}}
+            {{#getCollection collection}}
+            <div class="flex flex-col gap-8">
+                {{#each @collection}}
+                <div class="flex flex-col md:flex-row items-start gap-4">
+                    <div class="w-full md:max-w-96 shrink-0">
+                        <a href="{{url}}" class="block text-2xl font-bold leading-tight hover:underline decoration-4 underline-offset-2 mb-2">{{attributes.title}}</a>
+                        <div class="text-base text-gray-800 italic">{{attributes.date}}</div>
+                    </div>
+                    <div class="grow-1">
+                        <div class="text-gray-800 text-xl text-justify leading-relaxed">{{attributes.description}}</div>
+                    </div>
                 </div>
-                <div class="grow-1">
-                    <div class="text-gray-800 text-xl text-justify leading-relaxed">{{attributes.description}}</div>
-                </div>
+                {{/each}}
             </div>
-            {{/each}}
-        </div>
-        {{/getCollection}}
-    {{/section.html}}
+            {{/getCollection}}
+        {{/section.html}}
+    {{/each}}
 </div>
 {{/layout.html}}

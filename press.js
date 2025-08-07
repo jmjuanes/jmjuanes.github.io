@@ -58,7 +58,7 @@ press({
     template: mikel.create({
         helpers: {
             getCollection: params => {
-                const items = (params.data?.site?.pages || []).filter(page => {
+                const items = (params.variables?.root?.site?.pages || []).filter(page => {
                     return params.args[0] && page?.attributes?.collection === params.args[0];
                 });
                 return params.fn(params.data, {collection: items.reverse()});
