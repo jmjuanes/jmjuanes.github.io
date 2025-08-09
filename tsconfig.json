@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "allowImportingTsExtensions": true,
+        "esModuleInterop": true,
+        "module": "es6",
+        "target": "es5",
+        "jsx": "react-jsx",
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "noEmit": true
+    },
+    "include": [
+        "assets/*.ts"
+    ],
+    "exclude": [
+        "node_modules/**/*",
+        "*.js"
+    ]
+}
