@@ -12,7 +12,8 @@
         "noEmit": true
     },
     "include": [
-        "assets/*.ts"
+        "assets/*.ts",
+        "assets/*.tsx"
     ],
     "exclude": [
         "node_modules/**/*",
