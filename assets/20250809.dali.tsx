@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import { renderIcon, PathIcon } from "@josemi-icons/react";
+import { renderIcon, PathIcon, PlusIcon} from "@josemi-icons/react";
 
 type DaliPathCommand = {
     type: string;
@@ -25,13 +25,23 @@ type DaliState = {
     grid?: number;
 };
 
+// section component
+const Section = (props: {title: string, onCreate?: () => void}): React.JSX.Element => (
+    <div className="flex items-center justify-between py-2">
+        <div className="text-base font-bold">{props.title}</div>
+        {props.onCreate && (
+            <div className="flex items-center text-lg">
+                <PlusIcon />
+            </div>
+        )}
+    </div>
+);
+
 // the edition left panel is used to list the paths of the svg file
 // and to set the active path to edit
 const DaliEditionLeftPanel = (props: any): React.JSX.Element => (
     <div className="absolute z-30 top-0 left-0 mt-12 h-full w-64 p-4 bg-white">
-        <div className="flex items-center justify-between py-2">
-            <div className="text-base font-bold">Paths</div>
-        </div>
+        <Section title="Paths" />
         <div className="overflow-y-auto w-full max-h-xl flex flex-col gap-2">
             {props.paths.map(path => {
                 const pathClass = classNames({
