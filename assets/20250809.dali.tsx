@@ -1,6 +1,19 @@
 import React from "react";
 import classNames from "classnames";
-import { renderIcon, PathIcon, PlusIcon} from "@josemi-icons/react";
+import { renderIcon, PathIcon, PlusIcon } from "@josemi-icons/react";
+
+enum DaliCommands {
+    MOVE = "m",
+    LINE = "l",
+    HORIZONTAL_LINE = "h",
+    VERTICAL_LINE = "v",
+    CUBIC_BEZIER = "c",
+    SMOOTH_CUBIC_BEZIER = "s",
+    QUADRATIC_BEZIER = "q",
+    SMOOTH_QUADRATIC_BEZIER = "t",
+    ARC = "a",
+    CLOSE = "z",
+};
 
 type DaliPathCommand = {
     type: string;
@@ -10,6 +23,7 @@ type DaliPathCommand = {
 type DaliPath = {
     id: string;
     name?: string;
+    absolute: boolean;
     commands: DaliPathCommand[];
     fillColor?: string;
     strokeWidth?: number;
@@ -25,12 +39,24 @@ type DaliState = {
     grid?: number;
 };
 
+// hook to create a dali state
+const useDaliState = (initialState: Partial<DaliState>): DaliState => {
+    const state = React.useRef<DaliState>({
+        paths: initialState?.paths || [],
+        width: initialState?.width ?? 100,
+        height: initialState?.height ?? 100,
+    });
+    return state.current;
+};
+
 // section component
-const Section = (props: {title: string, onCreate?: () => void}): React.JSX.Element => (
+const Section = (props: {title: string, onCreate?: (event: React.SynteticEvent) => void}): React.JSX.Element => (
     <div className="flex items-center justify-between py-2">
-        <div className="text-base font-bold">{props.title}</div>
-        {props.onCreate && (
-            <div className="flex items-center text-lg">
+        <div className="text-base font-bold">
+            <span>{props.title}</span>
+        </div>
+        {typeof props.onCreate === "function" && (
+            <div className="flex items-center text-lg" onClick={props.onCreate}>
                 <PlusIcon />
             </div>
         )}
@@ -74,9 +100,8 @@ const DaliEditionRightPanel = (props: any): React.JSX.Element => {
 
 export const DaliApp = (): React.JSX.Element => {
     const parent = React.useRef<HTMLDivElement>(null);
-    const [ state, setState ] = React.useState<DaliState>(() => {
-        return { paths: [], width: 100, height: 100 };
-    });
+    const state = useDaliState({});
+    const [ version, forceUpdate ] = React.useReducer<number>((x: number): number => x + 1, 0);
     const [ activePath, setActivePath ] = React.useState<DaliPath>(null);
 
     return (
