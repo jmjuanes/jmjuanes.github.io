@@ -1,5 +1,5 @@
 import * as path from "node:path";
-// import * as babel from "@babel/core";
+import * as babel from "@babel/core";
 import mikel from "mikel";
 import press from "mikel-press";
 import markdown from "mikel-markdown";
@@ -23,15 +23,20 @@ const getBuildInfo = () => {
 // @description babel plugin for parsing JSX content in HTML files
 const BabelJSXPlugin = () => {
     const regex = /<script\s+type=["']text\/babel["']>([\s\S]*?)<\/script>/g;
-    // const transform = code => {
-    //     const result = babel.transformSync(code, {
-    //         presets: [
-    //             "@babel/preset-react",
-    //         ],
-    //         filename: "inline.jsx", // needed for Babel to recognize JSX
-    //     });
-    //     return result.code;
-    // };
+    const transform = code => {
+        const result = babel.transformSync(code, {
+            presets: [
+                "@babel/preset-env",
+                "@babel/preset-typescript",
+                "@babel/preset-react",
+            ],
+            plugins: [
+                "@babel/plugin-transform-runtime",
+            ],
+            filename: "inline.tsx", // needed for Babel to recognize JSX
+        });
+        return result.code;
+    };
     return {
         name: "BabelJSXPlugin",
         transform: (context, node) => {
@@ -42,9 +47,9 @@ const BabelJSXPlugin = () => {
                 });
             }
             // 2. transform jsx content in .jsx files
-            if (node.label === press.LABEL_ASSET && path.extname(node.path) === ".jsx") {
+            if (node.label === press.LABEL_ASSET && path.extname(node.path) === ".tsx") {
                 node.content = transform(press.utils.read(node.source));
-                node.path = path.join(path.dirname(node.path), path.basename(node.path, ".jsx") + ".js");
+                node.path = path.join(path.dirname(node.path), path.basename(node.path, ".tsx") + ".js");
             }
         },
     };
@@ -91,6 +96,7 @@ press({
         }),
         press.UsePlugin(markdown({})),
         press.FrontmatterPlugin(),
+        BabelJSXPlugin(),
         press.ContentPagePlugin(),
     ],
 });

@@ -13,11 +13,20 @@
         "serve": "serve www -p 8080"
     },
     "dependencies": {
+        "@josemi-icons/react": "^0.7.0",
         "@josemi-icons/svg": "^0.7.0",
+        "classnames": "^2.5.1",
         "highlight.js": "^11.11.1",
-        "lowcss": "^0.32.0"
+        "lowcss": "^0.32.0",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1"
     },
     "devDependencies": {
+        "@babel/core": "^7.28.0",
+        "@babel/preset-env": "^7.28.0",
+        "@babel/preset-react": "^7.27.1",
+        "@babel/preset-typescript": "^7.27.1",
+        "@babel/plugin-transform-runtime": "^7.28.0",
         "mikel": "^0.25.0",
         "mikel-markdown": "^0.25.0",
         "mikel-press": "^0.25.0",

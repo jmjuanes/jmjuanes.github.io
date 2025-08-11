@@ -5,7 +5,7 @@
         "allowImportingTsExtensions": true,
         "esModuleInterop": true,
         "module": "es6",
-        "target": "es5",
+        "target": "es2024",
         "jsx": "react-jsx",
         "moduleResolution": "node",
         "skipLibCheck": true,
