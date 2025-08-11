@@ -4,6 +4,11 @@
     "url": "https://www.josemi.xyz",
     "collections": [
         {
+            "collection": "apps",
+            "title": "Apps - Small web applications",
+            "description": "A collection of small web applications I have developed."
+        },
+        {
             "collection": "notes",
             "title": "Notes - Thoughts and Ideas",
             "description": "A collection of my thoughts, ideas, and notes on various topics."
