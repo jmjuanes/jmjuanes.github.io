@@ -26,7 +26,6 @@ const BabelJSXPlugin = () => {
     const transform = code => {
         const result = babel.transformSync(code, {
             presets: [
-                "@babel/preset-env",
                 "@babel/preset-typescript",
                 "@babel/preset-react",
             ],
@@ -84,6 +83,8 @@ press({
     }),
     plugins: [
         press.SourcePlugin({folder: "./posts" }),
+        press.SourcePlugin({folder: "./static" }),
+        press.AssetsPlugin({folder: "./assets", basePath: "js" }),
         press.DataPlugin(),
         press.PartialsPlugin(),
         press.CopyAssetsPlugin({
@@ -91,6 +92,7 @@ press({
             patterns: [
                 {from: "node_modules/lowcss/low.css"},
                 {from: "node_modules/@josemi-icons/svg/sprite.svg", to: "icons.svg"},
+                {from: "node_modules/@josemi-icons/react/index.js", to: "icons.js"},
                 {from: "node_modules/highlight.js/styles/nord.css", to: "highlight.css"},
             ],
         }),
