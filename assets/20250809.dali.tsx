@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import { uid } from "uid";
 import { renderIcon, PathIcon, PlusIcon } from "@josemi-icons/react";
 
 enum DaliCommands {
@@ -16,7 +17,8 @@ enum DaliCommands {
 };
 
 type DaliPathCommand = {
-    type: string;
+    id: string;
+    type: DaliCommands;
     values: number[];
 };
 
@@ -45,12 +47,19 @@ type Dali = {
     width: number;
     height: number;
     background: string;
-    activePath: string | null;
+    activePath: DaliPath | null;
 
     // internal methods to manipulate the dali editor
     createPath: (name?: string) => void;
+    createCommand: () => void;
     setActivePath: (pathId: string | null) => void;
     getActivePath: () => DaliPath | null;
+};
+
+// commands configuration
+const Commands = {
+    [DaliCommands.MOVE]: { name: "Move", values: ["x", "y"] },
+    [DaliCommands.LINE]: { name: "Line", values: ["x", "y"] },
 };
 
 // internal context to access to the dali state manager
@@ -72,21 +81,41 @@ const useDaliState = (initialState: Partial<DaliState>): [Dali, number] => {
             // create a new path element
             createPath: (name?: string) => {
                 dali.paths.push({
-                    id: `path-${Date.now()}`,
+                    id: "p:" + uid(6),
                     name: name || `Path ${dali.paths.length + 1}`,
                     commands: [],
                 });
-                dali.activePath = dali.paths[dali.paths.length - 1].id;
+                dali.activePath = dali.paths[dali.paths.length - 1];
                 forceUpdate();
+            },
+
+            // create a new command in the current active path
+            createCommand: () => {
+                if (dali.activePath) {
+                    dali.activePath.commands.push({
+                        id: "c:" + uid(6),
+                        type: DaliCommands.MOVE,
+                        values: Commands[DaliCommands.MOVE].values.map(x => 0),
+                    });
+                    forceUpdate();
+                }
+            },
+            deleteCommand: (commandId: string) => {
+                if (dali.activePath) {
+                    dali.activePath.commands = dali.activePath.commands.filter(command => {
+                        return command.id !== commandId;
+                    });
+                    forceUpdate();
+                }
             },
 
             // manipulate the active path
             setActivePath: (pathId: string | null): void => {
-                dali.activePath = pathId;
+                dali.activePath = dali.paths.find(path => path.id === pathId) || null;
                 forceUpdate();
             },
             getActivePath: (): DaliPath | null => {
-                return dali.paths.find(path => path.id === dali.activePath) || null;
+                return dali.activePath || null;
             },
         };
         return dali;
@@ -113,7 +142,75 @@ const Section = (props: {title: string, onCreate?: (event: React.SyntheticEvent)
     </div>
 );
 
+// general field component that renders the field name, a helper message and the content
+const Field = (props: { name: string, children: React.Node }): React.JSX.Element => (
+    <div className="flex items-start gap-2">
+        <div className="w-24 shrink-0">
+            <div className="h-8 flex items-center">
+                <div className="text-gray-600 text-sm font-medium">{props.name}</div>
+            </div>
+        </div>
+        <div className="grow-1">
+            {props.children}
+        </div>
+    </div>
+);
 
+// Form elements
+const Form = {
+    TextInput: (props: any): React.JSX.Element => (
+        <Field name={props.name}>
+            <input
+                type="text"
+                defaultValue={props.value}
+                className="w-full h-8 rounded-md bg-gray-100 text-gray-950 font-medium text-sm px-2"
+                onChange={props.onChange}
+            />
+        </Field>
+    ),
+};
+
+// command input
+const CommandInput = (props: any): React.JSX.Element => {
+    const t = props.type;
+    const config = Commands[props.type];
+    return (
+        <div className="flex items-start flex-nowrap gap-2">
+            <div className="shrink-0">
+                <select
+                    className="h-8 rounded-md bg-gray-100 text-gray-950 font-medium text-sm px-2"
+                    onChange={event => props.onTypeChange(event.currentTarget.value)}
+                >
+                    {Object.keys(Commands).map(key => (
+                        <option key={key} value={key}>{key.toUpperCase()}</option>
+                    ))}
+                </select>
+            </div>
+            <div className="w-full flex items-start gap-1">
+                {config.values.map((key, index) => (
+                    <div key={t + ":" + index} className="h-8 flex gap-1 items-center rounded-md bg-gray-100 px-2">
+                        <div className="text-gray-600 text-sm">{key}</div>
+                        <input
+                            key={t + ":" + index + ":input"}
+                            type="number"
+                            defaultValue={props.values[index] || 0}
+                            className="bg-transparent text-gray-950 text-sm w-8"
+                            onChange={event => props.onValueChange(index, event.currentTarget.value)}
+                        />
+                    </div>
+                ))}
+            </div>
+            <div className="h-8 flex items-center shrink-0">
+                <div
+                    className="flex text-gray-600 hover:text-gray-950 cursor-pointer text-lg"
+                    onClick={props.onDelete}
+                >
+                    {renderIcon("x")}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 // the edition left panel is used to list the paths of the svg file
 // and to set the active path to edit
@@ -133,8 +230,8 @@ export const DaliPathsPanel = (): React.JSX.Element => {
                 {dali.paths.map(path => {
                     const pathClass = classNames({
                         "flex items-center gap-2 px-2 h-7 rounded-lg cursor-pointer": true,
-                        "text-gray-950 hover:bg-gray-100": dali.activePath !== path.id,
-                        "text-white bg-gray-950": dali.activePath === path.id,
+                        "text-gray-950 hover:bg-gray-100": dali.activePath?.id !== path.id,
+                        "text-white bg-gray-950": dali.activePath?.id === path.id,
                     });
                     return (
                         <div key={path.id} className={pathClass} onClick={() => dali.setActivePath(path.id)}>
@@ -152,12 +249,40 @@ export const DaliPathsPanel = (): React.JSX.Element => {
 
 // the right edition panel is used to display the options to customize the active path
 // including the commands, fill, and stroke parameteres
-const DaliEditionPanel = (): React.JSX.Element => {
+export const DaliEditionPanel = (): React.JSX.Element => {
     const dali = useDali();
+    const activePath = dali.getActivePath();
+
+    // handle creating a new command
+    const handleCommandCreate = React.useCallback(() => {
+        dali.createCommand();
+    }, [ dali, dali.activePath?.id ]);
+
+    if (!activePath) {
+        return null;
+    }
 
     return (
         <React.Fragment>
-
+            <Section title="Path" />
+            <div className="pl-2">
+                <Form.TextInput
+                    key={activePath.id}
+                    name="Name"
+                    value={activePath.name || "Untitled"}
+                />
+            </div>
+            <Section title="Commands" onCreate={handleCommandCreate} />
+            <div className="flex flex-col gap-1 pl-2">
+                {activePath.commands.map(command => (
+                    <CommandInput
+                        key={command.id}
+                        type={command.type}
+                        values={command.values}
+                        onDelete={() => dali.deleteCommand(command.id)}
+                    />
+                ))}
+            </div>
         </React.Fragment>
     );
 };
