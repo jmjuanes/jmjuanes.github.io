@@ -14,7 +14,8 @@
             "@josemi-icons/react": "/vendor/icons.js",
             "classnames": "https://esm.sh/classnames@2.5.1",
             "react": "https://esm.sh/react@19.1.0",
-            "react-dom/": "https://esm.sh/react-dom@19.1.0/"
+            "react-dom/": "https://esm.sh/react-dom@19.1.0/",
+            "uid": "https://esm.sh/uid@2.0.2/"
         }
     }
 </script>
@@ -22,19 +23,24 @@
 <script type="text/babel">
     import React from "react";
     import ReactDOM from "react-dom/client";
-    import { DaliProvider, DaliPreview, DaliPathsPanel } from "/js/20250809.dali.js";
+    import { DaliProvider, DaliPreview, DaliPathsPanel, DaliEditionPanel } from "/js/20250809.dali.js";
 
     // render the dali preview component
     const root = ReactDOM.createRoot(document.getElementById("app"));
     root.render(
-        <div className="fixed top-0 left-0 w-full h-full">
-            <DaliProvider>
-                <DaliPreview />
-                <div className="absolute z-30 top-0 left-0 mt-12 h-full w-64 p-4 bg-white">
-                    <DaliPathsPanel />
+        <DaliProvider>
+            <div className="fixed top-0 left-0 w-full h-full min-w-0 min-h-0 bg-gray-100">
+                <div className="flex items-stretch justify-between w-full h-full">
+                    <div className="shrink-0 h-full w-64 p-4 bg-white">
+                        <DaliPathsPanel />
+                    </div>
+                    <div></div>
+                    <div className="shrink-0 h-hull w-88 p-4 bg-white">
+                        <DaliEditionPanel />
+                    </div>
                 </div>
-            </DaliProvider>
-        </div>
+            </div>
+        </DaliProvider>
     );
 </script>
 
