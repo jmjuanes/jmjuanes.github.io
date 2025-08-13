@@ -1,0 +1,42 @@
+---
+{
+    "title": "Dali",
+    "permalink": "/dali.html"
+}
+---
+{{>>layout.html}}
+
+<div id="app"></div>
+
+<script type="importmap">
+    {
+        "imports": {
+            "@josemi-icons/react": "/vendor/icons.js",
+            "classnames": "https://esm.sh/classnames@2.5.1",
+            "react": "https://esm.sh/react@19.1.0",
+            "react-dom/": "https://esm.sh/react-dom@19.1.0/"
+        }
+    }
+</script>
+
+<script type="text/babel">
+    import React from "react";
+    import ReactDOM from "react-dom/client";
+    import { DaliProvider, DaliPreview, DaliPathsPanel } from "/js/20250809.dali.js";
+
+    // render the dali preview component
+    const root = ReactDOM.createRoot(document.getElementById("app"));
+    root.render(
+        <div className="fixed top-0 left-0 w-full h-full">
+            <DaliProvider>
+                <DaliPreview />
+                <div className="absolute z-30 top-0 left-0 mt-12 h-full w-64 p-4 bg-white">
+                    <DaliPathsPanel />
+                </div>
+            </DaliProvider>
+        </div>
+    );
+</script>
+
+
+{{/layout.html}}
