@@ -1,13 +1,13 @@
 ---
 {
     "title": "Josemi Juanes | React Developer and Minimal Design Lover",
+    "layout": "default",
     "links": [
         {"text": "github", "url": "https://github.com/jmjuanes"},
         {"text": "linkedin", "url": "https://linkedin.com/in/jmjuanes"}
     ]
 }
 ---
-{{>>layout.html}}
 <div class="w-full max-w-7xl mx-auto p-8">
     <header class="py-24 sm:py-40">
         <div class="text-4xl sm:text-6xl lg:text-8xl font-black mb-8 sm:mb-12 tracking-tight leading-none">
@@ -30,7 +30,7 @@
     </header>
     {{#each site.data.projects}}
         {{#if featured}}
-            {{>>section.html title="Featured Project"}}
+            {{>>section.mustache title="Featured Project"}}
                 <div class="text-5xl sm:text-7xl font-bold leading-none tracking-tight mb-4">{{name}}</div>
                 <div class="text-2xl leading-snug font-medium mb-16 max-w-3xl">{{description}}</div>
                 {{#if content}}
@@ -50,10 +50,10 @@
                     {{/each}}
                 </div>
                 {{/if}}
-            {{/section.html}}
+            {{/section.mustache}}
         {{/if}}
     {{/each}}
-    {{>>section.html title="Open Source Projects"}}
+    {{>>section.mustache title="Open Source Projects"}}
         <div class="flex flex-col gap-12">
         {{#each site.data.projects}}
             {{#unless featured}}
@@ -83,26 +83,28 @@
             {{/unless}}
         {{/each}}
         </div>
-    {{/section.html}}
-    {{#each site.collections}}
-        {{>>section.html title=title}}
-            {{#getCollection collection}}
-            <div class="flex flex-col gap-8">
-                {{#each @collection}}
-                <div class="flex flex-col md:flex-row items-start gap-4">
-                    <div class="w-full md:max-w-96 shrink-0">
-                        <a href="{{url}}" class="block text-2xl font-bold leading-tight hover:underline decoration-4 underline-offset-2 mb-2">{{attributes.title}}</a>
-                        <div class="text-base text-gray-800 italic">{{attributes.date}}</div>
-                    </div>
-                    <div class="grow-1">
-                        <div class="text-gray-800 text-xl text-justify leading-relaxed">{{attributes.description}}</div>
+    {{/section.mustache}}
+    {{>>section.mustache title="Notes - Thoughts and Ideas"}}
+        <div class="flex flex-col gap-8">
+        {{#each site.pages}}
+        {{#eq this.attributes.collection "notes"}}
+            <div class="flex flex-col md:flex-row items-start gap-4">
+                <div class="w-full md:max-w-96 shrink-0">
+                    <a href="{{this.url}}" class="block text-2xl font-bold leading-tight hover:underline decoration-4 underline-offset-2 mb-2">
+                        <span>{{this.attributes.title}}</span>
+                    </a>
+                    <div class="text-base text-gray-800 italic">{{this.attributes.date}}</div>
+                </div>
+                <div class="grow-1">
+                    <div class="text-gray-800 text-xl text-justify leading-relaxed">
+                        {{this.attributes.description}}
                     </div>
                 </div>
-                {{/each}}
             </div>
-            {{/getCollection}}
-        {{/section.html}}
-    {{/each}}
+        {{/eq}}
+        {{/each}}
+        </div>
+    {{/section.mustache}}
     <footer class="py-20">
         <div class="mb-1 text-gray-800 text-sm">
             <span>Handcrafted by <b>Josemi</b> in Valencia, Spain.</span>
@@ -112,4 +114,3 @@
         </div>
     </footer>
 </div>
-{{/layout.html}}

@@ -18,9 +18,14 @@
         "lowcss": "^0.32.0"
     },
     "devDependencies": {
-        "mikel": "^0.25.0",
-        "mikel-markdown": "^0.25.0",
-        "mikel-press": "^0.25.0",
+        "@babel/core": "^7.28.4",
+        "@babel/preset-react": "^7.27.1",
+        "@babel/preset-typescript": "^7.27.1",
+        "@babel/plugin-transform-runtime": "^7.28.3",
+        "@types/react": "^19.1.10",
+        "mikel": "^0.26.2",
+        "mikel-markdown": "^0.26.2",
+        "mikel-press": "^0.26.2",
         "serve": "^14.2.4"
     }
 }
