@@ -64,6 +64,7 @@ const LayoutPlugin = () => ({
 
 press({
     ...websiteConfig,
+    extensions: [ ".mustache", ".md", ".markdown" ],
     build: {
         date: getBuildInfo(),
     },
@@ -82,9 +83,14 @@ press({
         },
     }),
     plugins: [
-        press.SourcePlugin({folder: "./posts" }),
+        press.SourcePlugin({
+            folder: "./posts",
+            extensions: [ ".md", ".markdown" ],
+        }),
         press.DataPlugin(),
-        press.PartialsPlugin(),
+        press.PartialsPlugin({
+            extensions: [ ".mustache" ],
+        }),
         press.CopyAssetsPlugin({
             basePath: "vendor",
             patterns: [
