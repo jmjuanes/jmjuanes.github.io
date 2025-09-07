@@ -1,5 +1,5 @@
 import * as path from "node:path";
-// import * as babel from "@babel/core";
+import * as babel from "@babel/core";
 import mikel from "mikel";
 import press from "mikel-press";
 import markdown from "mikel-markdown";
@@ -112,6 +112,7 @@ press({
         })),
         press.FrontmatterPlugin(),
         LayoutPlugin(),
+        BabelJSXPlugin(),
         press.ContentPagePlugin(),
     ],
 });
