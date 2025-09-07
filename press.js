@@ -57,7 +57,7 @@ const LayoutPlugin = () => ({
     transform: (context, node) => {
         if (node.label === press.LABEL_PAGE && node.attributes?.layout && node.content) {
             const layout = `layout-${node.attributes.layout}.mustache`;
-            node.content = `{{>>${layout}}}${node.content}{{/${layout}}}`;
+            node.content = `{{>>${layout}}}\n\n${node.content}\n\n{{/${layout}}}`;
         }
     },
 });
