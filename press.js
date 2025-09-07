@@ -89,7 +89,23 @@ press({
                 {from: "node_modules/highlight.js/styles/nord.css", to: "highlight.css"},
             ],
         }),
-        press.UsePlugin(markdown({})),
+        press.UsePlugin(markdown({
+            highlight: (code, language) => {
+                return hljs.highlight(code.trim(), { language: language }).value;
+            },
+            classNames: {
+                link: "font-medium underline",
+                code: "bg-gray-100 rounded-md py-1 px-2 text-xs font-mono font-bold bg-gray-900",
+                pre: "w-full overflow-x-auto bg-gray-950 text-gray-100 text-sm font-mono leading-relaxed my-6 p-4 rounded-xl",
+                heading: "font-bold mb-4 first:mt-0 mt-8 text-gray-950",
+                heading2: "text-2xl",
+                heading3: "text-xl",
+                heading4: "text-lg",
+                list: "list-inside mb-6 pl-4",
+                listItem: "mb-3 pl-1",
+                paragraph: "block leading-relaxed mb-6",
+            },
+        })),
         press.FrontmatterPlugin(),
         press.ContentPagePlugin(),
     ],
