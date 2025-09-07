@@ -50,20 +50,24 @@ const BabelJSXPlugin = () => {
     };
 };
 
+// @description layout plugin to automatically assign a page/post to a layout using
+// the page attributes
+const LayoutPlugin = () => ({
+    name: "LayoutPlugin",
+    transform: (context, node) => {
+        if (node.label === press.LABEL_PAGE && node.attributes?.layout && node.content) {
+            const layout = `layout-${node.attributes.layout}.mustache`;
+            node.content = `{{>>${layout}}}${node.content}{{/${layout}}}`;
+        }
+    },
+});
+
 press({
     ...websiteConfig,
     build: {
         date: getBuildInfo(),
     },
     template: mikel.create({
-        helpers: {
-            getCollection: params => {
-                const items = (params.variables?.root?.site?.pages || []).filter(page => {
-                    return params.args[0] && page?.attributes?.collection === params.args[0];
-                });
-                return params.fn(params.data, {collection: items.reverse()});
-            },
-        },
         functions: {
             icon: args => {
                 return [
@@ -107,6 +111,7 @@ press({
             },
         })),
         press.FrontmatterPlugin(),
+        LayoutPlugin(),
         press.ContentPagePlugin(),
     ],
 });
