@@ -4,7 +4,7 @@
     "description": "A guide for creating React Hooks to access to the Local and Session Storage of the browser in a simple way.",
     "date": "September 24, 2023",
     "collection": "notes",
-    "layout": "post",
+    "layout": "post.mustache",
     "permalink": "/notes/react-hooks-for-storage.html"
 }
 ---

@@ -23,15 +23,15 @@ const getBuildInfo = () => {
 // @description babel plugin for parsing JSX content in HTML files
 const BabelJSXPlugin = () => {
     const regex = /<script\s+type=["']text\/babel["']>([\s\S]*?)<\/script>/g;
-    // const transform = code => {
-    //     const result = babel.transformSync(code, {
-    //         presets: [
-    //             "@babel/preset-react",
-    //         ],
-    //         filename: "inline.jsx", // needed for Babel to recognize JSX
-    //     });
-    //     return result.code;
-    // };
+    const transform = code => {
+        const result = babel.transformSync(code, {
+            presets: [
+                "@babel/preset-react",
+            ],
+            filename: "inline.jsx", // needed for Babel to recognize JSX
+        });
+        return result.code;
+    };
     return {
         name: "BabelJSXPlugin",
         transform: (context, node) => {
@@ -49,18 +49,6 @@ const BabelJSXPlugin = () => {
         },
     };
 };
-
-// @description layout plugin to automatically assign a page/post to a layout using
-// the page attributes
-const LayoutPlugin = () => ({
-    name: "LayoutPlugin",
-    transform: (context, node) => {
-        if (node.label === press.LABEL_PAGE && node.attributes?.layout && node.content) {
-            const layout = `layout-${node.attributes.layout}.mustache`;
-            node.content = `{{>>${layout}}}\n\n${node.content}\n\n{{/${layout}}}`;
-        }
-    },
-});
 
 press({
     ...websiteConfig,
@@ -91,6 +79,10 @@ press({
         press.PartialsPlugin({
             extensions: [ ".mustache" ],
         }),
+        press.LayoutsPlugin({
+            folder: "./layouts",
+            extensions: [ ".mustache" ],
+        }),
         press.CopyAssetsPlugin({
             basePath: "vendor",
             patterns: [
@@ -117,7 +109,6 @@ press({
             },
         })),
         press.FrontmatterPlugin(),
-        LayoutPlugin(),
         BabelJSXPlugin(),
         press.ContentPagePlugin(),
     ],
