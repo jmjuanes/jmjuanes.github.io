@@ -84,6 +84,11 @@ press({
             extensions: [ ".mustache" ],
         }),
         press.CopyAssetsPlugin({
+            patterns: [
+                {from: "static/bingo.html"},
+            ],
+        }),
+        press.CopyAssetsPlugin({
             basePath: "vendor",
             patterns: [
                 {from: "node_modules/lowcss/low.css"},
