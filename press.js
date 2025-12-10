@@ -4,7 +4,7 @@ import mikel from "mikel";
 import press from "mikel-press";
 import markdown from "mikel-markdown";
 import hljs from "highlight.js";
-import websiteConfig from "./website.config.json" with {type: "json"};
+import websiteConfig from "./website.config.json" with { type: "json" };
 
 // generate build info
 const getBuildInfo = () => {
@@ -72,6 +72,10 @@ press({
     }),
     plugins: [
         press.SourcePlugin({
+            folder: "./content",
+            extensions: [ ".mustache" ],
+        }),
+        press.SourcePlugin({
             folder: "./posts",
             extensions: [ ".md", ".markdown" ],
         }),
@@ -82,11 +86,6 @@ press({
         press.LayoutsPlugin({
             folder: "./layouts",
             extensions: [ ".mustache" ],
-        }),
-        press.CopyAssetsPlugin({
-            patterns: [
-                {from: "static/bingo.html"},
-            ],
         }),
         press.CopyAssetsPlugin({
             basePath: "vendor",
