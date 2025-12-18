@@ -18,6 +18,13 @@
         <a href="/" class="text-2xl font-bold leading-tight underline decoration-2 underline-offset-4 hover:opacity-60">
             <span>josemi.</span>
         </a>
+        <div class="flex items-center gap-4">
+        {{#each site.navigation}}
+            <a href="{{this.link}}" class="text-xl font-medium hover:underline">
+                <span>{{this.text}}</span>
+            </a>
+        {{/each}}
+        </div>
     </header>
     <main class="w-full max-w-6xl mx-auto px-8 py-16">
         {{!@content}}
