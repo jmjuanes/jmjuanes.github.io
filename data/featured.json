@@ -1,0 +1,21 @@
+[
+    {
+        "name": "folio",
+        "description": "A minimal digital whiteboard for sketching, annotating and prototyping.",
+        "featured": true,
+        "date": "2020 - Present",
+        "content": [
+            "Folio is a minimalist digital whiteboard that can be used for sketching and prototyping, or just as a infinite canvas to take notes. It can be used via the web application or as Docker image to run it locally.",
+            "It was born while I was finishing my PhD thesis, as I needed a tool to design the diagrams and figures to include in it. I tried several existing tools, but none of them fit my needs perfectly. I wanted something that was simple, fast, and easy to use, without the clutter of unnecessary features or a complex interface. Finally, I decided to build it myself.",
+            "It is built using React and SVG, and it is fully open source."
+        ],
+        "stats": [
+            {"title": "Started / First Release", "value": "2020 / 2022"},
+            {"title": "Tech Stack", "value": "React, SVG, Node.js"}
+        ],
+        "links": [
+            {"text": "Check it out", "url": "https://folio.josemi.xyz"},
+            {"text": "GitHub Repository", "url": "https://github.com/jmjuanes/folio"}
+        ]
+    }
+]

@@ -1,0 +1,24 @@
+---
+{
+    "title": "Notes",
+    "description": "My thoughts and ideas on various topics, shared as small pages that I call notes. From programming hacks to life reflections.",
+    "layout": "page.mustache",
+    "permalink": "/notes.html"
+}
+---
+
+<div class="flex flex-col gap-8">
+{{#each site.pages}}
+{{#eq this.attributes.collection "notes"}}
+    <div class="flex flex-col gap-2">
+        <div class="text-base text-gray-600 italic">{{this.attributes.date}}</div>
+        <a href="{{this.url}}" class="block text-2xl font-bold leading-tight underline decoration-2 underline-offset-2 hover:opacity-60">
+            <span>{{this.attributes.title}}</span>
+        </a>
+        <div class="text-gray-800 text-xl leading-relaxed">
+            {{this.attributes.description}}
+        </div>
+    </div>
+{{/eq}}
+{{/each}}
+</div>

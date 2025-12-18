@@ -1,27 +1,17 @@
 [
     {
         "name": "folio",
-        "description": "A minimal digital whiteboard for sketching, annotating and prototyping.",
-        "featured": true,
-        "date": "2020 - Present",
-        "content": [
-            "Folio is a minimalist digital whiteboard that can be used for sketching and prototyping, or just as a infinite canvas to take notes. It can be used via the web application or as Docker image to run it locally.",
-            "It was born while I was finishing my PhD thesis, as I needed a tool to design the diagrams and figures to include in it. I tried several existing tools, but none of them fit my needs perfectly. I wanted something that was simple, fast, and easy to use, without the clutter of unnecessary features or a complex interface. Finally, I decided to build it myself.",
-            "It is built using React and SVG, and it is fully open source."
-        ],
-        "stats": [
-            {"title": "Started / First Release", "value": "2020 / 2022"},
-            {"title": "Tech Stack", "value": "React, SVG, Node.js"}
-        ],
+        "description": "Folio is a minimalist digital whiteboard that can be used for sketching and prototyping, or just as a infinite canvas to take notes. It can be used via the web application or as Docker image to run it locally.",
+        "date": "Jan 01, 2020 - Present",
         "links": [
-            {"text": "Check it out", "url": "https://folio.josemi.xyz"},
+            {"text": "Visit website", "url": "https://folio.josemi.xyz"},
             {"text": "GitHub Repository", "url": "https://github.com/jmjuanes/folio"}
         ]
     },
     {
         "name": "mikel",
         "description": "A lightweight and extremely fast template engine inspired by mustache. It provides a simple way to render templates using data objects, supporting features such as variables, partials, conditional sections, and looping.",
-        "date": "2023 - Present",
+        "date": "Mar 23, 2023 - Present",
         "links": [
             {"text": "View on GitHub", "url": "https://github.com/jmjuanes/mikel"}
         ]
@@ -29,7 +19,7 @@
     {
         "name": "josemi/icons",
         "description": "A collection of handcrafted and open source line icons designed for use in web applications, with a focus on minimalism and clarity. It supports both SVG and React components, making it easy to integrate into your projects.",
-        "date": "2023 - Present",
+        "date": "Jan 17, 2023 - Present",
         "links": [
             {"text": "Explore Icons", "url": "https://icons.josemi.xyz"},
             {"text": "View on GitHub", "url": "https://github.com/jmjuanes/icons"}
@@ -38,10 +28,18 @@
     {
         "name": "lowcss",
         "description": "LowCSS is a minimal CSS Utility library designed to build fast and lightweight web applications. It provides a set of utility classes that can be used to style HTML elements without the need for a full CSS framework.",
-        "date": "2022 - Present",
+        "date": "Oct 16, 2022 - Present",
         "links": [
             {"text": "Documentation", "url": "https://low.josemi.xyz"},
             {"text": "View on GitHub", "url": "https://github.com/jmjuanes/lowcss"}
+        ]
+    },
+    {
+        "name": "mokai",
+        "description": "An extremely small and predictable for editing short snippets of HTML / JS / CSS / Markdown without shipping a full IDE. Mokai focuses on: tiny surface area, no virtual DOM, no workers by default, and opt-in syntax highlighting.",
+        "date": "Dec 27, 2021 - Present",
+        "links": [
+            {"text": "View on GitHub", "url": "https://github.com/jmjuanes/mokai"}
         ]
     }
 ]
