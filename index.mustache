@@ -9,7 +9,7 @@
     ]
 }
 ---
-<div class="py-24 sm:py-28">
+<div class="py-20">
     <div class="text-4xl sm:text-6xl lg:text-8xl font-black mb-8 sm:mb-12 tracking-tight leading-none">
         <span>I'm Josemi.</span>
     </div>
@@ -28,26 +28,3 @@
     </div>
     {{/if}}
 </div>
-{{#each site.data.featured}}
-    {{>>section.mustache title="Featured Project"}}
-        <div class="text-5xl sm:text-7xl font-bold leading-none tracking-tight mb-4">{{name}}</div>
-        <div class="text-2xl leading-snug font-medium mb-16 max-w-3xl">{{description}}</div>
-        {{#if content}}
-        <div class="w-full">
-            {{#each content}}
-            <p class="mb-8 text-gray-800 text-xl text-justify leading-relaxed">{{.}}</p>
-            {{/each}}
-        </div>
-        {{/if}}
-        {{#if links}}
-        <div class="flex flex-wrap gap-4 mt-10">
-            {{#each links}}
-            <a class="flex items-center gap-1 hover:underline decoration-2 underline-offset-1" href="{{url}}">
-                <span class="text-xl lowercase font-bold">{{text}}</span>
-                <div class="flex items-center text-2xl">{{=icon icon="arrow-right"}}</div>
-            </a>
-            {{/each}}
-        </div>
-        {{/if}}
-    {{/section.mustache}}
-{{/each}}

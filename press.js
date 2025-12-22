@@ -6,20 +6,6 @@ import markdown from "mikel-markdown";
 import hljs from "highlight.js";
 import websiteConfig from "./website.config.json" with { type: "json" };
 
-// generate build info
-const getBuildInfo = () => {
-    const now = new Date();
-    // Use Intl.DateFileFormat to generate build time
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
-    const dateTimeOptions = {
-        dateStyle: "full",
-        timeStyle: "long",
-        timeZone: "CET",
-    };
-    // Return build info
-    return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
-};
-
 // @description babel plugin for parsing JSX content in HTML files
 const BabelJSXPlugin = () => {
     const regex = /<script\s+type=["']text\/babel["']>([\s\S]*?)<\/script>/g;
@@ -63,9 +49,6 @@ const MarkdownPlugin = () => {
 press({
     ...websiteConfig,
     extensions: [ ".mustache", ".md", ".markdown" ],
-    build: {
-        date: getBuildInfo(),
-    },
     template: mikel.create({
         functions: {
             icon: args => {
