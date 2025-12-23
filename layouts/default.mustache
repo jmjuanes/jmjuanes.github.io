@@ -13,31 +13,7 @@
     <link rel="stylesheet" href="/vendor/low.css">
     <title>{{page.attributes.title}}</title>
 </head>
-<body class="m-0 p-0 font-sans leading-normal text-gray-950">
-    <header class="w-full max-w-5xl mx-auto px-8 py-6 flex items-center justify-between gap-4">
-        <a href="/" class="text-2xl font-bold hover:underline decoration-2 underline-offset-4">
-            <span>josemi.</span>
-        </a>
-        <div class="flex items-center gap-8">
-        {{#each site.navigation}}
-            <a href="{{this.link}}" class="text-lg font-medium hover:underline underline-offset-2">
-                <span>{{this.text}}</span>
-            </a>
-        {{/each}}
-        </div>
-    </header>
-    <main class="w-full max-w-5xl mx-auto px-8 py-16">
-        {{!@content}}
-    </main>
-    <!--
-    <footer class="w-full max-w-5xl mx-auto px-8 py-20">
-        <div class="mb-1 text-lg">
-            <span>Handcrafted by <b>Josemi</b> in Valencia, Spain.</span>
-        </div>
-        <div class="text-sm">
-            <span>Last built on <b>{{site.build.date}}</b>.</span>
-        </div>
-    </footer>
-    -->
+<body class="m-0 p-0 font-sans leading-normal text-gray-950 min-h-full flex flex-col items-start w-full">
+    {{!@content}}
 </body>
 </html>

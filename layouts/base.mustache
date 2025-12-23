@@ -1,0 +1,30 @@
+---
+{
+    "layout": "default.mustache"
+}
+---
+<header class="w-full max-w-5xl mx-auto px-8 py-6 flex items-center justify-between gap-4 shrink-0">
+    <a href="/" class="text-2xl font-bold hover:underline decoration-2 underline-offset-4">
+        <span>josemi.</span>
+    </a>
+    <div class="flex items-center gap-8">
+    {{#each site.navigation}}
+        <a href="{{this.link}}" class="text-lg font-medium hover:underline underline-offset-2">
+            <span>{{this.text}}</span>
+        </a>
+    {{/each}}
+    </div>
+</header>
+<main class="w-full max-w-5xl mx-auto px-8 py-16 shrink-0 grow-1">
+    {{!@content}}
+</main>
+<footer class="w-full max-w-5xl mx-auto px-8 py-20 shrink-0">
+    <div class="mb-1 text-lg">
+        <span>Handcrafted by <b>Josemi</b> in Valencia, Spain.</span>
+    </div>
+    <!--
+    <div class="text-sm">
+        <span>Last built on <b>{{site.build.date}}</b>.</span>
+    </div>
+    -->
+</footer>
