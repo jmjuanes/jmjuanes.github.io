@@ -73,9 +73,9 @@ press({
             extensions: [ ".md", ".markdown" ],
         }),
         press.DataPlugin(),
-        // press.PartialsPlugin({
-        //     extensions: [ ".mustache" ],
-        // }),
+        press.PartialsPlugin({
+            extensions: [ ".mustache" ],
+        }),
         press.LayoutsPlugin({
             folder: "./layouts",
             extensions: [ ".mustache" ],
