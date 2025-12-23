@@ -19,9 +19,21 @@
     {{!@content}}
 </main>
 <footer class="w-full max-w-5xl mx-auto px-8 py-20 shrink-0">
-    <div class="mb-1 text-lg">
+    <div class="mb-2 text-base">
         <span>Handcrafted by <b>Josemi</b> in Valencia, Spain.</span>
     </div>
+    {{#if site.footer}}
+    <div class="flex flex-col sm:flex-row flex-wrap gap-4 mt-0">
+        {{#each site.footer}}
+        <a class="flex items-center gap-1 hover:underline decoration-2 underline-offset-1" href="{{this.url}}">
+            <span class="text-base font-bold lowercase">{{this.text}}</span>
+            <div class="flex items-center text-lg">
+                {{=icon icon="arrow-right"}}
+            </div>
+        </a>
+        {{/each}}
+    </div>
+    {{/if}}
     <!--
     <div class="text-sm">
         <span>Last built on <b>{{site.build.date}}</b>.</span>

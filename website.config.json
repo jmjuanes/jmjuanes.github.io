@@ -11,5 +11,11 @@
             "text": "Notes",
             "link": "/notes.html"
         }
+    ],
+    "footer": [
+        {
+            "text": "GitHub",
+            "url": "https://github.com/jmjuanes"
+        }
     ]
 }
