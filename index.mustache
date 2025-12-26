@@ -40,8 +40,8 @@
 {{/section.mustache}}
 {{>>section.mustache title="Notes"}}
     {{#eachPages collection="notes" limit=4}}
-        {{>link.html url=path title=attributes.title description=attributes.description date=attributes.date}}
-    {{/each}}
+        {{>link.mustache url=path title=attributes.title description=attributes.description date=attributes.date}}
+    {{/eachPages}}
     <div class="mt-4">
         <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes.html">
             <span>See all notes</span>
