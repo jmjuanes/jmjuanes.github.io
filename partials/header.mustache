@@ -1,0 +1,12 @@
+<header class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-8 flex items-center justify-between">
+    <a class="flex items-center hover:underline font-medium text-lg" href="/">
+        <span>josemi</span>
+    </a>
+    {{#if site.navigation}}
+    <div class="flex items-center gap-4">
+        {{#each site.navigation}}
+        <a class="hover:underline" href="{{this.url}}">{{this.text}}</a>
+        {{/each}}
+    </div>
+    {{/if}}
+</header>
