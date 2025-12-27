@@ -1,6 +1,6 @@
 <footer class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-12">
     {{#if site.socials}}
-    <div class="flex items-center gap-2 mb-6 opacity-60">
+    <div class="flex items-center gap-2 mb-4 opacity-60">
         {{#each site.socials}}
         <a class="hover:underline lowercase" href="{{this.url}}" target="_blank">
             <span>{{this.text}}</span>
@@ -11,10 +11,10 @@
         {{/each}}
     </div>
     {{/if}}
-    <div class="text-sm mb-1">
+    <div class="text-base mb-1">
         <span>Handcrafted by <b>Josemi</b> in Valencia, Spain.</span>
     </div>
-    <div class="text-xs opacity-60">
+    <div class="text-sm opacity-60">
         <span>Last built on <b>{{site.build.date}}</b>.</span>
     </div>
 </footer>
