@@ -1,12 +1,12 @@
 <footer class="w-full max-w-4xl mx-auto px-6 sm:px-12 py-12">
     {{#if site.socials}}
-    <div class="flex items-center gap-2 mb-6">
+    <div class="flex items-center gap-2 mb-6 opacity-60">
         {{#each site.socials}}
-        <a class="hover:underline text-gray-700" href="{{this.url}}" target="_blank">
+        <a class="hover:underline lowercase" href="{{this.url}}" target="_blank">
             <span>{{this.text}}</span>
         </a>
         {{#unless @last}}
-        <div class="text-gray-700 text-xs">•</div>
+        <div class="text-xs">•</div>
         {{/unless}}
         {{/each}}
     </div>
@@ -14,7 +14,7 @@
     <div class="text-sm mb-1">
         <span>Handcrafted by <b>Josemi</b> in Valencia, Spain.</span>
     </div>
-    <div class="text-xs text-gray-600">
+    <div class="text-xs opacity-60">
         <span>Last built on <b>{{site.build.date}}</b>.</span>
     </div>
 </footer>

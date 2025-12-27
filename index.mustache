@@ -11,15 +11,25 @@
 ---
 {{>header.mustache}}
 {{>>content.mustache}}
-<section class="mb-16">
+<section class="mb-16 flex flex-col gap-4">
     <div class="text-2xl sm:text-3xl md:text-4xl leading-snug">
         <span>Hi 👋 I'm <b>Josemi</b>, a passionate <b>mathematician</b> turned <b>React</b> developer </span>
         <span>that loves to craft minimal, beautiful, and performant user interfaces.</span>
     </div>
-    <div class="hidden">
+    <div class="text-2xl sm:text-3xl md:text-4xl leading-snug">
         <span>Currently I am building <a class="hover:underline font-bold" href="https://folio.josemi.xyz" target="_blank">folio</a>, a minimalistic digital whiteboard. </span>
         <span>You can also check the other <a class="hover:underline font-bold" href="/projects.html">projects</a> that I maintain.</span>
     </div>
+    {{#if site.socials}}
+    <div class="leading-snug flex items-center gap-2">
+        {{#each site.socials}} 
+        <a class="flex items-center gap-1 hover:underline decoration-4 underline-offset-2" href="{{this.url}}">
+            <div class="text-2xl sm:text-3xl font-bold lowercase">{{this.text}}</div>
+            <div class="flex items-center text-3xl sm:text-4xl">{{=icon icon="arrow-right"}}</div>
+        </a>
+        {{/each}}
+    </div>
+    {{/if}}
 </section>
 {{>>section.mustache title="Projects"}}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
