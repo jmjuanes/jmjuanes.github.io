@@ -1,11 +1,11 @@
-<div class="mb-4" data-id="{{this.url}}">
-    <a class="underline block font-bold text-xl sm:text-2xl decoration-gray-400 hover:decoration-gray-950 underline-offset-2" href="{{this.url}}">
+<div class="mb-4 flex flex-col gap-1" data-id="{{this.url}}">
+    <a class="underline block font-bold text-2xl decoration-gray-400 hover:decoration-gray-950 underline-offset-2" href="{{this.url}}">
         <span>{{this.title}}</span>
     </a>
     {{#if this.description}}
-    <div class="text-base opacity-80">{{this.description}}</div>
+    <div class="text-lg">{{this.description}}</div>
     {{/if}}
     {{#if this.date}}
-    <div class="text-sm opacity-50 mt-1">{{this.date}}</div>
+    <div class="text-base opacity-60">{{this.date}}</div>
     {{/if}}
 </div>
