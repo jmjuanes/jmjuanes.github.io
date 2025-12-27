@@ -5,7 +5,7 @@
     "date": "September 24, 2023",
     "collection": "notes",
     "layout": "post.mustache",
-    "permalink": "/notes/react-hooks-for-storage.html"
+    "permalink": "/react-hooks-for-storage.html"
 }
 ---
 
