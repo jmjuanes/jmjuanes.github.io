@@ -91,6 +91,10 @@ press({
             extensions: [ ".mustache" ],
         }),
         press.SourcePlugin({
+            folder: "./pages",
+            extension: [ ".mustache" ],
+        }),
+        press.SourcePlugin({
             folder: "./posts",
             extensions: [ ".md", ".markdown" ],
         }),
