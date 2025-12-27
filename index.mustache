@@ -32,13 +32,9 @@
     {{/if}}
 </section>
 {{>>section.mustache title="Projects"}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="flex flex-col gap-4">
     {{#each site.data.projects limit=4}}
-        <a href="{{this.url}}" class="group no-underline bg-gray-100 rounded-xl p-6">
-            <div class="text-2xl font-bold group-hover:underline leading-none mb-2">{{this.title}}</div>
-            <div class="text-base text-gray-700 mb-1">{{this.description}}</div>
-            <div class="text-sm text-gray-500">{{this.url}}</div>
-        </a>
+        {{>link.mustache url=this.url title=this.title description=this.description}}
     {{/each}}
     </div>
     <div class="mt-4">
@@ -49,9 +45,11 @@
     </div>
 {{/section.mustache}}
 {{>>section.mustache title="Notes"}}
+    <div class="flex flex-col gap-4">
     {{#pages collection="notes" limit=4}}
         {{>link.mustache url=path title=attributes.title description=attributes.description date=attributes.date}}
     {{/pages}}
+    </div>
     <div class="mt-4">
         <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes.html">
             <span>See all notes</span>
