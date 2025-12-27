@@ -34,7 +34,7 @@
 {{>>section.mustache title="Projects"}}
     <div class="flex flex-col gap-4">
     {{#each site.data.projects limit=4}}
-        {{>link.mustache url=this.url title=this.name description=this.description}}
+        {{>link.mustache url=this.url title=this.name description=this.description date=this.date}}
     {{/each}}
     </div>
     <div class="mt-4">
