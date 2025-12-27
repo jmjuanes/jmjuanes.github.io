@@ -6,7 +6,7 @@
     "permalink": "/projects.html"
 }
 ---
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-4">
 {{#each site.data.projects}}
     {{>link.mustache date=this.date url=this.url title=this.name description=this.description}}
 {{/each}}
