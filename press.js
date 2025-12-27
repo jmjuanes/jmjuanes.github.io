@@ -66,7 +66,7 @@ press({
                 const limit = Math.min(items.length, params.options?.limit || params.opt?.limit || items.length);
                 return items.slice(0, limit)
                     .reverse()
-                    .map((item, index) => p.fn(item[1], {index: index}))
+                    .map((item, index) => params.fn(item[1], {index: index}))
                     .join("");
             },
         },
