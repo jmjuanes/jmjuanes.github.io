@@ -64,7 +64,7 @@ press({
                     return !collection || page.attributes?.collection === collection;
                 });
                 const limit = Math.min(items.length, params.options?.limit || params.opt?.limit || items.length);
-                return items.slice(limit)
+                return items.slice(0, limit)
                     .reverse()
                     .map((item, index) => p.fn(item[1], {index: index}))
                     .join("");
