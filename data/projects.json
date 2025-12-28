@@ -1,8 +1,9 @@
 [
     {
         "name": "folio",
-        "description": "A minimal digital whiteboard for sketching, annotating and prototyping.",
-        "featured": true,
+        "title": "folio - a minimal digital whiteboard for sketching",
+        "description": "Folio is a minimalist digital whiteboard that can be used for sketching and prototyping, or just as a infinite canvas to take notes. It can be used via the web application or as Docker image to run it locally.",
+        "url": "https://folio.josemi.xyz",
         "date": "2020 - Present",
         "content": [
             "Folio is a minimalist digital whiteboard that can be used for sketching and prototyping, or just as a infinite canvas to take notes. It can be used via the web application or as Docker image to run it locally.",
@@ -20,7 +21,9 @@
     },
     {
         "name": "mikel",
+        "title": "mikel - tiny templating engine",
         "description": "A lightweight and extremely fast template engine inspired by mustache. It provides a simple way to render templates using data objects, supporting features such as variables, partials, conditional sections, and looping.",
+        "url": "https://github.com/jmjuanes/mikel",
         "date": "2023 - Present",
         "links": [
             {"text": "View on GitHub", "url": "https://github.com/jmjuanes/mikel"}
@@ -28,7 +31,9 @@
     },
     {
         "name": "josemi/icons",
+        "title": "icons - handcrafted SVG icons collection",
         "description": "A collection of handcrafted and open source line icons designed for use in web applications, with a focus on minimalism and clarity. It supports both SVG and React components, making it easy to integrate into your projects.",
+        "url": "https://icons.josemi.xyz",
         "date": "2023 - Present",
         "links": [
             {"text": "Explore Icons", "url": "https://icons.josemi.xyz"},
@@ -37,11 +42,26 @@
     },
     {
         "name": "lowcss",
+        "title": "lowCSS - minimal CSS utility library",
         "description": "LowCSS is a minimal CSS Utility library designed to build fast and lightweight web applications. It provides a set of utility classes that can be used to style HTML elements without the need for a full CSS framework.",
+        "url": "https://low.josemi.xyz",
         "date": "2022 - Present",
         "links": [
             {"text": "Documentation", "url": "https://low.josemi.xyz"},
             {"text": "View on GitHub", "url": "https://github.com/jmjuanes/lowcss"}
+        ]
+    },
+    {
+        "name": "mokai",
+        "title": "mokai - tiny code editor",
+        "description": "An extremely small and predictable code editor for editing short snippets of HTML / JS / CSS / Markdown without shipping a full IDE. Mokai focuses on: tiny surface area, no virtual DOM, no workers by default, and opt-in syntax highlighting.",
+        "url": "https://github.com/jmjuanes/mokai",
+        "date": "Dec 27, 2021 - Present",
+        "links": [
+            {
+                "text": "View on GitHub",
+                "url": "https://github.com/jmjuanes/mokai"
+            }
         ]
     }
 ]

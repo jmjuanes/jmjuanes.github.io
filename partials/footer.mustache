@@ -1,0 +1,20 @@
+<footer class="w-full max-w-7xl mx-auto px-8 py-20">
+    {{#if site.socials}}
+    <div class="flex items-center gap-2 mb-4">
+        {{#each site.socials}}
+        <a class="hover:underline decoration-2 underline-offset-2 lowercase text-lg sm:text-xl" href="{{this.url}}" target="_blank">
+            <span class="font-bold">{{this.text}}</span>
+        </a>
+        {{#unless @last}}
+        <div class="text-xs">•</div>
+        {{/unless}}
+        {{/each}}
+    </div>
+    {{/if}}
+    <div class="mb-1 text-lg">
+        <span>Handcrafted by <b>Josemi</b> in Valencia, Spain.</span>
+    </div>
+    <div class="text-sm opacity-60">
+        <span>Last built on <b>{{site.build.date}}</b>.</span>
+    </div>
+</footer>
