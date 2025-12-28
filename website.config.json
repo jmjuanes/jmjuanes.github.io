@@ -1,5 +1,15 @@
 {
     "title": "Josemi Juanes, Ph.D.",
     "description": "React developer and Minimal Design lover.",
-    "url": "https://www.josemi.xyz"
+    "url": "https://www.josemi.xyz",
+    "socials": [
+        {
+            "text": "GitHub",
+            "url": "https://github.com/jmjuanes"
+        },
+        {
+            "text": "Linkedin",
+            "url": "https://linkedin.com/in/jmjuanes"
+        }
+    ]
 }
