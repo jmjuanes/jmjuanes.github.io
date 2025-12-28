@@ -5,7 +5,7 @@
     "permalink": "/index.html"
 }
 ---
-<main class="w-full max-w-7xl mx-auto p-8">
+{{>>content.mustache}}
     <section class="py-24 sm:py-40">
         <div class="text-4xl sm:text-6xl lg:text-8xl font-black mb-8 sm:mb-12 tracking-tight leading-none">
             <span>hey, I'm Josemi.</span>
@@ -49,5 +49,5 @@
         {{/pages}}
         </div>
     {{/section.mustache}}
-</main>
+{{/content.mustache}}
 {{>footer.mustache}}
