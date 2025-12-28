@@ -1,0 +1,18 @@
+---
+{
+    "title": "josemi/notes",
+    "description": "My thoughts and ideas on various topics, shared as small pages that I call notes.",
+    "layout": "page.mustache",
+    "permalink": "/notes.html"
+}
+---
+<div class="flex flex-col gap-4">
+{{#pages collection="notes"}}
+    {{>link.mustache
+        date=this.attributes.date
+        url=this.url
+        title=this.attributes.title
+        description=this.attributes.description
+    }}
+{{/pages}}
+</div>
