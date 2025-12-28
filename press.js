@@ -57,16 +57,31 @@ press({
         date: getBuildInfo(),
     },
     template: mikel.create({
+        helpers: {
+            pages: params => {
+                const collection = params?.opt?.collection || params?.options?.collection || null;
+                const items = (params.data?.site?.pages || []).filter(page => {
+                    return !collection || page.attributes?.collection === collection;
+                });
+                const limit = Math.min(items.length, params.options?.limit || params.opt?.limit || items.length);
+                return items.slice(0, limit)
+                    .reverse()
+                    .map((item, index) => params.fn(item, {index: index}))
+                    .join("");
+            },
+        },
         functions: {
-            icon: args => {
+            icon: params => {
                 return [
                     `<svg width="1em" height="1em">`,
-                    `<use xlink:href="/vendor/icons.svg#${args.opt.icon}"></use>`,
+                    `<use xlink:href="/vendor/icons.svg#${params.options?.icon || params.opt?.icon || ""}"></use>`,
                     `</svg>`,
                 ].join("");
             },
             highlight: params => {
-                return hljs.highlight(params.opt.code.trim(), {language: params.opt.language}).value;
+                const code = (params.options?.code || params.opt?.code).trim();
+                const language = params.options?.language || params.opt?.language;
+                return hljs.highlight(code, { language }).value;
             },
         },
     }),
