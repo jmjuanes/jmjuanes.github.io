@@ -1,8 +1,8 @@
 <footer class="w-full max-w-7xl mx-auto px-8 py-20">
     {{#if site.socials}}
-    <div class="flex items-center gap-2 mb-4 opacity-60">
+    <div class="flex items-center gap-2 mb-4">
         {{#each site.socials}}
-        <a class="hover:underline lowercase text-lg" href="{{this.url}}" target="_blank">
+        <a class="hover:underline lowercase text-lg sm:text-xl" href="{{this.url}}" target="_blank">
             <span>{{this.text}}</span>
         </a>
         {{#unless @last}}
