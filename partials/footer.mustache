@@ -2,8 +2,8 @@
     {{#if site.socials}}
     <div class="flex items-center gap-2 mb-4">
         {{#each site.socials}}
-        <a class="hover:underline lowercase text-lg sm:text-xl font-bold" href="{{this.url}}" target="_blank">
-            <span>{{this.text}}</span>
+        <a class="hover:underline decoration-2 underline-offset-2 lowercase text-lg sm:text-xl" href="{{this.url}}" target="_blank">
+            <span class="font-bold">{{this.text}}</span>
         </a>
         {{#unless @last}}
         <div class="text-xs">•</div>
