@@ -27,55 +27,20 @@
     </section>
     {{>>section.mustache title="Projects"}}
         <div class="flex flex-col gap-6">
-        {{#each site.data.projects}}
+        {{#each site.data.projects limit=4}}
             {{>link.mustache title=this.name description=this.description date=this.date url=this.url}}
-            <!--
-            <div class="flex flex-col md:flex-row items-start gap-4">
-                <div class="w-full md:max-w-56 shrink-0">
-                    <div class="text-2xl font-bold leading-tight mb-2">{{this.name || this.title}}</div>
-                    {{#if this.date}}
-                    <div class="text-base text-gray-800 italic">{{this.date}}</div>
-                    {{/if}}
-                </div>
-                <div class="grow-1">
-                    <div class="text-gray-800 text-xl text-justify leading-relaxed">{{description}}</div>
-                    {{#if links}}
-                    <div class="flex flex-col sm:flex-row flex-wrap gap-4 mt-6">
-                        {{#each links}}
-                        <a class="flex items-center gap-1 hover:underline decoration-2 underline-offset-1" href="{{url}}">
-                            <span class="text-lg font-bold lowercase">{{text}}</span>
-                            <div class="flex items-center text-xl">
-                                {{=icon icon="arrow-right"}}
-                            </div>
-                        </a>
-                        {{/each}}
-                    </div>
-                    {{/if}}
-                </div>
-            </div>
-            -->
         {{/each}}
         </div>
     {{/section.mustache}}
     {{>>section.mustache title="Notes - Thoughts and Ideas"}}
         <div class="flex flex-col gap-6">
         {{#pages collection="notes" limit=4}}
-            {{>link.mustache title=this.attributes.title description=this.attributes.description date=this.attributes.date url=this.url}}
-            <!--
-            <div class="flex flex-col md:flex-row items-start gap-4">
-                <div class="w-full md:max-w-96 shrink-0">
-                    <a href="{{this.url}}" class="block text-2xl font-bold leading-tight hover:underline decoration-4 underline-offset-2 mb-2">
-                        <span>{{this.attributes.title}}</span>
-                    </a>
-                    <div class="text-base text-gray-800 italic">{{this.attributes.date}}</div>
-                </div>
-                <div class="grow-1">
-                    <div class="text-gray-800 text-xl text-justify leading-relaxed">
-                        {{this.attributes.description}}
-                    </div>
-                </div>
-            </div>
-            -->
+            {{>link.mustache
+                title=this.attributes.title
+                description=this.attributes.description
+                date=this.attributes.date
+                url=this.url
+            }}
         {{/pages}}
         </div>
     {{/section.mustache}}
