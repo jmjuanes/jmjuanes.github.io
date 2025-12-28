@@ -26,7 +26,7 @@
         {{/if}}
     </section>
     {{>>section.mustache title="Projects"}}
-        <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-6 mb-6">
         {{#each site.data.projects limit=4}}
             {{>link.mustache
                 title=this.title
@@ -36,9 +36,15 @@
             }}
         {{/each}}
         </div>
+        <div class="">
+            <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/projects.html">
+                <span class="text-lg">See all projects</span>
+                {{=icon icon="arrow-right"}}
+            </a>
+        </div>
     {{/section.mustache}}
     {{>>section.mustache title="Notes"}}
-        <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-6 mb-6">
         {{#pages collection="notes" limit=4}}
             {{>link.mustache
                 title=this.attributes.title
@@ -47,6 +53,12 @@
                 url=this.url
             }}
         {{/pages}}
+        </div>
+        <div class="">
+            <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes.html">
+                <span class="text-lg">See all notes</span>
+                {{=icon icon="arrow-right"}}
+            </a>
         </div>
     {{/section.mustache}}
 {{/content.mustache}}
