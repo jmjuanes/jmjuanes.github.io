@@ -3,16 +3,9 @@
     "layout": "default.mustache"
 }
 ---
-<header class="py-6 px-8">
-    <a class="inline-flex items-center gap-2 hover:underline font-bold text-xl" href="/">
-        <div class="flex items-center text-2xl">
-            {{=icon icon="arrow-left"}}
-        </div>
-        <span>josemi.xyz</span>
-    </a>
-</header>
-<div class="w-full max-w-5xl mx-auto px-8 py-10">
-    <div class="mb-14">
+{{>header.mustache}}
+<main class="w-full max-w-5xl mx-auto px-8 py-10">
+    <section class="mb-14">
         <div class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">{{page.attributes.title}}</div>
         {{#if page.attributes.description}}
         <div class="text-xl sm:text-2xl md:text-3xl leading-snug font-medium text-gray-800">
@@ -24,8 +17,6 @@
             <span>{{page.attributes.date}}</span>
         </div>
         {{/if}}
-    </div>
-    {{#markdown}}
-        {{!@content}}
-    {{/markdown}}
-</div>
+    </section>
+    {{!@content}}
+</main>

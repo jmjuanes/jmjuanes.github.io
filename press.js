@@ -50,6 +50,16 @@ const BabelJSXPlugin = () => {
     };
 };
 
+const MarkdownPlugin = () => {
+    return {
+        transform: (context, node) => {
+            if (node.label === press.LABEL_PAGE && node.content && path.extname(node.source) === ".md") {
+                node.content = `{{#markdown}}\n\n${node.content}\n\n{{/markdown}}\n`;
+            }
+        },
+    };
+};
+
 press({
     ...websiteConfig,
     extensions: [ ".mustache", ".md", ".markdown" ],
@@ -91,6 +101,10 @@ press({
             extensions: [ ".mustache" ],
         }),
         press.SourcePlugin({
+            folder: "./pages",
+            extensions: [ ".mustache" ],
+        }),
+        press.SourcePlugin({
             folder: "./posts",
             extensions: [ ".md", ".markdown" ],
         }),
@@ -129,6 +143,7 @@ press({
         })),
         press.FrontmatterPlugin(),
         BabelJSXPlugin(),
+        MarkdownPlugin(),
         press.ContentPagePlugin(),
     ],
 });
