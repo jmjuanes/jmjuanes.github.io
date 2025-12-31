@@ -1,5 +1,4 @@
 import * as path from "node:path";
-import * as babel from "@babel/core";
 import mikel from "mikel";
 import press from "mikel-press";
 import markdown from "mikel-markdown";
@@ -18,46 +17,6 @@ const getBuildInfo = () => {
     };
     // Return build info
     return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
-};
-
-// @description babel plugin for parsing JSX content in HTML files
-const BabelJSXPlugin = () => {
-    const regex = /<script\s+type=["']text\/babel["']>([\s\S]*?)<\/script>/g;
-    const transform = code => {
-        const result = babel.transformSync(code, {
-            presets: [
-                "@babel/preset-react",
-            ],
-            filename: "inline.jsx", // needed for Babel to recognize JSX
-        });
-        return result.code;
-    };
-    return {
-        name: "BabelJSXPlugin",
-        transform: (context, node) => {
-            // 1. transform inline jsx content in .html files
-            if (node.path.endsWith(".html") && !!node.content) {
-                node.content = node.content.replace(regex, (_, code) => {
-                    return `<script type="module">${transform(code)}</script>`;
-                });
-            }
-            // 2. transform jsx content in .jsx files
-            if (node.label === press.LABEL_ASSET && path.extname(node.path) === ".jsx") {
-                node.content = transform(press.utils.read(node.source));
-                node.path = path.join(path.dirname(node.path), path.basename(node.path, ".jsx") + ".js");
-            }
-        },
-    };
-};
-
-const MarkdownPlugin = () => {
-    return {
-        transform: (context, node) => {
-            if (node.label === press.LABEL_PAGE && node.content && path.extname(node.source) === ".md") {
-                node.content = `{{#markdown}}\n\n${node.content}\n\n{{/markdown}}\n`;
-            }
-        },
-    };
 };
 
 press({
@@ -119,9 +78,10 @@ press({
         press.CopyAssetsPlugin({
             basePath: "vendor",
             patterns: [
-                {from: "node_modules/lowcss/low.css"},
-                {from: "node_modules/@josemi-icons/svg/sprite.svg", to: "icons.svg"},
-                {from: "node_modules/highlight.js/styles/nord.css", to: "highlight.css"},
+                { from: "node_modules/lowcss/low.css" },
+                { from: "node_modules/@josemi-icons/svg/sprite.svg", to: "icons.svg" },
+                { from: "node_modules/highlight.js/styles/nord.css", to: "highlight.css" },
+                { from: "node_modules/naro/index.js", to: "naro.js" },
             ],
         }),
         press.UsePlugin(markdown({
@@ -142,8 +102,11 @@ press({
             },
         })),
         press.FrontmatterPlugin(),
-        BabelJSXPlugin(),
-        MarkdownPlugin(),
+        press.TransformPlugin(node => {
+            if (node.label === press.LABEL_PAGE && node.content && path.extname(node.source) === ".md") {
+                node.content = `{{#markdown}}\n\n${node.content}\n\n{{/markdown}}\n`;
+            }
+        }),
         press.ContentPagePlugin(),
     ],
 });
