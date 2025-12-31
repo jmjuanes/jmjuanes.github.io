@@ -15,17 +15,16 @@
     "dependencies": {
         "@josemi-icons/svg": "^0.7.0",
         "highlight.js": "^11.11.1",
-        "lowcss": "^0.32.0"
+        "lowcss": "^0.32.0",
+        "naro": "^0.2.0"
     },
     "devDependencies": {
         "@babel/core": "^7.28.4",
-        "@babel/preset-react": "^7.27.1",
         "@babel/preset-typescript": "^7.27.1",
         "@babel/plugin-transform-runtime": "^7.28.3",
-        "@types/react": "^19.1.10",
-        "mikel": "^0.28.0",
-        "mikel-markdown": "^0.28.0",
-        "mikel-press": "^0.28.0",
+        "mikel": "^0.29.0",
+        "mikel-markdown": "^0.29.0",
+        "mikel-press": "^0.29.0",
         "serve": "^14.2.4"
     }
 }
