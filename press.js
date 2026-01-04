@@ -81,7 +81,7 @@ press({
                 { from: "node_modules/lowcss/low.css" },
                 { from: "node_modules/@josemi-icons/svg/sprite.svg", to: "icons.svg" },
                 { from: "node_modules/highlight.js/styles/nord.css", to: "highlight.css" },
-                { from: "node_modules/naro/index.js", to: "naro.js" },
+                { from: "node_modules/kofi/index.js", to: "kofi.js" },
             ],
         }),
         press.UsePlugin(markdown({
