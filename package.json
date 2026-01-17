@@ -15,7 +15,7 @@
     "dependencies": {
         "@josemi-icons/svg": "^0.7.0",
         "highlight.js": "^11.11.1",
-        "kofi": "^0.13.0",
+        "kofi": "^0.14.0",
         "lowcss": "^0.32.0",
         "mikel": "^0.29.0"
     },
