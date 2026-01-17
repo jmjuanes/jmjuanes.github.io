@@ -1,0 +1,7 @@
+{
+    "low.css": "node_modules/lowcss/low.css",
+    "icons.svg": "node_modules/@josemi-icons/svg/sprite.svg",
+    "highlight.css": "node_modules/highlight.js/styles/nord.css",
+    "kofi.js": "node_modules/kofi/index.js",
+    "mikel.js": "node_modules/mikel/index.js"
+}

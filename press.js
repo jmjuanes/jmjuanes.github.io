@@ -3,7 +3,9 @@ import mikel from "mikel";
 import press from "mikel-press";
 import markdown from "mikel-markdown";
 import hljs from "highlight.js";
+
 import websiteConfig from "./website.config.json" with { type: "json" };
+import vendor from "./vendor.json" with { type: "json" };
 
 // generate build info
 const getBuildInfo = () => {
@@ -76,13 +78,17 @@ press({
             extensions: [ ".mustache" ],
         }),
         press.CopyAssetsPlugin({
+            basePath: ".",
+            patterns: press.utils.walkdir(path.resolve("./assets")).map(file => ({
+                from: path.resolve(path.join("./assets", file)),
+                to: file,
+            })),
+        }),
+        press.CopyAssetsPlugin({
             basePath: "vendor",
-            patterns: [
-                { from: "node_modules/lowcss/low.css" },
-                { from: "node_modules/@josemi-icons/svg/sprite.svg", to: "icons.svg" },
-                { from: "node_modules/highlight.js/styles/nord.css", to: "highlight.css" },
-                { from: "node_modules/kofi/index.js", to: "kofi.js" },
-            ],
+            patterns: Object.keys(vendor).map(target => {
+                return { from: vendor[target], to: target };
+            }),
         }),
         press.UsePlugin(markdown({
             highlight: (code, language) => {
