@@ -1,0 +1,10 @@
+{
+    "templates": [
+        {
+            "id": "resume-basic",
+            "name": "Basic Resume",
+            "description": "A simple and clean resume template.",
+            "collection": "resume"
+        }
+    ]
+}
