@@ -5,40 +5,13 @@ import markdown from "mikel-markdown";
 import hljs from "highlight.js";
 import websiteConfig from "./website.config.json" with { type: "json" };
 
-// generate build info
-const getBuildInfo = () => {
-    const now = new Date();
-    // Use Intl.DateFileFormat to generate build time
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
-    const dateTimeOptions = {
-        dateStyle: "full",
-        timeStyle: "long",
-        timeZone: "CET",
-    };
-    // Return build info
-    return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
-};
-
 press({
-    ...websiteConfig,
+    url: websiteConfig.url,
+    title: websiteConfig.title,
+    description: websiteConfig.description,
     extensions: [ ".mustache", ".md", ".markdown" ],
-    build: {
-        date: getBuildInfo(),
-    },
     template: mikel.create({
-        helpers: {
-            pages: params => {
-                const collection = params?.opt?.collection || params?.options?.collection || null;
-                const items = (params.data?.site?.pages || []).filter(page => {
-                    return !collection || page.attributes?.collection === collection;
-                });
-                const limit = Math.min(items.length, params.options?.limit || params.opt?.limit || items.length);
-                return items.slice(0, limit)
-                    .reverse()
-                    .map((item, index) => params.fn(item, {index: index}))
-                    .join("");
-            },
-        },
+        // helpers: {},
         functions: {
             icon: params => {
                 return [
@@ -51,6 +24,11 @@ press({
                 const code = (params.options?.code || params.opt?.code).trim();
                 const language = params.options?.language || params.opt?.language;
                 return hljs.highlight(code, { language }).value;
+            },
+            build: () => {
+                // Use Intl.DateFileFormat to generate build time
+                // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
+                return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "long", timeZone: "CET" }).format(new Date());
             },
         },
     }),
@@ -76,29 +54,17 @@ press({
             extensions: [ ".mustache" ],
         }),
         press.CopyAssetsPlugin({
-            basePath: "vendor",
-            patterns: [
-                { from: "node_modules/lowcss/low.css" },
-                { from: "node_modules/@josemi-icons/svg/sprite.svg", to: "icons.svg" },
-                { from: "node_modules/highlight.js/styles/nord.css", to: "highlight.css" },
-                { from: "node_modules/kofi/index.js", to: "kofi.js" },
-            ],
+            patterns: Object.keys(websiteConfig.assets || {}).map(destination => {
+                return {
+                    from: websiteConfig.assets[destination],
+                    to: destination,
+                };
+            }),
         }),
         press.UsePlugin(markdown({
+            ...websiteConfig.markdown,
             highlight: (code, language) => {
                 return hljs.highlight(code.trim(), { language: language }).value;
-            },
-            classNames: {
-                link: "font-medium underline",
-                code: "bg-gray-100 rounded-md py-1 px-2 text-xs font-mono font-bold bg-gray-900",
-                pre: "w-full overflow-x-auto bg-gray-950 text-gray-100 text-sm font-mono leading-relaxed my-6 p-4 rounded-xl",
-                heading: "font-bold mb-4 first:mt-0 mt-8 text-gray-950",
-                heading2: "text-2xl",
-                heading3: "text-xl",
-                heading4: "text-lg",
-                list: "list-inside mb-6 pl-4",
-                listItem: "mb-3 pl-1",
-                paragraph: "block leading-relaxed mb-6",
             },
         })),
         press.FrontmatterPlugin(),

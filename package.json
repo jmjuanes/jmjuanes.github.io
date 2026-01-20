@@ -15,13 +15,13 @@
     "dependencies": {
         "@josemi-icons/svg": "^0.7.0",
         "highlight.js": "^11.11.1",
-        "kofi": "^0.12.0",
+        "kofi": "^0.14.0",
         "lowcss": "^0.32.0",
-        "mikel": "^0.29.0"
+        "mikel": "^0.30.1"
     },
     "devDependencies": {
-        "mikel-markdown": "^0.29.0",
-        "mikel-press": "^0.29.0",
+        "mikel-markdown": "^0.30.1",
+        "mikel-press": "^0.30.1",
         "serve": "^14.2.4"
     }
 }
