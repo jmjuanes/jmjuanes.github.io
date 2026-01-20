@@ -13,9 +13,9 @@
 <div id="landing" class="w-full" style="display:none;"></div>
 
 <script type="module">
-    import mikel from "/vendor/mikel.js";
-    import kofi from "/vendor/kofi.js";
-    import { loadTemplate } from "/scripts/templates.js";
+    import mikel from '{{=getAssetUrl "mikel/index.js"}}';
+    import kofi from '{{=getAssetUrl "kofi/index.js"}}';
+    // import { loadTemplate } from "/scripts/templates.js";
 
     // reference to dom containers
     const appContainer = document.querySelector(`div#app`);
