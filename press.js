@@ -5,28 +5,11 @@ import markdown from "mikel-markdown";
 import hljs from "highlight.js";
 import websiteConfig from "./website.config.json" with { type: "json" };
 
-// generate build info
-const getBuildInfo = () => {
-    const now = new Date();
-    // Use Intl.DateFileFormat to generate build time
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
-    const dateTimeOptions = {
-        dateStyle: "full",
-        timeStyle: "long",
-        timeZone: "CET",
-    };
-    // Return build info
-    return new Intl.DateTimeFormat("en-US", dateTimeOptions).format(now);
-};
-
 press({
     url: websiteConfig.url,
     title: websiteConfig.title,
     description: websiteConfig.description,
     extensions: [ ".mustache", ".md", ".markdown" ],
-    build: {
-        date: getBuildInfo(),
-    },
     template: mikel.create({
         // helpers: {},
         functions: {
@@ -41,6 +24,11 @@ press({
                 const code = (params.options?.code || params.opt?.code).trim();
                 const language = params.options?.language || params.opt?.language;
                 return hljs.highlight(code, { language }).value;
+            },
+            build: () => {
+                // Use Intl.DateFileFormat to generate build time
+                // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
+                return new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "long", timeZone: "CET" }).format(new Date());
             },
         },
     }),
