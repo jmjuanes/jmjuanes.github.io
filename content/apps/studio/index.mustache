@@ -1,0 +1,454 @@
+---
+{
+    "title": "studio",
+    "description": "",
+    "date": "January 10, 2026",
+    "permalink": "/studio/index.html",
+    "layout": "default.mustache",
+    "draft": true
+}
+---
+
+<div id="app" class="fixed top-0 left-0 w-full h-full min-h-0" style="display:none;"></div>
+<div id="landing" class="w-full" style="display:none;"></div>
+
+<script type="module">
+    import mikel from "/vendor/mikel.js";
+    import kofi from "/vendor/kofi.js";
+    import { loadTemplate } from "/scripts/templates.js";
+
+    // reference to dom containers
+    const appContainer = document.querySelector(`div#app`);
+    const landingContainer = document.querySelector(`div#landing`);
+
+    // global variables
+    const EVENTS = {
+        INIT: "init",
+        CREATE_ELEMENT: "element:create",
+        DELETE_ELEMENT: "element:delete",
+        REORDER_ELEMENT: "element:reorder",
+        SET_ACTIVE_ELEMENT: "element:set-active",
+        CLEAR_ACTIVE_ELEMENT: "element:clear-active",
+        RENDER_EDITOR: "render:editor",
+        RENDER_PREVIEW: "render:preview",
+    };
+    const LEFT_SIDE_TABS = {
+        LAYERS: "tab:layers",
+        ELEMENTS: "tab:elements",
+    };
+    const FORM_TYPES = {
+        TEXT: "text",
+    };
+
+    // renderer for form options
+    const FormOptions = {
+        [FORM_TYPES.TEXT]: props => {
+            const className = kofi.directives.classMap({
+                "block w-full bg-gray-100 border-0 px-2 py-1 h-8 text-sm rounded-lg": true,
+            });
+            const handleChange = event => {
+                return props.onChange(event.target.value || "");
+            };
+            return kofi.html`
+                <input type="text" className="${className}" value="${props.value}" onChange="${handleChange}" />
+            `;
+        },
+    };
+
+    // application components
+    const ui = {
+        Icon: props => kofi.html`
+            <svg width="1em" height="1em">
+                <svg:use href="${"/vendor/icons.svg#" + props.icon}" />
+            </svg>
+        `,
+        IconButton: props => {
+            const className = kofi.directives.classMap({
+                "group bg-gray-100 rounded-lg p-2 flex items-center text-xl": true,
+                "cursor-pointer": !props.disabled,
+                "pointer-events-none opacity-60": props.disabled,
+            });
+            return kofi.html`
+                <div className="${className}" onClick="${props.onClick}">
+                    <div className="flex items-center group-hover:opacity-70">
+                        ${ui.Icon({ icon: props.icon })}
+                    </div>
+                </div>
+            `;
+        },
+        Tabs: props => {
+            const content = (props.items || props.tabs || []).map(tab => {
+                const className = kofi.directives.classMap({
+                    "w-full text-center px-2 py-1 rounded-md leading-none": true,
+                    "bg-white shadow-sm": props.value === tab.value,
+                    "cursor-pointer hover:bg-white": props.value !== tab.value && !tab.disabled,
+                    "pointer-events-none opacity-60": !!tab.disabled,
+                });
+                return kofi.html`
+                    <div className="${className}" onClick="${() => props.onChange(tab.id || tab.value)}">
+                        <span className="font-bold text-sm">${tab.name || tab.text}</span>
+                    </div>
+                `;
+            });
+            return kofi.html`
+                <div className="flex items-center gap-2 w-full bg-gray-100 p-1 rounded-lg">
+                    ${content}
+                </div>
+            `;
+        },
+        Logo: () => kofi.html`
+            <div className="flex items-center leading-none tracking-tight gap-1 select-none">
+                <div className="flex items-center">
+                    ${ui.Icon({ icon: "article" })}
+                </div>
+                <div className="flex items-center">
+                    <div className="font-bold">studio</div>
+                    <div className="font-light opacity-60">pro</div>
+                </div>
+            </div>
+        `,
+        Header: props => kofi.html`
+            <div className="shrink-0 bg-white text-gray-950 flex flex-row items-center justify-between h-14 px-4 py-3">
+                <div className="text-2xl">
+                    ${ui.Logo()}
+                </div>
+                ${props.rightContent ? props.rightContent() : ""}
+            </div>
+        `,
+        Form: props => kofi.html`
+            <div className="flex flex-col gap-4">
+                ${Object.keys(props.fields).map(field => kofi.html`
+                    <div className="flex flex-col gap-1">
+                        ${props.fields[field].title ? kofi.html`
+                            <div className="font-bold text-sm">${props.fields[field].title}</div>
+                        ` : ""}
+                        ${FormOptions[props.fields[field].type]({
+                            value: props.data[field],
+                            disabled: false,
+                            onChange: value => props.onChange(field, value),
+                        })}
+                    </div>
+                `)}
+            </div>
+        `,
+        LeftSideLayers: props => {
+            const itemHeight = 44;
+            const containerStyle = {
+                height: `${props.layers.length * itemHeight}px`,
+            };
+            const content = props.layers.map((layer, index) => {
+                const className = kofi.directives.classMap({
+                    "group absolute w-full rounded-lg overflow-hidden flex items-center select-none": true,
+                    "bg-gray-100": layer.id === props.activeLayer,
+                    "hover:bg-gray-100 cursor-pointer": layer.id !== props.activeLayer,
+                });
+                const layerStyle = kofi.directives.styleMap({
+                    top: `${index * itemHeight}px`,
+                    height: `36px`,
+                    cursor: "grab",
+                    zIndex: "0",
+                });
+                const handleMove = event => {
+                    event.preventDefault();
+                    const itemElement = event.currentTarget.parentElement;
+                    const parentElement = itemElement.parentElement;
+                    itemElement.style.zIndex = "100";
+                    itemElement.style.cursor = "grabbing";
+                    // 2. create the move handler
+                    const handlePointerMove = moveEvent => {
+                        const { top, height } = parentElement.getBoundingClientRect();
+                        const itemPosition = Math.max(0, Math.min(moveEvent.clientY - top - (itemHeight / 2), height - itemHeight));
+                        const itemOriginalIndex = parseInt(itemElement.getAttribute("data-original-index"), 10);
+                        const itemCurrentIndex = parseInt(itemElement.getAttribute("data-current-index"), 10);
+                        const itemNextIndex = Math.floor((itemPosition + (itemHeight / 2)) / itemHeight);
+                        // reorder the layers visually
+                        Array.from(parentElement.children).forEach(childElement => {
+                            if (childElement !== itemElement) {
+                                const childCurrentlIndex = parseInt(childElement.getAttribute("data-current-index"), 10);
+                                if (childCurrentlIndex === itemNextIndex) {
+                                    // move the child to the original position of the dragged item
+                                    childElement.style.top = `${itemCurrentIndex * itemHeight}px`;
+                                    childElement.setAttribute("data-current-index", itemCurrentIndex);
+                                }
+                            }
+                        });
+                        // update the item element attributes
+                        itemElement.setAttribute("data-current-index", itemNextIndex);
+                        itemElement.style.top = `${itemPosition}px`;
+                    };
+                    // 3. create the up handler
+                    const handlePointerUp = upEvent => {
+                        document.removeEventListener("pointermove", handlePointerMove);
+                        document.removeEventListener("pointerup", handlePointerUp);
+                        document.removeEventListener("pointerleave", handlePointerUp);
+                        // emit the move event
+                        const itemOriginalIndex = parseInt(itemElement.getAttribute("data-original-index"), 10);
+                        const itemCurrentIndex = parseInt(itemElement.getAttribute("data-current-index"), 10);
+                        if (itemOriginalIndex !== itemCurrentIndex && typeof props.onMove === "function") {
+                            props.onMove(layer, itemOriginalIndex, itemCurrentIndex);
+                        }
+                        // reset item element styles
+                        itemElement.style.cursor = "";
+                        itemElement.style.zIndex = "0";
+                        itemElement.style.top = `${itemCurrentIndex * itemHeight}px`;
+                    };
+                    // 4. attach the move and up handlers
+                    document.addEventListener("pointermove", handlePointerMove);
+                    document.addEventListener("pointerup", handlePointerUp);
+                    document.addEventListener("pointerleave", handlePointerUp);
+                };
+                return kofi.html`
+                    <div key="${layer.id}" className="${className}" data-original-index="${index}" data-current-index="${index}" style="${layerStyle}">
+                        ${kofi.directives.when(!!props.elements, () => kofi.html`
+                            <div className="flex items-center text-xl px-3 py-2 shrink-0" onPointerDown="${handleMove}">
+                                ${ui.Icon({ icon: props.elements[layer.type].icon })}
+                            </div>
+                        `)}
+                        <div className="font-bold text-sm pr-3 py-2 w-full leading-none overflow-hidden" onClick="${() => props.onClick(layer)}">
+                            <span>${layer.name || layer.id}</span>
+                        </div>
+                        <div className="flex gap-1 items-center shrink-0 opacity-0 group-hover:opacity-100">
+                            <div className="cursor-pointer flex opacity-40 hover:opacity-80 px-2 py-1" onClick="${() => props.onDelete(layer)}">
+                                ${ui.Icon({ icon: "trash" })}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            return kofi.html`
+                <div className="w-full relative" style="${containerStyle}">
+                    ${content}
+                </div>
+            `;
+        },
+        LeftSideElements: props => kofi.html`
+            <div className="flex flex-col gap-4">
+                ${Object.keys(props.elements || {}).map(key => kofi.html`
+                    <div key="${key}" className="group flex gap-3 items-center cursor-pointer" onClick="${() => props.onClick(key)}">
+                        <div className="bg-gray-100 rounded-md p-2 shrink-0 flex items-center text-xl">
+                            <div className="flex group-hover:hidden items-center">
+                                ${ui.Icon({ icon: props.elements[key].icon})}
+                            </div>
+                            <div className="hidden group-hover:flex">
+                                ${ui.Icon({ icon: "plus" })}
+                            </div>
+                        </div>
+                        <div className="w-full grow-1 flex flex-col justify-center">
+                            <div className="font-bold text-sm">${props.elements[key].title}</div>
+                            <div className="opacity-60 text-xs">${props.elements[key].description}</div>
+                        </div>
+                    </div>
+                `)}
+            </div>
+        `,
+    };
+
+    // create the app instance
+    const app = kofi.emitter({
+        [EVENTS.INIT]: () => {
+            Object.assign(app.state, {
+                config: {},
+                templateContent: "",
+                templateConfig: {},
+                data: {
+                    template: "resume-basic",
+                    config: {},
+                    elements: [],
+                },
+                activeElement: null,
+                activeLeftSideTab: LEFT_SIDE_TABS.LAYERS,
+            });
+            appContainer.style.display = "";
+            // fetch configuration
+            window.fetch("/conf/studio.json")
+                .then(response => response.json())
+                .then(config => {
+                    app.state.config = config;
+                    return loadTemplate(app.state.data.template);
+                })
+                .then(template => {
+                    app.state.templateContent = template.body;
+                    app.state.templateConfig = template.attributes || {};
+                    app.emit(EVENTS.RENDER_EDITOR);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        },
+        [EVENTS.CREATE_ELEMENT]: ({ type }) => {
+            // 1. initialize new element configuration
+            const elementsCount = app.state.data.elements.reduce((count, element) => {
+                return count + (element.type === type ? 1 : 0);
+            }, 1)
+            const elementConfig = app.state.templateConfig.elements.find(element => {
+                return element.id === type || element.type === type;
+            });
+            const element = {
+                type: type,
+                id: kofi.directives.uid(),
+                name: [elementConfig.title, elementsCount].join(" "),
+                attributes: {},
+            };
+            // 2. assign element fields
+            Object.keys(elementConfig.fields || {}).forEach(field => {
+                element.attributes[field] = elementConfig.fields[field].initialValue;
+            });
+            // 3. insert the element and update
+            app.state.data.elements.push(element);
+            app.state.activeElement = element; // change active element
+            app.state.activeLeftSideTab = LEFT_SIDE_TABS.LAYERS; // tange to layers
+            app.emit(EVENTS.RENDER_EDITOR);
+        },
+        [EVENTS.DELETE_ELEMENT]: ({ element }) => {
+            // 1. remove this elements from the tree
+            app.state.data.elements = app.state.data.elements.filter(el => {
+                return el.id !== element?.id;
+            });
+            // 2. reset the active element if it is the deleted element
+            if (app.state.activeElement?.id === element?.id) {
+                app.state.activeElement = null;
+            }
+            // 3. check if elements list is empty
+            if (app.state.data.elements.length === 0) {
+                app.state.activeLeftSideTab = LEFT_SIDE_TABS.ELEMENTS;
+            }
+            // 4. update the view
+            app.emit(EVENTS.RENDER_EDITOR);
+        },
+        [EVENTS.REORDER_ELEMENT]: ({ element, fromIndex, toIndex }) => {
+            const elements = app.state.data.elements;
+            const [ movedElement ] = elements.splice(fromIndex, 1);
+            elements.splice(toIndex, 0, movedElement);
+            app.emit(EVENTS.RENDER_EDITOR);
+        },
+        [EVENTS.SET_ACTIVE_ELEMENT]: ({ element }) => {
+            app.state.activeElement = app.state.data.elements.find(el => {
+                return el === element || el.id === element;
+            });
+            app.emit(EVENTS.RENDER_EDITOR);
+        },
+        [EVENTS.CLEAR_ACTIVE_ELEMENT]: () => {
+            app.state.activeElement = null;
+            app.emit(EVENTS.RENDER_EDITOR);
+        },
+        [EVENTS.RENDER_EDITOR]: () => {
+            const leftSideTabs = [
+                {
+                    value: LEFT_SIDE_TABS.LAYERS,
+                    text: "Layers",
+                    disabled: app.state?.data?.elements?.length === 0,
+                },
+                {
+                    value: LEFT_SIDE_TABS.ELEMENTS,
+                    text: "Elements",
+                },
+            ];
+            kofi.render(kofi.html`
+                <div className="w-full h-full min-h-0 flex flex-col bg-white">
+                    ${ui.Header({})}
+                    <div className="grow-1 h-full w-full flex items-stretch">
+                        <div className="w-full max-w-64 h-full shrink-0 p-4">
+                            <div className="w-full py-0">
+                                ${ui.Tabs({
+                                    items: leftSideTabs,
+                                    value: app.state.activeLeftSideTab,
+                                    onChange: tabValue => {
+                                        app.state.activeLeftSideTab = tabValue;
+                                        app.emit(EVENTS.RENDER_EDITOR);
+                                    },
+                                })}
+                            </div>
+                            ${kofi.directives.when(app.state.activeLeftSideTab === LEFT_SIDE_TABS.LAYERS, () => kofi.html`
+                                <div className="w-full py-4 overflow-y-scroll h-full">
+                                    ${ui.LeftSideLayers({
+                                        elements: app.state?.templateConfig?.elements || [],
+                                        layers: app.state?.data?.elements || [],
+                                        activeLayer: app.state.activeElement?.id || "",
+                                        onMove: (element, fromIndex, toIndex) => {
+                                            app.emit(EVENTS.REORDER_ELEMENT, { element, fromIndex, toIndex });
+                                        },
+                                        onClick: element => {
+                                            app.emit(EVENTS.SET_ACTIVE_ELEMENT, { element });
+                                        },
+                                        onDelete: element => {
+                                            app.emit(EVENTS.DELETE_ELEMENT, { element });
+                                        },
+                                    })}
+                                </div>
+                            `)}
+                            ${kofi.directives.when(app.state.activeLeftSideTab === LEFT_SIDE_TABS.ELEMENTS, () => kofi.html`
+                                <div className="w-full py-4 overflow-y-scroll h-full">
+                                    ${ui.LeftSideElements({
+                                        elements: app.state?.templateConfig?.elements || [],
+                                        onClick: elementType => {
+                                            app.emit(EVENTS.CREATE_ELEMENT, { type: elementType });
+                                        },
+                                    })}
+                                </div>
+                            `)}
+                        </div>
+                        <div className="w-full h-full py-4 px-2">
+                            ${kofi.directives.when(app.state?.data?.elements?.length === 0, () => kofi.html`
+                                <div className="border-1 border-dashed border-gray-200 rounded-2xl w-full h-full flex items-center justify-center">
+                                    <div className="max-w-md w-full flex flex-col items-center gap-1">
+                                        <div className="flex justify-center text-3xl bg-gray-100 rounded-xl p-2">
+                                            ${ui.Icon({ icon: "article" })}
+                                        </div>
+                                        <div className="font-semibold text-center">Your resume is empty</div>
+                                        <div className="opacity-60 text-center text-sm">
+                                            <span>Add elements from the left side to start building your resume.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `)}
+                            ${kofi.directives.when(app.state?.data?.elements?.length > 0, () => kofi.html`
+                                <div className="relative w-full h-full min-h-0">
+                                    <div className="w-full h-full border-1 border-gray-200 overflow-scroll rounded-2xl"></div>
+                                    <div className="absolute z-100 bottom-0 right-0 mb-2 mr-2">
+                                        <div className="bg-gray-100 rounded-xl px-2 py-1 text-xs">Preview</div>
+                                    </div>
+                                    <div className="absolute z-100 bottom-0 left-0 mb-2 ml-2">
+                                        <div className="flex items-center overflow-hidden rounded-xl bg-gray-100">
+                                            ${ui.IconButton({ icon: "minus" })}
+                                            ${ui.IconButton({ icon: "plus" })}
+                                        </div>
+                                    </div>
+                                </div>
+                            `)}
+                        </div>
+                        ${kofi.directives.when(!!app.state.activeElement, () => kofi.html`
+                            <div className="relative w-full max-w-sm h-full shrink-0 p-4">
+                                <div className="sticky top-0 w-full bg-white pb-4 flex items-center justify-between">
+                                    <div className="font-bold">
+                                        <span>${app.state.activeElement.name}</span>
+                                    </div>
+                                    ${ui.IconButton({
+                                        icon: "x",
+                                        disabled: false,
+                                        onClick: () => {
+                                            app.emit(EVENTS.CLEAR_ACTIVE_ELEMENT);
+                                        },
+                                    })}
+                                </div>
+                                ${ui.Form({
+                                    data: app.state.activeElement?.attributes || {},
+                                    fields: app.state.templateConfig.elements.find(el => el.id === app.state.activeElement.type)?.fields || {},
+                                    onChange: (field, value) => {
+                                        app.state.activeElement.attributes[field] = value;
+                                        // TODO: debounce reloading preview
+                                    },
+                                })}
+                            </div>
+                        `)}
+                    </div>
+                </div>
+            `, appContainer);
+        },
+        [EVENTS.RENDER_PREVIEW]: () => {
+            return null;
+        },
+    });
+
+    // initialize the app
+    app.emit(EVENTS.INIT);
+</script>
