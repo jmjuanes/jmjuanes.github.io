@@ -5,9 +5,9 @@
     "markdown": {
         "classNames": {
             "link": "font-medium underline",
-            "code": "bg-gray-100 rounded-md py-1 px-2 text-xs font-mono font-bold bg-gray-900",
-            "pre": "w-full overflow-x-auto bg-gray-950 text-gray-100 text-sm font-mono leading-relaxed my-6 p-4 rounded-xl",
-            "heading": "font-bold mb-4 first:mt-0 mt-8 text-gray-950",
+            "code": "rounded-md py-1 px-2 text-xs font-mono font-bold bg-foreground text-background",
+            "pre": "w-full overflow-x-auto bg-foreground text-background text-sm font-mono leading-relaxed my-6 p-4 rounded-xl",
+            "heading": "font-bold font-heading mb-4 first:mt-0 mt-8",
             "heading2": "text-2xl",
             "heading3": "text-xl",
             "heading4": "text-lg",
