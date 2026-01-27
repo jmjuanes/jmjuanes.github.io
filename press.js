@@ -54,6 +54,13 @@ press({
             extensions: [ ".mustache" ],
         }),
         press.CopyAssetsPlugin({
+            basePath: ".",
+            patterns: press.utils.walkdir(path.resolve("./assets")).map(file => ({
+                from: path.resolve(path.join("./assets", file)),
+                to: file,
+            })),
+        }),
+        press.CopyAssetsPlugin({
             patterns: Object.keys(websiteConfig.assets || {}).map(destination => {
                 return {
                     from: websiteConfig.assets[destination],
