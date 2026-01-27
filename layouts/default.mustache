@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="overscroll-behavior-x:none;" class="bg-white h-full">
+<html lang="en" style="overscroll-behavior-x:none;" class="bg-background h-full">
 <head>
     <meta charSet="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
@@ -9,11 +9,13 @@
     <meta property="og:url" content="{{site.url}}">
     <meta property="og:description" content="{{site.description}}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap">
     <link rel="stylesheet" href="/vendor/highlight.css">
     <link rel="stylesheet" href="/vendor/low.css">
+    <link rel="stylesheet" href="/styles/theme.css">
     <title>{{page.attributes.title}}</title>
 </head>
-<body class="m-0 p-0 font-sans leading-normal text-gray-950 min-h-full">
+<body class="m-0 p-0 font-sans leading-normal bg-background text-foreground min-h-full">
     {{!@content}}
 </body>
 </html>

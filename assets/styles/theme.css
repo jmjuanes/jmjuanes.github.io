@@ -1,0 +1,29 @@
+:root {
+    --background: 36 44% 96%;
+    --foreground: 0 0% 18%;
+    --card: 33 40% 94%;
+    --card-foreground: 0 0% 18%;
+    --primary: 0 0% 18%;
+    --primary-foreground: 36 44% 96%;
+    --secondary: 25 30% 70%;
+    --secondary-foreground: 0 0% 18%;
+    --muted: 33 30% 88%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 140 20% 50%;
+    --accent-foreground: 36 44% 96%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 36 44% 96%;
+    --border: 33 25% 85%;
+    --input: 33 25% 85%;
+}
+
+:root {
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+}
+
+.font-heading {
+    font-family: "Merriweather", serif;
+}
