@@ -21,7 +21,6 @@ const build = (): Promise<void> => {
             });
         })
         .then(result => {
-            return result;
             // print all warnings (if any)
             result.warnings().forEach(warn => {
                 console.warn(warn.toString());
