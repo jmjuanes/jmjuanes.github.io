@@ -1,7 +1,7 @@
 {
-    "name": "josemi.xyz",
+    "name": "josemi",
     "description": "My personal portfolio",
-    "version": "0.2.0",
+    "version": "0.0.0",
     "type": "module",
     "private": true,
     "license": "MIT",
@@ -9,19 +9,38 @@
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
         "build": "node press.js",
+        "build:brand": "yarn workspace josemi-brand build",
         "clean": "rm -rf www",
         "serve": "serve www -p 8080"
     },
+    "workspaces": [
+        "packages/*"
+    ],
     "dependencies": {
         "@josemi-icons/svg": "^0.7.0",
         "highlight.js": "^11.11.1",
         "kofi": "^0.14.0",
-        "lowcss": "^0.33.0",
-        "mikel": "^0.30.1"
+        "lowcss": "^0.34.0",
+        "mikel": "^0.32.0",
+        "react": "^19.2.4",
+        "react-dom": "^19.2.4"
     },
     "devDependencies": {
-        "mikel-markdown": "^0.30.1",
-        "mikel-press": "^0.30.1",
-        "serve": "^14.2.4"
+        "@babel/core": "^7.29.0",
+        "@babel/plugin-transform-runtime": "^7.29.0",
+        "@babel/preset-react": "^7.28.5",
+        "@babel/preset-typescript": "^7.28.5",
+        "autoprefixer": "^10.4.24",
+        "babel-loader": "^10.0.0",
+        "csso": "^5.0.5",
+        "mikel-markdown": "^0.32.0",
+        "mikel-press": "^0.32.0",
+        "postcss": "^8.5.6",
+        "postcss-import": "^16.1.1",
+        "serve": "^14.2.4",
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3",
+        "webpack": "^5.105.1",
+        "webpack-cli": "^6.0.1"
     }
 }
