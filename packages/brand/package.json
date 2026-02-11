@@ -1,0 +1,21 @@
+{
+    "name": "josemi-brand",
+    "description": "Components and primitives for the Josemi websites",
+    "version": "0.0.0",
+    "type": "module",
+    "license": "MIT",
+    "homepage": "https://www.josemi.xyz/brand",
+    "author": "Josemi <hello@josemi.xyz>",
+    "scripts": {
+        "build": "tsx scripts/build.ts"
+    },
+    "keywords": [
+        "css",
+        "josemi"
+    ],
+    "files": [
+        "README.md",
+        "package.json",
+        "brand.css"
+    ]
+}

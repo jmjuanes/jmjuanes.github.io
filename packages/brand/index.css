@@ -1,0 +1,33 @@
+@import "lowcss/reset.css";
+@import "lowcss/theme.css";
+@import "lowcss/utilities.css";
+
+/* override theme variables */
+@theme {
+    @clear --color-*;
+    --color-background: var(--background);
+}
+
+.light {
+    --background: hsl(36, 44%, 96%);
+    --foreground: hsl(0, 0%, 18%);
+    --card: hsl(33, 40%, 94%);
+    --card-foreground: hsl(0, 0%, 18%);
+    --primary: hsl(0, 0%, 18%);
+    --primary-foreground: hsl(36, 44%, 96%);
+    --secondary: hsl(25, 30%, 70%);
+    --secondary-foreground: hsl(0, 0%, 18%);
+    --muted: hsl(33, 30%, 88%);
+    --muted-foreground: hsl(0, 0%, 40%);
+    --accent: hsl(140, 20%, 50%);
+    --accent-foreground: hsl(36, 44%, 96%);
+    --destructive: hsl(0, 84%, 60%);
+    --destructive-foreground: hsl(36, 44%, 96%);
+    --border: hsl(33, 25%, 85%);
+    --input: hsl(33, 25%, 85%);
+}
+
+/* reset border color */
+* {
+    border-color: var(--color-border);
+}
