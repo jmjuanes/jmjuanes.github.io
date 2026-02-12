@@ -7,7 +7,7 @@
     "homepage": "https://www.josemi.xyz/brand",
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
-        "build": "tsx scripts/build.ts"
+        "build": "postcss index.css -u postcss-import -u lowcss | csso > brand.css"
     },
     "keywords": [
         "css",
