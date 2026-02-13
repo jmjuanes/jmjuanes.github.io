@@ -1,0 +1,24 @@
+<header class="mt-16 mb-16 first:mt-0 last:mb-0 flex flex-col gap-4 {{this.className}}" data-testid="section-intro">
+    {{#if this.heading}}
+    <h2 class="text-4xl font-bold font-heading mb-0 mt-0" data-testid="section-intro-heading">
+        <span>{{!this.heading}}</span>
+    </h2>
+    {{/if}}
+    {{#if this.description}}
+    <p class="opacity-80 text-base mb-0 pb-0" data-testid="section-intro-description">
+        <span>{{!this.description}}</span>
+    </p>
+    {{/if}}
+    {{#if this.links}}
+    <div class="flex items-center gap-4 mt-4" data-testid="section-intro-links">
+        {{#each this.links}}
+        <a class="flex items-center gap-2 hover:underline decoration-4 underline-offset-2" href="{{this.url}}">
+            <span class="text-base font-semibold lowercase">{{!this.text}}</span>
+            <div class="flex items-center text-lg">
+                {{>icon.mustache icon="chevron-right"}}
+            </div>
+        </a>
+        {{/each}}
+    </div>
+    {{/if}}
+</header>
