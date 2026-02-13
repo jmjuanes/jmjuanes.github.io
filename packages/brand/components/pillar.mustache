@@ -1,11 +1,11 @@
-<div class="mb-4 flex flex-col gap-1" data-testid="pillar">
-    {{#if this.date}}
+<div class="mb-4 flex flex-col gap-1 {{this.className}}" data-testid="pillar">
+    {{#if this.label}}
     <div class="text-base opacity-60 leading-none italic">
-        {{this.date}}
+        <span>{{this.label}}</span>
     </div>
     {{/if}}
     <a class="hover:underline block font-bold font-heading text-2xl sm:text-3xl decoration-primary underline-offset-2" href="{{this.url}}">
-        <span>{{this.title}}</span>
+        <span>{{this.heading}}</span>
     </a>
     {{#if this.description}}
     <div class="text-lg sm:text-xl">
