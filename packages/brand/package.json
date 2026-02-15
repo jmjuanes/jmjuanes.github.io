@@ -9,6 +9,9 @@
     "scripts": {
         "build": "postcss index.css -u postcss-import -u lowcss | csso > brand.css"
     },
+    "peerDependencies": {
+        "mikel": "*"
+    },
     "keywords": [
         "css",
         "josemi"
