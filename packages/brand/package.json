@@ -7,18 +7,29 @@
     "homepage": "https://www.josemi.xyz/brand",
     "author": "Josemi <hello@josemi.xyz>",
     "scripts": {
-        "build": "postcss index.css -u postcss-import -u lowcss | csso > brand.css"
+        "build": "tsc index.ts --esModuleInterop --module preserve --declaration"
+    },
+    "main": "index.js",
+    "types": "index.d.ts",
+    "exports": {
+        ".": "./index.js",
+        "./index.js": "./index.js",
+        "./index.d.ts": "./index.d.ts",
+        "./package.json": "./package.json"
     },
     "peerDependencies": {
         "mikel": "*"
     },
     "keywords": [
-        "css",
+        "brand",
         "josemi"
     ],
     "files": [
         "README.md",
         "package.json",
-        "brand.css"
+        "index.d.ts",
+        "index.js",
+        "components",
+        "layouts"
     ]
 }

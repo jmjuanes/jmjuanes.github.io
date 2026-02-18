@@ -1,0 +1,25 @@
+{
+    "name": "josemi-css",
+    "description": "CSS stylesheets for the Josemi websites and applications",
+    "version": "0.0.0",
+    "type": "module",
+    "license": "MIT",
+    "homepage": "https://www.josemi.xyz/brand",
+    "author": "Josemi <hello@josemi.xyz>",
+    "scripts": {
+        "build": "postcss index.css -u postcss-import -u lowcss | csso > josemi.css"
+    },
+    "exports": {
+        "./globals.css": "./globals.css",
+        "./package.json": "./package.json"
+    },
+    "keywords": [
+        "css",
+        "josemi"
+    ],
+    "files": [
+        "README.md",
+        "package.json",
+        "globals.css"
+    ]
+}

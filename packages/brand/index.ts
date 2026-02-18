@@ -2,8 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import type { MikelOptions, MikelPartial } from "mikel";
 
-// export josemi-brand plugin for mikel engine
-export default (options: any = {}): Partial<MikelOptions> => {
+export type BrandPluginOptions = {
+    iconsPath?: string;
+};
+
+export default (options: BrandPluginOptions = {}): Partial<MikelOptions> => {
     // 1. read components and layouts and save them as partials
     const partials = {} as Record<string, string>;
     ["components", "layouts"].forEach(folder => {
