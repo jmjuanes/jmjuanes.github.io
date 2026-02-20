@@ -17,6 +17,7 @@
         }
     },
     "assets": {
+        "ui.css": ".cache/ui.css",
         "vendor/mikel.js": "node_modules/mikel/index.js",
         "vendor/kofi.js": "node_modules/kofi/index.js",
         "vendor/low.css": "node_modules/lowcss/low.css",

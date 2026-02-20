@@ -5,7 +5,10 @@
     "permalink": "/index.html"
 }
 ---
-{{>>content.mustache}}
+{{>>container.mustache size="7xl"}}
+    {{>hero.mustache
+        heading="Hey, I'm Josemi."
+    }}
     <section class="py-24 sm:py-40">
         <div class="text-4xl sm:text-6xl lg:text-8xl font-bold mb-8 sm:mb-12 tracking-tight leading-none font-heading">
             <span>Hey, I'm Josemi.</span>
@@ -61,5 +64,5 @@
             </a>
         </div>
     {{/section.mustache}}
-{{/content.mustache}}
+{{/container.mustache}}
 {{>footer.mustache}}

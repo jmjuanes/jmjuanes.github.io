@@ -3,6 +3,8 @@ import mikel from "mikel";
 import press from "mikel-press";
 import markdown from "mikel-markdown";
 import hljs from "highlight.js";
+
+import brandPlugin from "./packages/brand/index.js";
 import websiteConfig from "./website.config.json" with { type: "json" };
 
 press({
@@ -46,9 +48,9 @@ press({
             extensions: [ ".md", ".markdown" ],
         }),
         press.DataPlugin(),
-        press.PartialsPlugin({
-            extensions: [ ".mustache" ],
-        }),
+        // press.PartialsPlugin({
+        //     extensions: [ ".mustache" ],
+        // }),
         press.LayoutsPlugin({
             folder: "./layouts",
             extensions: [ ".mustache" ],
@@ -73,6 +75,9 @@ press({
             highlight: (code, language) => {
                 return hljs.highlight(code.trim(), { language: language }).value;
             },
+        })),
+        press.UsePlugin(brandPlugin({
+            ...websiteConfig.brand,
         })),
         press.FrontmatterPlugin(),
         press.TransformPlugin(node => {

@@ -23,7 +23,7 @@
     --font-family-heading: "Merriweather", serif;
 }
 
-.light {
+:root {
     --background: hsl(36, 44%, 96%);
     --foreground: hsl(0, 0%, 18%);
     --card: hsl(33, 40%, 94%);
