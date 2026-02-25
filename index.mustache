@@ -5,36 +5,20 @@
     "permalink": "/index.html"
 }
 ---
-{{>>container.mustache size="7xl"}}
-    {{>hero.mustache
+{{>>josemi:container size="7xl"}}
+    {{>josemi:hero
         heading="Hey, I'm Josemi."
+        description="I'm a passionate <b>mathematician</b> turned <b>React</b> developer that loves to craft minimal, beautiful, and performant user interfaces."
+        actions=site.data.socials
     }}
-    <section class="py-24 sm:py-40">
-        <div class="text-4xl sm:text-6xl lg:text-8xl font-bold mb-8 sm:mb-12 tracking-tight leading-none font-heading">
-            <span>Hey, I'm Josemi.</span>
-        </div>
-        <div class="text-3xl sm:text-5xl leading-snug mb-6">
-            <span>I'm a passionate <b>mathematician</b> turned <b>React</b> developer </span>
-            <span>that loves to craft minimal, beautiful, and performant user interfaces.</span>
-        </div>
-        {{#if site.data.socials}}
-        <div class="flex flex-col md:flex-row flex-wrap gap-8 mt-10">
-            {{#each site.data.socials}}
-            <a class="flex items-center gap-1 hover:underline decoration-4 underline-offset-2" href="{{this.url}}">
-                <span class="text-3xl sm:text-4xl font-bold lowercase">{{this.text}}</span>
-                <div class="flex items-center text-4xl sm:text-5xl">{{=icon icon="arrow-right"}}</div>
-            </a>
-            {{/each}}
-        </div>
-        {{/if}}
-    </section>
-    {{>>section.mustache title="Projects"}}
+    {{>>josemi:section}}
+        {{>josemi:section-intro heading="Projects"}}
         <div class="flex flex-col gap-6 mb-6">
         {{#each site.data.projects limit=4}}
-            {{>link.mustache
-                title=this.title
+            {{>josemi:pillar
+                heading=this.title
                 description=this.description
-                date=this.date
+                label=this.date
                 url=this.url
             }}
         {{/each}}
@@ -42,17 +26,18 @@
         <div class="">
             <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/projects.html">
                 <span class="text-lg">See all projects</span>
-                {{=icon icon="arrow-right"}}
+                {{>josemi:icon icon="arrow-right"}}
             </a>
         </div>
-    {{/section.mustache}}
-    {{>>section.mustache title="Notes"}}
+    {{/josemi:section}}
+    {{>>josemi:section}}
+        {{>josemi:section-intro heading="Notes"}}
         <div class="flex flex-col gap-6 mb-6">
         {{#pages collection="notes" limit=4}}
-            {{>link.mustache
-                title=this.attributes.title
+            {{>josemi:pillar
+                heading=this.attributes.title
                 description=this.attributes.description
-                date=this.attributes.date
+                label=this.attributes.date
                 url=this.url
             }}
         {{/pages}}
@@ -60,9 +45,9 @@
         <div class="">
             <a class="inline-flex items-center gap-1 lh-none no-underline hover:underline" href="/notes.html">
                 <span class="text-lg">See all notes</span>
-                {{=icon icon="arrow-right"}}
+                {{>josemi:icon icon="arrow-right"}}
             </a>
         </div>
-    {{/section.mustache}}
-{{/container.mustache}}
-{{>footer.mustache}}
+    {{/josemi:section}}
+{{/josemi:container}}
+{{>footer.mustache links=site.data.socials}}
