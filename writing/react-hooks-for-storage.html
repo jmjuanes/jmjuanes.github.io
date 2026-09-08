@@ -1,0 +1,154 @@
+
+<!doctype html>
+<html lang="en" style="overscroll-behavior-x:none;" class="height-full">
+<head>
+    <meta charSet="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="title" content="React Hooks and Local Storage">
+    <meta name="description" content="A guide for creating React Hooks to access to the Local and Session Storage of the browser in a simple way.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:description" content="A guide for creating React Hooks to access to the Local and Session Storage of the browser in a simple way.">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap">
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/brand.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/utilities.css">
+    <title>React Hooks and Local Storage - josemi</title>
+</head>
+<body class="">
+    <header class="container py-4">
+    <div class="sm-flex flex-wrap flex-center mx-n2">
+        <div class="flex-auto">
+            <div class="flex">
+                <a href="/" class="bold px-2 inherit">josemi</a>
+                
+                    <span> / </span>
+                    <a href="/writing.html" class="bold px-1">writing</a>
+                
+            </div>
+            
+                <div class="block px-2 mt-3">
+                    <a href="" class="text-4 line-height-2 bold black">
+                        <span>React Hooks and Local Storage</span>
+                    </a>
+                </div>
+            
+            
+                <div class="px-2 mt-1">A guide for creating React Hooks to access to the Local and Session Storage of the browser in a simple way.</div>
+            
+        </div>
+        
+    </div>
+</header>
+
+    <main class="container">
+        
+    
+<h2 id="what-is-local-and-session-storage?">What is Local and Session storage?</h2>
+<p><b>Local</b> storage and <b>Session</b> storage are two web storage options available in JavaScript that allow you to store data on the client-side (in the user's browser) for a specific web domain. They are part of the Web Storage API and provide a way to store key-value pairs persistently (local storage) or for the duration of a page session (session storage).</p>
+<p>On the one side, data stored using local storage persists even after the browser is closed, and is available across multiple browser sessions. It is suitable for storing user preferences, cached data, or application state.</p>
+<p>On the other side, data stored with session storage is automatically cleared when the session ends (e.g., when the user closes the browser tab or window). It is suitable for temporary data that is needed only while the user is interacting with the current page, such as shopping cart items, form data, or temporary user authentication tokens.</p>
+<h2 id="api-for-local-and-session-storage">API for local and session storage</h2>
+<p>The API for local ans session storage is exactly the same. Local storage API can be accessed from <code>window.localStorage</code>, and session storage API can be accessed from <code>window.sessionStorage</code>.</p>
+<p>Both session storage and local storage offer similar methods for managing stored data. Here are the key methods available for both:</p>
+<h3 id="setitem(key,-value)">setItem(key, value)</h3>
+<p>Use this method to store a key-value pair in either session storage or local storage. The <b>key</b> argument is a string that acts as the identifier, and <b>value</b> can be any data type, but it will be automatically converted to a string.</p>
+<h3 id="getitem(key)">getItem(key)</h3>
+<p>Use this method to retrieve the value associated with a specific key. It returns the stored value as a string.</p>
+<h3 id="removeitem(key)">removeItem(key)</h3>
+<p>Use this method to remove a specific key-value pair from either session storage or local storage.</p>
+<pre class="fit border line-height-5 p-3 small">// Storing data in local storage
+localStorage.setItem(&quot;username&quot;, &quot;John&quot;);
+
+// Retrieving data from local storage
+const username = localStorage.getItem(&quot;username&quot;); // Returns &quot;John&quot;
+
+// Removing data from local storage
+localStorage.removeItem(&quot;username&quot;);</pre>
+<h2 id="creating-the-react-hook">Creating the React Hook</h2>
+<p>Now, let's create a custom React hook to simplify working with local storage or session storage in React components, by encapsulating the logic for reading and writing values.</p>
+<pre class="fit border line-height-5 p-3 small">import {useState, useEffect} from &quot;react&quot;;
+
+export const useStorage = (store, key, defaultValue) =&gt; {
+    // Initialize the state with the current value from storage or the default value
+    const [currentValue, setCurrentValue] = useState(() =&gt; {
+        // Attempt to retrieve the value from storage
+        const storedValue = store.getItem(key);
+        // If the value exists in storage, parse and return it
+        if (storedValue !== null) {
+            return JSON.parse(storedValue);
+        }
+        // Otherwise, return the default value
+        return defaultValue;
+    });
+    // Update the storage value whenever currentValue changes
+    useEffect(() =&gt; {
+        // Serialize the new value and store it
+        store.setItem(key, JSON.stringify(currentValue));
+    }, [currentValue]);
+    // Return the pair [currentValue, setCurrentValue]
+    return [currentValue, setCurrentValue];
+};</pre>
+<p>This hook follows these steps:</p>
+<h3 id="1.-initializes-the-state">1. Initializes the state</h3>
+<p>It initializes the state (<code>currentValue</code>) with the value from storage if it exists, or uses the default value provided as the third argument of the hook.</p>
+<h3 id="2.-sets-up-an-effect">2. Sets up an effect</h3>
+<p>It sets up an effect that runs whenever <code>currentValue</code> changes.This effect serializes the new value and stores it in the chosen storage (either local or session).</p>
+<h3 id="3.-returns-the-pair-[currentvalue,-setcurrentvalue]">3. Returns the pair [currentValue, setCurrentValue]</h3>
+<p>It returns the pair <code>[currentValue, setCurrentValue]</code>, allowingyou to read and update the value in storage.</p>
+<p>We can improve the previous code by creating two wrappers for using directly local or session storage, without having to provide this value as an argument to the hook:</p>
+<pre class="fit border line-height-5 p-3 small">export const useLocalStorage = (key, defaultValue) =&gt; {
+    return useStorage(window.localStorage, key, defaultValue);
+};
+
+export const useSessionStorage = (key, defaultValue) =&gt; {
+    return useStorage(window.sessionStorage, key, defaultValue);
+};</pre>
+<p>This way, we can use the <code>useLocalStorage</code> and <code>useSessionStorage</code> hooks without having to pass the storage object as an argument.</p>
+<pre class="fit border line-height-5 p-3 small">import React from &quot;react&quot;;
+import {useLocalStorage} from &quot;./useStorage.js&quot;;
+
+export const MyCounter = () =&gt; {
+    // Use the useLocalStorage hook to manage a value in local storage
+    const [count, setCount] = useLocalStorage(&quot;count&quot;, 0);
+
+    return (
+        &lt;div className=&quot;flex gap-2&quot;&gt;
+            &lt;button onClick={() =&gt; setCount(prev =&gt; prev - 1)}&gt;
+                &lt;span&gt;-&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;div&gt;{count}&lt;/div&gt;
+            &lt;button onClick={() =&gt; setCount(prev =&gt; prev + 1)}&gt;
+                &lt;span&gt;+&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    );
+};</pre>
+
+    </main>
+    <footer class="container mt-6">
+    <div class="border-top"></div>
+    <div class="sm-flex flex-baseline flex-wrap py-4 mx-n2">
+        
+        
+            <div class="sm-flex flex-baseline">
+                
+                    <a href="https://github.com/jmjuanes" class="control control-link bold text-0">GitHub</a>
+                
+                    <a href="https://linkedin.com/in/jmjuanes" class="control control-link bold text-0">Linkedin</a>
+                
+            </div>
+        
+        <div class="flex-auto"></div>
+        <a href="/" class="control control-link text-0">
+            <span>Handcrafted by <b>Josemi</b>.</span>
+        </a>
+    </div>
+</footer>
+
+</body>
+</html>

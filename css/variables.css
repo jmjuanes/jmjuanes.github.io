@@ -1,0 +1,66 @@
+:root {
+    /* breakpoints */
+    --breakpoint-sm: 40rem;
+    --breakpoint-md: 48rem;
+    --breakpoint-lg: 64rem;
+
+    /* color palette */
+    --white: hsl(0, 0%, 100%);
+    --black: hsl(210, 15%, 15%);
+    --light-100: hsl(0, 0%, 98%);
+    --light-200: hsl(0, 0%, 96%);
+    --light-300: hsl(0, 0%, 94%);
+    --light-400: hsl(0, 0%, 92%);
+    --light-500: hsl(0, 0%, 90%);
+    --light-600: hsl(0, 0%, 88%);
+    --light-700: hsl(0, 0%, 86%);
+    --light-800: hsl(0, 0%, 84%);
+    --light-900: hsl(0, 0%, 82%);
+    --dark-100: hsl(240, 8%, 32%);
+    --dark-200: hsl(240, 8%, 30%);
+    --dark-300: hsl(240, 8%, 28%);
+    --dark-400: hsl(240, 8%, 26%);
+    --dark-500: hsl(240, 8%, 24%);
+    --dark-600: hsl(240, 8%, 22%);
+    --dark-700: hsl(240, 8%, 20%);
+    --dark-800: hsl(240, 8%, 18%);
+    --dark-900: hsl(240, 8%, 16%);
+
+    /* 
+    --red: #BB6C71;
+    --orange: #D18C5E;
+    --yellow: #D9BE6C;
+    --green: #8FAE7D;
+    --purple: #A084A6;
+    --blue: #7B9BC2;
+    /* --blue: #5A7CA6; */
+
+    /* font families */
+    --font-family-sans: "Geist", sans-serif;
+    --font-family-mono: "Geist Mono", monospace;
+
+    /* font size */
+    --font-size-0: 0.875rem;
+    --font-size-1: 1rem;
+    --font-size-2: 1.25rem;
+    --font-size-3: 1.5rem;
+    --font-size-4: 1.75rem;
+    --font-size-5: 2rem;
+    --font-size-6: 2.5rem;
+
+    /* spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 1rem;
+    --space-4: 1.5rem;
+    --space-5: 2rem;
+    --space-6: 5rem;
+
+    /* border variables */
+    --border-width: 2px;
+    --border-radius: 0.5rem;
+    --border-color: var(--light-300);
+
+    /* shadow */
+    --shadow: 0 0 1rem 0.5rem hsla(0, 0%, 0%, 0.05);
+}

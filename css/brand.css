@@ -1,0 +1,48 @@
+/* container: centers page content with a max width and horizontal padding */
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 54rem;
+    padding: 0 var(--space-5);
+    width: 100%;
+}
+
+/* control component */
+.control {
+    background-color: transparent;
+    border: var(--border-width) solid transparent;
+    color: inherit;
+    cursor: pointer;
+    display: inline-block;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    text-decoration: none;
+    vertical-align: middle;
+}
+.control:hover {
+    text-decoration: none;
+}
+.control:focus {
+    outline: none;
+}
+.control:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.control-btn {
+    font-weight: bold;
+}
+.control-btn:focus {
+    border-color: var(--dark-200);
+}
+.control-link {
+    border: 0;
+    font-weight: bold;
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+}
+.control-link:hover {
+    text-decoration: underline;
+}

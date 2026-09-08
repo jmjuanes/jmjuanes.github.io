@@ -1,0 +1,58 @@
+
+/* use border-box everywhere so width/height include padding and border */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* remove default browser margin/padding on all elements */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* prevent iOS Safari from auto-resizing text on orientation change */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* base page styles with minimum height and readable line-height */
+body {
+    font-optical-sizing: auto;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* make media elements block-level and never overflow their container */
+img, picture, svg, video {
+    display: block;
+    max-width: 100%;
+}
+
+/* remove default link color/underline, inherit from parent instead */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* make form elements inherit typography instead of using browser defaults */
+button, input, textarea, select {
+    font: inherit;
+    color: inherit;
+}
+
+/* strip default button chrome so it can be styled from scratch */
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* remove default list markers */
+ul, ol {
+    list-style: none;
+}
