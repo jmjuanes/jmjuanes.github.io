@@ -1,0 +1,17 @@
+/* font family utilities */
+.font-inherit { font-family: inherit; }
+.font-body    { font-family: var(--font-family-body); }
+.font-headind { font-family: var(--font-family-heading); }
+.font-mono    { font-family: var(--font-family-mono); }
+
+/* color utilities */
+.bg-background { background-color: var(--background); }
+.bg-card { background-color: var(--card) }
+
+/* truncate text */
+.truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

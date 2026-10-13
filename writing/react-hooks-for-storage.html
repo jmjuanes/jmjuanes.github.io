@@ -2,6 +2,12 @@
 <!doctype html>
 <html lang="en" style="overscroll-behavior-x:none;" class="height-full">
 <head>
+    <!--
+        josemi.xyz v0.0.0
+        Repository: https://github.com/jmjuanes/josemi
+        Latest commit: d61cb5193760783a88495689c4a7e5bfb7908d0e
+        Build date: Tuesday, October 13, 2026 at 9:36:32 PM GMT+2
+    -->
     <meta charSet="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
     <meta name="title" content="React Hooks and Local Storage">
@@ -11,40 +17,53 @@
     <meta property="og:description" content="A guide for creating React Hooks to access to the Local and Session Storage of the browser in a simple way.">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap">
-    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/vendor/highlight/highlight.css">
+    <link rel="stylesheet" href="/cdn/lowcss@latest/low.css">
     <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/vendor/hiro/hiro.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/utilities.css">
     <title>React Hooks and Local Storage - josemi</title>
 </head>
-<body class="theme-default">
-    <header class="container py-4">
-    <div class="sm-flex flex-wrap flex-center mx-n2">
-        <div class="flex-auto">
-            <div class="flex">
-                <a href="/" class="fw-bold px-2 inherit">josemi</a>
-                
-                    <span> / </span>
-                    <a href="/writing.html" class="bold px-1">writing</a>
-                
+<body class=" flex flex-col items-start">
+    
+    <header class="w-full py-6">
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        <div class="flex justify-between">
+            <div class="flex shrink-0 items-center">
+                <div class="flex gap-2 text-xl">
+                    <a href="/" class="font-bold text-current">josemi</a>
+                    
+                        <span> / </span>
+                        <a href="/writing.html" class="text-current font-medium">writing</a>
+                    
+                </div>
             </div>
             
-                <div class="block px-2 mt-3">
-                    <a href="" class="fs-4 line-height-2 fw-bold black">
-                        <span>React Hooks and Local Storage</span>
-                    </a>
-                </div>
+        </div>
+    
+</div>
+
+</header>
+
+    <main class="w-full py-0" style="flex:1;">
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        
+        <div class="flex flex-col gap-0 pt-4 pb-12">
+            <div class="text-4xl md:text-5xl font-bold leading-snug mb-2">
+                <span>React Hooks and Local Storage</span>
+            </div>
+            
+                <div class="text-2xl opacity-60 font-medium">A guide for creating React Hooks to access to the Local and Session Storage of the browser in a simple way.</div>
             
             
-                <div class="px-2 mt-1">A guide for creating React Hooks to access to the Local and Session Storage of the browser in a simple way.</div>
+                <div class="text-base opacity-40 mt-2">September 24, 2023</div>
             
         </div>
         
-    </div>
-</header>
-
-    <main class="container">
+    <div class="prose">
         
-    
 <h2 id="what-is-local-and-session-storage?">What is Local and Session storage?</h2>
 <p><b>Local</b> storage and <b>Session</b> storage are two web storage options available in JavaScript that allow you to store data on the client-side (in the user's browser) for a specific web domain. They are part of the Web Storage API and provide a way to store key-value pairs persistently (local storage) or for the duration of a page session (session storage).</p>
 <p>On the one side, data stored using local storage persists even after the browser is closed, and is available across multiple browser sessions. It is suitable for storing user preferences, cached data, or application state.</p>
@@ -58,37 +77,37 @@
 <p>Use this method to retrieve the value associated with a specific key. It returns the stored value as a string.</p>
 <h3 id="removeitem(key)">removeItem(key)</h3>
 <p>Use this method to remove a specific key-value pair from either session storage or local storage.</p>
-<pre class="fit border line-height-5 p-3 small">// Storing data in local storage
-localStorage.setItem(&quot;username&quot;, &quot;John&quot;);
+<pre><span class="hljs-comment">// Storing data in local storage</span>
+<span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">setItem</span>(<span class="hljs-string">&quot;username&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>);
 
-// Retrieving data from local storage
-const username = localStorage.getItem(&quot;username&quot;); // Returns &quot;John&quot;
+<span class="hljs-comment">// Retrieving data from local storage</span>
+<span class="hljs-keyword">const</span> username = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&quot;username&quot;</span>); <span class="hljs-comment">// Returns &quot;John&quot;</span>
 
-// Removing data from local storage
-localStorage.removeItem(&quot;username&quot;);</pre>
+<span class="hljs-comment">// Removing data from local storage</span>
+<span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">removeItem</span>(<span class="hljs-string">&quot;username&quot;</span>);</pre>
 <h2 id="creating-the-react-hook">Creating the React Hook</h2>
 <p>Now, let's create a custom React hook to simplify working with local storage or session storage in React components, by encapsulating the logic for reading and writing values.</p>
-<pre class="fit border line-height-5 p-3 small">import {useState, useEffect} from &quot;react&quot;;
+<pre><span class="hljs-keyword">import</span> {useState, useEffect} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
 
-export const useStorage = (store, key, defaultValue) =&gt; {
-    // Initialize the state with the current value from storage or the default value
-    const [currentValue, setCurrentValue] = useState(() =&gt; {
-        // Attempt to retrieve the value from storage
-        const storedValue = store.getItem(key);
-        // If the value exists in storage, parse and return it
-        if (storedValue !== null) {
-            return JSON.parse(storedValue);
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useStorage</span> = (<span class="hljs-params">store, key, defaultValue</span>) =&gt; {
+    <span class="hljs-comment">// Initialize the state with the current value from storage or the default value</span>
+    <span class="hljs-keyword">const</span> [currentValue, setCurrentValue] = <span class="hljs-title function_">useState</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-comment">// Attempt to retrieve the value from storage</span>
+        <span class="hljs-keyword">const</span> storedValue = store.<span class="hljs-title function_">getItem</span>(key);
+        <span class="hljs-comment">// If the value exists in storage, parse and return it</span>
+        <span class="hljs-keyword">if</span> (storedValue !== <span class="hljs-literal">null</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(storedValue);
         }
-        // Otherwise, return the default value
-        return defaultValue;
+        <span class="hljs-comment">// Otherwise, return the default value</span>
+        <span class="hljs-keyword">return</span> defaultValue;
     });
-    // Update the storage value whenever currentValue changes
-    useEffect(() =&gt; {
-        // Serialize the new value and store it
-        store.setItem(key, JSON.stringify(currentValue));
+    <span class="hljs-comment">// Update the storage value whenever currentValue changes</span>
+    <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-comment">// Serialize the new value and store it</span>
+        store.<span class="hljs-title function_">setItem</span>(key, <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(currentValue));
     }, [currentValue]);
-    // Return the pair [currentValue, setCurrentValue]
-    return [currentValue, setCurrentValue];
+    <span class="hljs-comment">// Return the pair [currentValue, setCurrentValue]</span>
+    <span class="hljs-keyword">return</span> [currentValue, setCurrentValue];
 };</pre>
 <p>This hook follows these steps:</p>
 <h3 id="1.-initializes-the-state">1. Initializes the state</h3>
@@ -98,54 +117,67 @@ export const useStorage = (store, key, defaultValue) =&gt; {
 <h3 id="3.-returns-the-pair-[currentvalue,-setcurrentvalue]">3. Returns the pair [currentValue, setCurrentValue]</h3>
 <p>It returns the pair <code>[currentValue, setCurrentValue]</code>, allowingyou to read and update the value in storage.</p>
 <p>We can improve the previous code by creating two wrappers for using directly local or session storage, without having to provide this value as an argument to the hook:</p>
-<pre class="fit border line-height-5 p-3 small">export const useLocalStorage = (key, defaultValue) =&gt; {
-    return useStorage(window.localStorage, key, defaultValue);
+<pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useLocalStorage</span> = (<span class="hljs-params">key, defaultValue</span>) =&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">useStorage</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">localStorage</span>, key, defaultValue);
 };
 
-export const useSessionStorage = (key, defaultValue) =&gt; {
-    return useStorage(window.sessionStorage, key, defaultValue);
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useSessionStorage</span> = (<span class="hljs-params">key, defaultValue</span>) =&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">useStorage</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">sessionStorage</span>, key, defaultValue);
 };</pre>
 <p>This way, we can use the <code>useLocalStorage</code> and <code>useSessionStorage</code> hooks without having to pass the storage object as an argument.</p>
-<pre class="fit border line-height-5 p-3 small">import React from &quot;react&quot;;
-import {useLocalStorage} from &quot;./useStorage.js&quot;;
+<pre><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+<span class="hljs-keyword">import</span> {useLocalStorage} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./useStorage.js&quot;</span>;
 
-export const MyCounter = () =&gt; {
-    // Use the useLocalStorage hook to manage a value in local storage
-    const [count, setCount] = useLocalStorage(&quot;count&quot;, 0);
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">MyCounter</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-comment">// Use the useLocalStorage hook to manage a value in local storage</span>
+    <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useLocalStorage</span>(<span class="hljs-string">&quot;count&quot;</span>, <span class="hljs-number">0</span>);
 
-    return (
-        &lt;div className=&quot;flex gap-2&quot;&gt;
-            &lt;button onClick={() =&gt; setCount(prev =&gt; prev - 1)}&gt;
-                &lt;span&gt;-&lt;/span&gt;
-            &lt;/button&gt;
-            &lt;div&gt;{count}&lt;/div&gt;
-            &lt;button onClick={() =&gt; setCount(prev =&gt; prev + 1)}&gt;
-                &lt;span&gt;+&lt;/span&gt;
-            &lt;/button&gt;
-        &lt;/div&gt;
+    <span class="hljs-keyword">return</span> (
+        <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;flex gap-2&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(prev =&gt; prev - 1)}&gt;
+                <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(prev =&gt; prev + 1)}&gt;
+                <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
     );
 };</pre>
+    </div>
 
-    </main>
-    <footer class="container mt-6">
-    <div class="border-top"></div>
-    <div class="sm-flex flex-baseline flex-wrap py-4 mx-n2">
-        
-        
-            <div class="sm-flex flex-baseline">
+    
+    
+</div>
+
+</main>
+
+    <footer class="w-full pt-12 pb-16">
+    <div class="w-full h-px bg-current mb-12 opacity-20"></div>
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        <div class="sm:flex flex-wrap justify-between">
+            <div class="flex flex-wrap gap-4 items-center">
                 
-                    <a href="https://github.com/jmjuanes" class="control control-link fw-bold fs-0">GitHub</a>
+                    <a href="https://github.com/jmjuanes" class="font-medium text-base hover:underline">
+                        <span>GitHub</span>
+                    </a>
                 
-                    <a href="https://linkedin.com/in/jmjuanes" class="control control-link fw-bold fs-0">Linkedin</a>
+                    <a href="https://linkedin.com/in/jmjuanes" class="font-medium text-base hover:underline">
+                        <span>Linkedin</span>
+                    </a>
                 
             </div>
-        
-        <div class="flex-auto"></div>
-        <a href="/" class="control control-link fs-0">
-            <span>Handcrafted by <b>Josemi</b>.</span>
-        </a>
-    </div>
+            <div class="text-base text-current">
+                <span>Handcrafted by <b>Josemi</b>.</span>
+            </div>
+        </div>
+    
+</div>
+
 </footer>
+
 
 </body>
 </html>
+

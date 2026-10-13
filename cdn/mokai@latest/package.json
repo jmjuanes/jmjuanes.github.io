@@ -1,0 +1,32 @@
+{
+    "name": "mokai",
+    "version": "0.6.1",
+    "type": "module",
+    "description": "Tiny code editor for the web",
+    "repository": "https://github.com/jmjuanes/mokai",
+    "author": "Josemi Juanes <hello@josemi.xyz>",
+    "bugs": "https://github.com/jmjuanes/mokai/issues",
+    "homepage": "https://www.josemi.xyz/mokai",
+    "main": "index.js",
+    "module": "index.js",
+    "exports": {
+        ".": "./index.js",
+        "./index.js": "./index.js",
+        "./styles.css": "./styles.css",
+        "./mokai.js": "./index.js",
+        "./mokai.css": "./styles.css",
+        "./package.json": "./package.json"
+    },
+    "types": "./index.d.ts",
+    "scripts": {
+        "release": "node scripts/release.js"
+    },
+    "files": [
+        "README.md",
+        "LICENSE",
+        "styles.css",
+        "index.js",
+        "index.d.ts"
+    ],
+    "license": "MIT"
+}

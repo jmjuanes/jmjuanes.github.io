@@ -1,0 +1,83 @@
+/* Reset box sizing and borders of all elements */
+*,
+*:before,
+*:after {
+    border-color: currentColor;
+    border-style: solid;
+    border-width: 0;
+    box-sizing: border-box;
+}
+
+/* Set default html style */
+html {
+    font-size: 16px;
+    line-height: 1.5;
+    scroll-behavior: smooth;
+}
+
+/* Set default body style */
+body {
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Reset margins in some elements */
+:where(blockquote, h1, h2, h3, h4, h5, h6, hr, p, pre) {
+    margin: 0;
+}
+
+/* Normalize typography in headings */
+:where(h1, h2, h3, h4, h5, h6) {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Reset margins on lists */
+:where(ul, ol, dl) {
+    margin: 0;
+    padding: 0;
+}
+
+/* Fix bold weight (in firefox) */
+:where(strong, b) {
+    font-weight: bold;
+}
+
+/* Reset links */
+:where(a) {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+/* Make images and videos responsive by default */
+:where(img, video) {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+/* Reset table border */
+:where(table) {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Reset form elements */
+:where(button, input, select, textarea) {
+    color: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+/* Prevent resizing textareas horizontally */
+:where(textarea) {
+    resize: vertical;
+}

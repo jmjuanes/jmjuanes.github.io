@@ -1,0 +1,134 @@
+:root {
+    /* heading customization variables */
+    --heading-font-weight: 700;
+    --heading-foreground: inherit;
+    --heading-line-height: 1.125;
+    --heading-margin-top: var(--spacing-10);
+    --heading-margin-bottom: var(--spacing-4);
+
+    /* paragraph customization variables */
+    --paragraph-line-height: 1.75;
+    --paragraph-margin-top: 0;
+    --paragraph-margin-bottom: var(--spacing-4);
+
+    /* list customization variables */
+    --list-margin-top: 0;
+    --list-margin-bottom: var(--spacing-4);
+
+    /* code block variables */
+    --code-background: var(--card);
+    --code-border-radius: var(--radius-xl);
+    --code-font-family: var(--font-family-mono);
+    --code-font-size: var(--font-size-sm);
+    --code-foreground: inherit;
+    --code-line-height: 1.75;
+    --code-padding-y: var(--spacing-1);
+    --code-padding-x: var(--spacing-2);
+
+    /* pre element variables */
+    --pre-margin-bottom: var(--spacing-4);
+    --pre-margin-top: 0;
+    --pre-padding-x: var(--spacing-6);
+    --pre-padding-y: var(--spacing-4);
+
+    /* horizontal rule variables */
+    --rule-border-color: var(--card);
+    --rule-border-width: 2px;
+    --rule-margin-top: var(--spacing-8);
+    --rule-margin-bottom: var(--spacing-8);
+
+    /* links variables */
+    --link-foreground: inherit;
+    --link-text-decoration: none;
+    --link-hover-text-decoration: underline;
+}
+
+/* base page styles with minimum height and readable line-height */
+:where(body) {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    font-optical-sizing: auto;
+    font-style: normal;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* customize style for horizontal rules */
+:where(hr) {
+    border: 0;
+    border-bottom: var(--rule-border-width) solid var(--rule-border-color);
+    margin-bottom: var(--rule-margin-bottom);
+    margin-top: var(--rule-margin-top);
+}
+
+/* heading styles */
+:where(h1),
+:where(h2),
+:where(h3),
+:where(h4),
+:where(h5),
+:where(h6) {
+    color: var(--heading-foreground);
+    font-family: var(--font-heading);
+    font-weight: var(--heading-font-weight);
+    line-height: var(--heading-line-height);
+    margin-bottom: var(--heading-margin-bottom);
+}
+:where(h1:not(:first-child)),
+:where(h2:not(:first-child)),
+:where(h3:not(:first-child)),
+:where(h4:not(:first-child)),
+:where(h5:not(:first-child)),
+:where(h6:not(:first-child)) {
+    margin-top: var(--heading-margin-top);
+}
+:where(h1) { font-size: var(--font-size-4xl); }
+:where(h2) { font-size: var(--font-size-3xl); }
+:where(h3) { font-size: var(--font-size-2xl); }
+:where(h4) { font-size: var(--font-size-xl); }
+:where(h5) { font-size: var(--font-size-lg); }
+
+/* paragraph styles */
+:where(p) {
+    line-height: var(--paragraph-line-height);
+    margin-bottom: var(--paragraph-margin-bottom);
+    margin-top: var(--paragraph-margin-top);
+}
+
+/* list styles */
+:where(dl),
+:where(ol),
+:where(ul) {
+    margin-top: var(--list-margin-top);
+    margin-bottom: var(--list-margin-bottom);
+}
+
+/* code styles */
+:where(pre),
+:where(code) {
+    background-color: var(--code-background);
+    border-radius: var(--code-border-radius);
+    color: var(--code-foreground);
+    font-family: var(--code-font-family);
+    font-size: var(--code-font-size);
+    line-height: var(--code-line-height);
+}
+:where(code) {
+    padding: var(--code-padding-y) var(--code-padding-x);
+}
+:where(pre) {
+    margin-top: var(--pre-margin-top);
+    margin-bottom: var(--pre-margin-bottom);
+    overflow-x: auto;
+    padding: var(--pre-padding-y) var(--pre-padding-x);
+}
+
+/* links */
+:where(a) {
+    color: var(--link-foreground);
+    text-decoration: var(--link-text-decoration);
+}
+:where(a:hover) {
+    text-decoration: var(--link-hover-text-decoration);
+}

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lapse</title>
+    <link rel="stylesheet" href="/cdn/lowcss@latest/low.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen p-4">
+    <main class="w-full max-w-md my-8 mx-auto p-6 border-1 border-gray-200 bg-white shadow-sm rounded-xl">
+        <header class="mb-6">
+            <h1 class="text-xl font-bold mt-0 mb-2">Lapse</h1>
+            <p class="text-sm opacity-80">
+                Elapsed time between two times, per interval and in total.
+            </p>
+        </header>
+        <!-- header for the times rows -->
+        <div class="grid grid-cols-4 gap-2 text-xs font-medium mb-2" aria-hidden="true">
+            <span class="text-center">Start</span>
+            <span class="text-center">End</span>
+            <span class="text-center">Elapsed</span>
+            <span></span>
+        </div>
+        <!-- intervals rows -->
+        <div id="rows" class="flex flex-col gap-2"></div>
+
+        <div class="flex gap-2 mt-4">
+            <button id="add" type="button" class="inline-flex gap-2 items-center py-2 px-3 rounded-lg bg-gray-950 hover:bg-gray-800 text-white border-0">
+                <svg class="block shrink-0 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+                <span class="font-medium text-sm">Add interval</span>
+            </button>
+            <button id="reset" type="button" class="py-2 px-3 bg-gray-100 hover:bg-gray-200 rounded-lg">
+                <span class="font-medium text-sm">Clear</span>
+            </button>
+        </div>
+
+        <div class="bg-gray-300 h-px my-6"></div>
+
+        <div class="flex items-center justify-between">
+            <span class="text-sm font-medium">Total</span>
+            <div class="text-right">
+                <div id="total" class="text-2xl font-bold" style="font-variant-numeric: tabular-nums; letter-spacing: -0.025em;">0h 00m</div>
+                <div id="decimal" class="text-sm opacity-80" style="font-variant-numeric: tabular-nums;">0.00 h</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const STORAGE_KEY = "lapse";
+        const emptyRow = () => ({ start: "", end: "" });
+
+        const rowsEl = document.querySelector("#rows");
+        const totalEl = document.querySelector("#total");
+        const decimalEl = document.querySelector("#decimal");
+
+        const load = () => {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                if (Array.isArray(saved) && saved.length > 0) {
+                    return saved.map(row => ({ start: row.start || "", end: row.end || "" }));
+                }
+            }
+            catch (error) {
+                // Storage unavailable: start blank
+            }
+            return [emptyRow()];
+        };
+
+        const save = () => {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state.rows));
+            }
+            catch (error) {
+                // Ignore
+            }
+        };
+
+        const state = { rows: load() };
+
+        // "HH:MM" -> minutes since 00:00 (null if empty)
+        const toMinutes = value => {
+            if (!value) {
+                return null;
+            }
+            const [hours, minutes] = value.split(":").map(Number);
+            return hours * 60 + minutes;
+        };
+
+        const formatDuration = minutes => {
+            const hours = Math.floor(minutes / 60);
+            return `${hours}h ${String(minutes % 60).padStart(2, "0")}m`;
+        };
+
+        const formatDecimal = minutes => {
+            const value = (minutes / 60).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
+            return `${value} h`;
+        };
+
+        // Rebuild the rows (only on add, remove or clear, so typing never loses focus)
+        const renderRows = () => {
+            rowsEl.innerHTML = state.rows.map((row, index) => `
+                <div class="w-full grid grid-cols-4 gap-2" data-index="${index}">
+                    <input class="rounded-lg p-2 border-1 border-gray-200 bg-white text-sm" type="time" aria-label="Start" data-field="start" value="${row.start}">
+                    <input class="rounded-lg p-2 border-1 border-gray-200 bg-white text-sm" type="time" aria-label="End" data-field="end" value="${row.end}">
+                    <div class="w-full flex items-center justify-center">
+                        <span class="text-sm font-bold" data-result>—</span>
+                    </div>
+                    <div class="w-full flex items-center justify-end">
+                        <button type="button" class="flex p-2 rounded-lg bg-white hover:bg-gray-100" aria-label="Remove interval" data-remove>
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <path d="M18 6 6 18M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join("");
+            update();
+        };
+
+        const update = () => {
+            let total = 0;
+            state.rows.forEach((row, index) => {
+                const result = rowsEl.children[index].querySelector("[data-result]");
+                const start = toMinutes(row.start);
+                const end = toMinutes(row.end);
+                result.className = "result muted";
+                if (start === null || end === null) {
+                    result.textContent = "—";
+                }
+                else if (end < start) {
+                    result.className = "result error";
+                    result.textContent = "End < start";
+                }
+                else {
+                    total = total + (end - start);
+                    result.className = "result";
+                    result.textContent = formatDuration(end - start);
+                }
+            });
+            totalEl.textContent = formatDuration(total);
+            decimalEl.textContent = formatDecimal(total);
+            save();
+        };
+
+        rowsEl.addEventListener("input", event => {
+            const field = event.target.dataset.field;
+            if (field) {
+                const index = Number(event.target.closest("[data-index]").dataset.index);
+                state.rows[index][field] = event.target.value;
+                update();
+            }
+        });
+
+        rowsEl.addEventListener("click", event => {
+            const button = event.target.closest("[data-remove]");
+            if (button) {
+                const index = Number(button.closest("[data-index]").dataset.index);
+                state.rows.splice(index, 1);
+                if (state.rows.length === 0) {
+                    state.rows.push(emptyRow());
+                }
+                renderRows();
+            }
+        });
+
+        document.querySelector("#add").addEventListener("click", () => {
+            state.rows.push(emptyRow());
+            renderRows();
+            rowsEl.lastElementChild.querySelector("input").focus();
+        });
+
+        document.querySelector("#reset").addEventListener("click", () => {
+            state.rows = [emptyRow()];
+            renderRows();
+        });
+
+        renderRows();
+    </script>
+</body>
+</html>

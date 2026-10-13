@@ -1,6 +1,15 @@
-.theme-default {
-    --font-family-body: "Geist", sans-serif;
-    --font-family-mono: "Geist Mono", monospace;
-    --background: #f2f1ed;
-    --foreground: #3d3d3a;
+:root {
+    /* theme fonts */
+    --font-body: "Geist", sans-serif;
+    --font-heading: inherit;
+    --font-mono: "Geist Mono", monospace;
+
+    /* theme colors */
+    --foreground: #111111;
+    --background: #F7F3EF;
+    --card: #FDF9F8;
+    --warning: #FFE59A;
+    --danger: #FFB5C1;
+    --success: #B7E1D1;
+    --info: #A9D3FF;
 }
