@@ -1,0 +1,146 @@
+
+<!doctype html>
+<html lang="en" style="overscroll-behavior-x:none;" class="height-full">
+<head>
+    <!--
+        josemi.xyz v0.0.0
+        Repository: https://github.com/jmjuanes/josemi
+        Latest commit: ad4a0affd388632363ce3d42c2e3d84961c21e9d
+        Build date: Monday, November 16, 2026 at 8:53:46 PM GMT+1
+    -->
+    <meta charSet="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="title" content="Lapse">
+    <meta name="description" content="Calculate the time elapsed between two times, across as many intervals as you need.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:description" content="Calculate the time elapsed between two times, across as many intervals as you need.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilda+Display&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap">
+    <!--
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap">
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap">
+    <link rel="stylesheet" href="/vendor/highlight.css">
+    <link rel="stylesheet" href="/vendor/low.css">
+    <!--
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/utilities.css">
+    -->
+    <title>Lapse - josemi</title>
+    <style>
+        .font-body { font-family: "Albert Sans", sans-serif !important; }
+        .font-heading { font-family: "Gilda Display", serif !important; font-weight: 400 !important; }
+        .font-mono { font-family: "Geist Mono", monospace !important; }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-body flex flex-col items-start">
+    <header class="w-full py-6">
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        <div class="flex justify-between">
+            <div class="flex shrink-0 items-center">
+                <div class="flex gap-1 text-xl">
+                    <a href="/" class="font-medium text-current">josemi</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    
+</div>
+
+</header>
+
+    <main class="w-full py-0" style="flex:1;">
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        
+        
+    <div class="flex flex-col gap-0 pt-4 pb-12">
+        <div class="text-4xl md:text-5xl font-heading leading-snug mb-0">
+            <span>Lapse</span>
+        </div>
+        
+            <div class="text-2xl opacity-60 font-medium">Calculate the time elapsed between two times, across as many intervals as you need.</div>
+        
+        
+    </div>
+    
+    <div class="prose">
+        
+<!--html-->
+<div class="w-full max-w-md my-8 mx-auto p-6 border-1 border-gray-200 bg-white shadow-sm rounded-xl">
+    <!-- header for the times rows -->
+    <div class="grid grid-cols-4 gap-2 text-xs font-medium mb-2" aria-hidden="true">
+        <span class="text-center">Start</span>
+        <span class="text-center">End</span>
+        <span class="text-center">Elapsed</span>
+        <span></span>
+    </div>
+    <!-- intervals rows -->
+    <div id="rows" class="flex flex-col gap-2"></div>
+    <div class="flex gap-2 mt-4">
+        <button id="add" type="button" class="inline-flex gap-2 items-center py-2 px-3 rounded-lg bg-gray-950 hover:bg-gray-800 text-white border-0">
+            <svg class="block shrink-0 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M12 5v14M5 12h14" />
+            </svg>
+            <span class="font-medium text-sm">Add interval</span>
+        </button>
+        <button id="reset" type="button" class="py-2 px-3 bg-gray-100 hover:bg-gray-200 rounded-lg">
+            <span class="font-medium text-sm">Clear</span>
+        </button>
+    </div>
+    <div class="bg-gray-300 h-px my-6"></div>
+    <div class="flex items-center justify-between">
+        <span class="text-sm font-medium">Total</span>
+        <div class="text-right">
+            <div id="total" class="text-2xl font-bold" style="font-variant-numeric: tabular-nums; letter-spacing: -0.025em;">0h 00m</div>
+            <div id="decimal" class="text-sm opacity-80" style="font-variant-numeric: tabular-nums;">0.00 h</div>
+        </div>
+    </div>
+</div>
+<script src="/js/lapse.js"></script>
+<!--/html-->
+    </div>
+
+
+    
+    
+</div>
+
+</main>
+
+    <footer class="w-full pt-12 pb-16">
+    <div class="w-full h-px bg-current mb-12 opacity-20"></div>
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        <div class="sm:flex flex-wrap justify-between">
+            <div class="flex flex-wrap gap-4 items-center">
+                
+                    <a href="https://github.com/jmjuanes" class="font-medium text-base hover:underline">
+                        <span>GitHub</span>
+                    </a>
+                
+                    <a href="https://linkedin.com/in/jmjuanes" class="font-medium text-base hover:underline">
+                        <span>Linkedin</span>
+                    </a>
+                
+            </div>
+            <div class="text-base text-current">
+                <span>Handcrafted by <b>Josemi</b>.</span>
+            </div>
+        </div>
+    
+</div>
+
+</footer>
+
+</body>
+</html>
+
