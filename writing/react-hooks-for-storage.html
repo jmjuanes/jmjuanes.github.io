@@ -5,8 +5,8 @@
     <!--
         josemi.xyz v0.0.0
         Repository: https://github.com/jmjuanes/josemi
-        Latest commit: ad4a0affd388632363ce3d42c2e3d84961c21e9d
-        Build date: Monday, November 16, 2026 at 8:53:46 PM GMT+1
+        Latest commit: b915551d2da7a5115217f129477482c1627281d1
+        Build date: Sunday, November 22, 2026 at 9:50:19 PM GMT+1
     -->
     <meta charSet="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
@@ -20,26 +20,17 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilda+Display&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@100..900&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap">
-    <!--
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap">
-    -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap">
     <link rel="stylesheet" href="/vendor/highlight.css">
     <link rel="stylesheet" href="/vendor/low.css">
-    <!--
+    <link rel="stylesheet" href="/css/polar.css">
     <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/utilities.css">
-    -->
+    <link rel="stylesheet" href="/css/aurora.css">
     <title>React Hooks and Local Storage - josemi</title>
-    <style>
-        .font-body { font-family: "Albert Sans", sans-serif !important; }
-        .font-heading { font-family: "Gilda Display", serif !important; font-weight: 400 !important; }
-        .font-mono { font-family: "Geist Mono", monospace !important; }
-    </style>
 </head>
 
-<body class="bg-gray-50 text-gray-900 font-body flex flex-col items-start">
+<body class="bg-background text-foreground font-body flex flex-col items-start">
     <header class="w-full py-6">
     <div class="mx-auto w-full max-w-4xl px-6">
     
@@ -72,9 +63,14 @@
         
             <div class="text-2xl opacity-60 font-medium">A guide for creating React Hooks to access to the Local and Session Storage of the browser in a simple way.</div>
         
-        
-            <div class="text-base opacity-40 mt-1">September 24, 2023</div>
-        
+        <div class="mt-2 flex flex-wrap gap-2 items-center">
+            
+                <div class="text-base mb-0 text-muted-foreground leading-none">
+                    <span>September 24, 2023</span>
+                </div>
+            
+            
+        </div>
     </div>
     
     <div class="prose">
@@ -92,7 +88,7 @@
 <p class="leading-normal mb-6 block text-justify">Use this method to retrieve the value associated with a specific key. It returns the stored value as a string.</p>
 <h3 class="font-heading mt-0 mb-4 text-2xl" id="removeitem(key)">removeItem(key)</h3>
 <p class="leading-normal mb-6 block text-justify">Use this method to remove a specific key-value pair from either session storage or local storage.</p>
-<pre class="block font-mono overflow-x-auto mb-8 bg-gray-100 text-current text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-comment">// Storing data in local storage</span>
+<pre class="block font-mono overflow-x-auto mt-6 mb-8 bg-foreground text-background text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-comment">// Storing data in local storage</span>
 <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">setItem</span>(<span class="hljs-string">&quot;username&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>);
 
 <span class="hljs-comment">// Retrieving data from local storage</span>
@@ -102,7 +98,7 @@
 <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">removeItem</span>(<span class="hljs-string">&quot;username&quot;</span>);</pre>
 <h2 class="font-heading mt-0 mb-4 text-3xl" id="creating-the-react-hook">Creating the React Hook</h2>
 <p class="leading-normal mb-6 block text-justify">Now, let's create a custom React hook to simplify working with local storage or session storage in React components, by encapsulating the logic for reading and writing values.</p>
-<pre class="block font-mono overflow-x-auto mb-8 bg-gray-100 text-current text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-keyword">import</span> {useState, useEffect} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+<pre class="block font-mono overflow-x-auto mt-6 mb-8 bg-foreground text-background text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-keyword">import</span> {useState, useEffect} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useStorage</span> = (<span class="hljs-params">store, key, defaultValue</span>) =&gt; {
     <span class="hljs-comment">// Initialize the state with the current value from storage or the default value</span>
@@ -132,7 +128,7 @@
 <h3 class="font-heading mt-0 mb-4 text-2xl" id="3.-returns-the-pair-[currentvalue,-setcurrentvalue]">3. Returns the pair [currentValue, setCurrentValue]</h3>
 <p class="leading-normal mb-6 block text-justify">It returns the pair <code>[currentValue, setCurrentValue]</code>, allowingyou to read and update the value in storage.</p>
 <p class="leading-normal mb-6 block text-justify">We can improve the previous code by creating two wrappers for using directly local or session storage, without having to provide this value as an argument to the hook:</p>
-<pre class="block font-mono overflow-x-auto mb-8 bg-gray-100 text-current text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useLocalStorage</span> = (<span class="hljs-params">key, defaultValue</span>) =&gt; {
+<pre class="block font-mono overflow-x-auto mt-6 mb-8 bg-foreground text-background text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useLocalStorage</span> = (<span class="hljs-params">key, defaultValue</span>) =&gt; {
     <span class="hljs-keyword">return</span> <span class="hljs-title function_">useStorage</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">localStorage</span>, key, defaultValue);
 };
 
@@ -140,7 +136,7 @@
     <span class="hljs-keyword">return</span> <span class="hljs-title function_">useStorage</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">sessionStorage</span>, key, defaultValue);
 };</pre>
 <p class="leading-normal mb-6 block text-justify">This way, we can use the <code>useLocalStorage</code> and <code>useSessionStorage</code> hooks without having to pass the storage object as an argument.</p>
-<pre class="block font-mono overflow-x-auto mb-8 bg-gray-100 text-current text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+<pre class="block font-mono overflow-x-auto mt-6 mb-8 bg-foreground text-background text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
 <span class="hljs-keyword">import</span> {useLocalStorage} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./useStorage.js&quot;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">MyCounter</span> = (<span class="hljs-params"></span>) =&gt; {

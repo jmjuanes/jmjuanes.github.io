@@ -1,0 +1,263 @@
+
+<!doctype html>
+<html lang="en" style="overscroll-behavior-x:none;" class="height-full">
+<head>
+    <!--
+        josemi.xyz v0.0.0
+        Repository: https://github.com/jmjuanes/josemi
+        Latest commit: b915551d2da7a5115217f129477482c1627281d1
+        Build date: Sunday, November 22, 2026 at 9:50:19 PM GMT+1
+    -->
+    <meta charSet="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="title" content="Aurora background">
+    <meta name="description" content="A dark card background made of blurred light leaks and film grain, built with pure CSS and driven by the polar palette.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:description" content="A dark card background made of blurred light leaks and film grain, built with pure CSS and driven by the polar palette.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilda+Display&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap">
+    <link rel="stylesheet" href="/vendor/highlight.css">
+    <link rel="stylesheet" href="/vendor/low.css">
+    <link rel="stylesheet" href="/css/polar.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/utilities.css">
+    <link rel="stylesheet" href="/css/aurora.css">
+    <title>Aurora background - josemi</title>
+</head>
+
+<body class="bg-background text-foreground font-body flex flex-col items-start">
+    <header class="w-full py-6">
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        <div class="flex justify-between">
+            <div class="flex shrink-0 items-center">
+                <div class="flex gap-1 text-xl">
+                    <a href="/" class="font-medium text-current">josemi</a>
+                    
+                        <span> / </span>
+                        <a href="/experiments" class="opacity-60 text-current font-medium">experiments</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    
+</div>
+
+</header>
+
+    <main class="w-full py-0" style="flex:1;">
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        
+        
+    <div class="flex flex-col gap-0 pt-4 pb-12">
+        <div class="text-4xl md:text-5xl font-heading leading-snug mb-0">
+            <span>Aurora background</span>
+        </div>
+        
+            <div class="text-2xl opacity-60 font-medium">A dark card background made of blurred light leaks and film grain, built with pure CSS and driven by the polar palette.</div>
+        
+        <div class="mt-2 flex flex-wrap gap-2 items-center">
+            
+                <div class="text-base mb-0 text-muted-foreground leading-none">
+                    <span>November 22, 2026</span>
+                </div>
+            
+            
+                
+                    <div class="text-muted-foreground leading-none"> · </div>
+                
+                
+                    <div class="rounded-full px-2 py-1 leading-none text-sm bg-muted text-muted-foreground">
+                        <span>css</span>
+                    </div>
+                
+                    <div class="rounded-full px-2 py-1 leading-none text-sm bg-muted text-muted-foreground">
+                        <span>gradients</span>
+                    </div>
+                
+                    <div class="rounded-full px-2 py-1 leading-none text-sm bg-muted text-muted-foreground">
+                        <span>background</span>
+                    </div>
+                
+                    <div class="rounded-full px-2 py-1 leading-none text-sm bg-muted text-muted-foreground">
+                        <span>design-system</span>
+                    </div>
+                
+            
+        </div>
+    </div>
+    
+    <div class="prose">
+        
+<p class="leading-normal mb-6 block text-justify">The aurora is a background for hero cards and call-to-action blocks: a near-black surface where soft colored light bleeds in from the edges, finished with a layer of film grain. It is built with plain CSS gradients, so it weighs zero bytes of image, scales to any size and uses the same color variables as the rest of the <a href="/design/theme">theme</a>.</p>
+<p class="leading-normal mb-6 block text-justify">It is meant to be used sparingly. One aurora per page, usually in a closing call to action or in the hero, is enough to give the site a focal point without competing with the content.</p>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="live-demo">Live demo</h2>
+<p class="leading-normal mb-6 block text-justify">Move the sliders to see how each parameter changes the result.</p>
+<!--html-->
+<section class="rounded-3xl bg-card p-6 mb-6">
+    <div class="aurora rounded-xl mb-4" id="aurora-preview">
+        <div class="flex flex-col items-center justify-center text-background text-center min-h-88 w-full p-6">
+            <div class="text-4xl font-heading mb-0">Ship the idea. Skip the setup.</div>
+            <div class="text-xl mb-4">Let's find where a small tool can save you the most time each week.</div>
+            <a class="bg-background text-foreground px-4 py-2 rounded-xl" href="#">
+                <span class="opacity-80">Start a project</span>
+            </a>
+        </div>
+    </div>
+    <div class="flex flex-col md:flex-row gap-4 w-full" id="aurora-controls">
+        <label class="grid items-center gap-3 grow-1 shrink-0" style="grid-template-columns: 4rem 1fr 2rem;">
+            <div class="font-medium">Blur</div>
+            <input type="range" min="0" max="120" step="1" value="40" data-prop="--aurora-blur" data-unit="px">
+            <output class="font-mono text-xs"></output>
+        </label>
+        <label class="grid items-center gap-3 grow-1 shrink-0" style="grid-template-columns: 4rem 1fr 2rem;">
+            <div class="font-medium">Intensity</div>
+            <input type="range" min="0" max="1" step="0.05" value="0.7" data-prop="--aurora-intensity">
+            <output class="font-mono text-xs"></output>
+        </label>
+        <label class="grid items-center gap-3 grow-1 shrink-0" style="grid-template-columns: 4rem 1fr 2rem;">
+            <div class="font-medium">Grain</div>
+            <input type="range" min="0" max="0.5" step="0.01" value="0.15" data-prop="--aurora-grain">
+            <output class="font-mono text-xs"></output>
+        </label>
+    </div>
+</section>
+<script>
+(() => {
+    const preview = document.querySelector("#aurora-preview");
+    const inputs = Array.from(document.querySelectorAll("#aurora-controls input"));
+    const update = () => {
+        return inputs.map(input => {
+            const value = `${input.value}${input.dataset.unit || ""}`;
+            preview.style.setProperty(input.dataset.prop, value);
+            input.parentElement.querySelector("output").textContent = value;
+            return `${input.dataset.prop}: ${value};`;
+        });
+    };
+    inputs.forEach(input => input.addEventListener("input", update));
+    update();
+})();
+</script>
+<!--/html-->
+<p class="leading-normal mb-6 block text-justify">The demo is self-contained: it carries its own copy of the CSS (with hex fallbacks, so it also works on a page that does not load the theme) and a small script for the sliders. Once the aurora lives in the brand stylesheet, the <code class="text-sm font-mono">&lt;style&gt;</code> block can be removed from this page.</p>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="anatomy">Anatomy</h2>
+<p class="leading-normal mb-6 block text-justify">The effect is made of three stacked layers. Understanding them makes it easy to tune.<ol class="list-inside pl-3 mt-2 mb-8"><li class="mb-2 pl-2"><strong class="font-bold">Base.</strong> A solid <code class="text-sm font-mono">dark-1</code> background on the element itself. Everything else paints on top of it.</li><li class="mb-2 pl-2"><strong class="font-bold">Light leaks.</strong> A <code class="text-sm font-mono">::before</code> pseudo-element, larger than the card, holding several elliptical radial gradients plus one diagonal linear gradient for the streak. The whole layer is blurred, which turns the hard-edged gradients into soft glows.</li><li class="mb-2 pl-2"><strong class="font-bold">Grain.</strong> An <code class="text-sm font-mono">::after</code> pseudo-element with an SVG noise filter, blended with <code class="text-sm font-mono">overlay</code>. It breaks the perfectly smooth gradients, which is what makes the result look photographic instead of digital.</li></ol></p>
+<p class="leading-normal mb-6 block text-justify">The grain deserves a closer look, because it is the only part that is not a gradient. The <code class="text-sm font-mono">feTurbulence</code> filter generates fractal noise, a random-looking pattern similar to the texture of a photograph. It is drawn once on a 200×200 SVG tile, and the browser repeats that tile across the card (<code class="text-sm font-mono">stitchTiles=&#039;stitch&#039;</code> makes the edges match, so the repetition is invisible). The SVG is embedded as a data URI instead of a separate file to save a request, and <code class="text-sm font-mono">%23n</code> is just <code class="text-sm font-mono">#n</code> URL-encoded, which is how the rectangle refers to the filter with <code class="text-sm font-mono">id=&#039;n&#039;</code>. The strength is not part of the SVG: <code class="text-sm font-mono">--aurora-grain</code> controls it through the opacity of the pseudo-element.</p>
+<p class="leading-normal mb-6 block text-justify">The element uses <code class="text-sm font-mono">isolation: isolate</code> so the pseudo-elements can sit behind the content (<code class="text-sm font-mono">z-index: -1</code> and <code class="text-sm font-mono">-2</code>) without escaping the card.</p>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="usage">Usage</h2>
+<p class="leading-normal mb-6 block text-justify">Add the class to any container. Content goes inside as usual:</p>
+<pre class="block font-mono overflow-x-auto mt-6 mb-8 bg-foreground text-background text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;aurora&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Start saving time. Start scaling faster.<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Let&#x27;s identify where automation can make the biggest impact.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/contact&quot;</span>&gt;</span>Book a free call<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></pre>
+<p class="leading-normal mb-6 block text-justify">The container needs some padding and a fixed or minimum height to show enough surface. Something around <code class="text-sm font-mono">min-height: 24rem</code> and <code class="text-sm font-mono">padding: 4rem 2rem</code> works well for a call to action.</p>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="the-css">The CSS</h2>
+<pre class="block font-mono overflow-x-auto mt-6 mb-8 bg-foreground text-background text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-selector-class">.aurora</span> {
+    <span class="hljs-comment">/* tunable parameters */</span>
+    <span class="hljs-attr">--aurora-base</span>: <span class="hljs-built_in">var</span>(--polar-dark-<span class="hljs-number">1</span>);
+    <span class="hljs-attr">--aurora-color-1</span>: <span class="hljs-built_in">var</span>(--polar-glacier-<span class="hljs-number">2</span>);
+    <span class="hljs-attr">--aurora-color-2</span>: <span class="hljs-built_in">var</span>(--polar-accent-orange);
+    <span class="hljs-attr">--aurora-color-3</span>: <span class="hljs-built_in">var</span>(--polar-glacier-<span class="hljs-number">3</span>);
+    <span class="hljs-attr">--aurora-streak</span>: <span class="hljs-built_in">var</span>(--polar-glacier-<span class="hljs-number">1</span>);
+    <span class="hljs-attr">--aurora-blur</span>: <span class="hljs-number">40px</span>;
+    <span class="hljs-attr">--aurora-intensity</span>: <span class="hljs-number">0.7</span>;
+    <span class="hljs-attr">--aurora-grain</span>: <span class="hljs-number">0.15</span>;
+
+    <span class="hljs-attribute">position</span>: relative;
+    <span class="hljs-attribute">overflow</span>: hidden;
+    <span class="hljs-attribute">isolation</span>: isolate;
+    <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">3rem</span>;
+    <span class="hljs-attribute">background</span>: <span class="hljs-built_in">var</span>(--aurora-base);
+    <span class="hljs-attribute">color</span>: <span class="hljs-built_in">var</span>(--polar-mist-<span class="hljs-number">3</span>);
+}
+
+<span class="hljs-comment">/* light leaks */</span>
+<span class="hljs-selector-class">.aurora</span><span class="hljs-selector-pseudo">::before</span> {
+    <span class="hljs-attribute">content</span>: <span class="hljs-string">&quot;&quot;</span>;
+    <span class="hljs-attribute">position</span>: absolute;
+    <span class="hljs-attribute">inset</span>: -<span class="hljs-number">20%</span>;
+    <span class="hljs-attribute">z-index</span>: -<span class="hljs-number">2</span>;
+    <span class="hljs-attribute">background</span>:
+        <span class="hljs-built_in">linear-gradient</span>(<span class="hljs-number">115deg</span>, transparent <span class="hljs-number">35%</span>, <span class="hljs-built_in">var</span>(--aurora-streak) <span class="hljs-number">48%</span>, transparent <span class="hljs-number">60%</span>),
+        <span class="hljs-built_in">radial-gradient</span>(ellipse <span class="hljs-number">30%</span> <span class="hljs-number">45%</span> at <span class="hljs-number">25%</span> <span class="hljs-number">5%</span>, <span class="hljs-built_in">var</span>(--aurora-color-<span class="hljs-number">1</span>), transparent <span class="hljs-number">70%</span>),
+        <span class="hljs-built_in">radial-gradient</span>(ellipse <span class="hljs-number">26%</span> <span class="hljs-number">38%</span> at <span class="hljs-number">59%</span> <span class="hljs-number">20%</span>, <span class="hljs-built_in">var</span>(--aurora-color-<span class="hljs-number">2</span>), transparent <span class="hljs-number">70%</span>),
+        <span class="hljs-built_in">radial-gradient</span>(ellipse <span class="hljs-number">25%</span> <span class="hljs-number">40%</span> at <span class="hljs-number">100%</span> <span class="hljs-number">10%</span>, <span class="hljs-built_in">var</span>(--aurora-color-<span class="hljs-number">3</span>), transparent <span class="hljs-number">70%</span>),
+        <span class="hljs-built_in">radial-gradient</span>(ellipse <span class="hljs-number">25%</span> <span class="hljs-number">50%</span> at <span class="hljs-number">0%</span> <span class="hljs-number">85%</span>, <span class="hljs-built_in">var</span>(--aurora-color-<span class="hljs-number">3</span>), transparent <span class="hljs-number">70%</span>);
+    <span class="hljs-attribute">filter</span>: <span class="hljs-built_in">blur</span>(<span class="hljs-built_in">var</span>(--aurora-blur));
+    <span class="hljs-attribute">opacity</span>: <span class="hljs-built_in">var</span>(--aurora-intensity);
+}
+
+<span class="hljs-comment">/* film grain */</span>
+<span class="hljs-selector-class">.aurora</span><span class="hljs-selector-pseudo">::after</span> {
+    <span class="hljs-attribute">content</span>: <span class="hljs-string">&quot;&quot;</span>;
+    <span class="hljs-attribute">position</span>: absolute;
+    <span class="hljs-attribute">inset</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">z-index</span>: -<span class="hljs-number">1</span>;
+    <span class="hljs-attribute">background-image</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">&quot;data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;200&#x27; height=&#x27;200&#x27;&gt;&lt;filter id=&#x27;n&#x27;&gt;&lt;feTurbulence type=&#x27;fractalNoise&#x27; baseFrequency=&#x27;0.8&#x27; numOctaves=&#x27;3&#x27; stitchTiles=&#x27;stitch&#x27;/&gt;&lt;/filter&gt;&lt;rect width=&#x27;100%&#x27; height=&#x27;100%&#x27; filter=&#x27;url(%23n)&#x27;/&gt;&lt;/svg&gt;&quot;</span>);
+    <span class="hljs-attribute">opacity</span>: <span class="hljs-built_in">var</span>(--aurora-grain);
+    <span class="hljs-attribute">mix-blend-mode</span>: overlay;
+}</pre>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="parameters">Parameters</h2>
+<p class="leading-normal mb-6 block text-justify">Every value that is worth changing is a custom property on the element, so a variant never needs to touch the selectors above.</p>
+<div><table class="w-full mb-8 mt-6"><thead class="font-bold border-border border-b-2"><tr><td class="p-2">Property</td><td class="p-2">Default</td><td class="p-2">What it does</td></tr></thead><tbody><tr><td class="p-2"><code class="text-sm font-mono">--aurora-base</code></td><td class="p-2"><code class="text-sm font-mono">dark-1</code></td><td class="p-2">Color of the surface behind the glows.</td></tr><tr><td class="p-2"><code class="text-sm font-mono">--aurora-color-1</code></td><td class="p-2"><code class="text-sm font-mono">glacier-2</code></td><td class="p-2">Glow in the top left, the coldest and brightest one.</td></tr><tr><td class="p-2"><code class="text-sm font-mono">--aurora-color-2</code></td><td class="p-2"><code class="text-sm font-mono">accent-orange</code></td><td class="p-2">Warm glow at the top. It is the point of contrast, so keep it small.</td></tr><tr><td class="p-2"><code class="text-sm font-mono">--aurora-color-3</code></td><td class="p-2"><code class="text-sm font-mono">glacier-3</code></td><td class="p-2">Deep blue used in two corners to frame the card.</td></tr><tr><td class="p-2"><code class="text-sm font-mono">--aurora-streak</code></td><td class="p-2"><code class="text-sm font-mono">glacier-1</code></td><td class="p-2">Diagonal streak that imitates a lens flare.</td></tr><tr><td class="p-2"><code class="text-sm font-mono">--aurora-blur</code></td><td class="p-2"><code class="text-sm font-mono">40px</code></td><td class="p-2">How soft the glows are. Higher values look smoother and more atmospheric.</td></tr><tr><td class="p-2"><code class="text-sm font-mono">--aurora-intensity</code></td><td class="p-2"><code class="text-sm font-mono">0.7</code></td><td class="p-2">Overall strength of the glows.</td></tr><tr><td class="p-2"><code class="text-sm font-mono">--aurora-grain</code></td><td class="p-2"><code class="text-sm font-mono">0.15</code></td><td class="p-2">Strength of the film grain. Set it to <code class="text-sm font-mono">0</code> to remove it.</td></tr></tbody></table></div>A cooler variant that drops the warm accent, for example, is a single override:
+<pre class="block font-mono overflow-x-auto mt-6 mb-8 bg-foreground text-background text-xs leading-relaxed p-6 rounded-xl"><span class="hljs-selector-class">.aurora-cold</span> {
+    <span class="hljs-attr">--aurora-color-2</span>: <span class="hljs-built_in">var</span>(--polar-glacier-<span class="hljs-number">1</span>);
+}</pre>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="tuning-it">Tuning it</h2>
+<p class="leading-normal mb-6 block text-justify">The gradient positions are percentages of the pseudo-element, which is 40% larger than the card because of <code class="text-sm font-mono">inset: -20%</code>. This is the most common source of confusion: a glow placed at <code class="text-sm font-mono">0%</code> does not sit on the edge of the card, it sits 20% of the card <em>outside</em> of it, and most of it is cropped by <code class="text-sm font-mono">overflow: hidden</code>.</p>
+<p class="leading-normal mb-6 block text-justify">To place a glow at a given point of the card, convert it with <code class="text-sm font-mono">(card position + 20) / 1.4</code>. For example, a glow that should be centered at 60% of the width and 15% of the height of the card goes at <code class="text-sm font-mono">at 57% 25%</code>. The same factor applies to sizes: a radius of 30% of the pseudo-element is about 42% of the card.</p>
+<p class="leading-normal mb-6 block text-justify">A few more rules of thumb:<ul class="list-inside pl-3 mt-2 mb-8"><li class="mb-2 pl-2"><strong class="font-bold">Move a glow</strong> by changing the <code class="text-sm font-mono">at X% Y%</code> part of its gradient. Placing it partly outside of the card is fine and gives a natural look, but if a glow seems to be missing, check first that its center is not too far out.</li><li class="mb-2 pl-2"><strong class="font-bold">Change a glow's size</strong> with the first two numbers (<code class="text-sm font-mono">ellipse 30% 45%</code>), which are its horizontal and vertical radius. Tall and narrow ellipses read as beams of light, wide and flat ones as haze.</li><li class="mb-2 pl-2"><strong class="font-bold">Make the streak more or less visible</strong> by narrowing or widening its color stop range (<code class="text-sm font-mono">35%</code> to <code class="text-sm font-mono">60%</code>) and by changing its angle (<code class="text-sm font-mono">115deg</code>).</li><li class="mb-2 pl-2"><strong class="font-bold">Keep the center dark.</strong> Text sits in the middle of the card, so leave that area to the base color and let the glows live near the edges.</li></ul></p>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="accessibility">Accessibility</h2>
+<p class="leading-normal mb-6 block text-justify">Text on the aurora is <code class="text-sm font-mono">mist-3</code> on <code class="text-sm font-mono">dark-1</code>, a contrast of 14.58:1, which is well above AAA. That number only holds where the surface is actually dark, though. A glow that drifts behind the text can lower the contrast a lot, since glacier and orange are mid-tones. Keep the glows away from the area where copy sits, and check the final result with real text on top before shipping.</p>
+<p class="leading-normal mb-6 block text-justify">The effect is fully static, so there is nothing to disable for users who prefer reduced motion.</p>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="limitations-and-alternatives">Limitations and alternatives</h2>
+<p class="leading-normal mb-6 block text-justify">CSS gradients can imitate the glow and the grain, but not optical effects such as the colored fringes of a real lens flare, where the light splits into a faint rainbow along its edge. In CSS that area stays flat.</p>
+<p class="leading-normal mb-6 block text-justify">Two other ways of getting the same background, in case you need them:<ul class="list-inside pl-3 mt-2 mb-8"><li class="mb-2 pl-2"><strong class="font-bold">A pre-rendered image.</strong> Export the effect as WebP or AVIF and use it as <code class="text-sm font-mono">background-image</code>. It looks exactly as designed and, because it is mostly blur, it compresses well. The cost is that it no longer follows the theme: a different palette or dark mode variant means another image.</li><li class="mb-2 pl-2"><strong class="font-bold">A shader.</strong> A WebGL or canvas shader can render the same look and animate it. It is the most flexible option and also the heaviest, so it only makes sense if the movement is part of the design.</li></ul></p>
+<p class="leading-normal mb-6 block text-justify">For most uses the CSS version is the best trade-off, and it is the one kept in the design system.</p>
+<h2 class="font-heading mt-0 mb-4 text-3xl" id="performance">Performance</h2>
+<p class="leading-normal mb-6 block text-justify">Blur filters on large elements are cheap when static, but expensive if you animate them or repaint the card often. Keep the aurora static, avoid placing it inside elements that scroll with heavy transforms, and do not stack several on the same screen.</p>
+    </div>
+
+
+    
+    
+</div>
+
+</main>
+
+    <footer class="w-full pt-12 pb-16">
+    <div class="w-full h-px bg-current mb-12 opacity-20"></div>
+    <div class="mx-auto w-full max-w-4xl px-6">
+    
+        <div class="sm:flex flex-wrap justify-between">
+            <div class="flex flex-wrap gap-4 items-center">
+                
+                    <a href="https://github.com/jmjuanes" class="font-medium text-base hover:underline">
+                        <span>GitHub</span>
+                    </a>
+                
+                    <a href="https://linkedin.com/in/jmjuanes" class="font-medium text-base hover:underline">
+                        <span>Linkedin</span>
+                    </a>
+                
+            </div>
+            <div class="text-base text-current">
+                <span>Handcrafted by <b>Josemi</b>.</span>
+            </div>
+        </div>
+    
+</div>
+
+</footer>
+
+</body>
+</html>
+

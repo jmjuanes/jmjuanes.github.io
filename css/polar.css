@@ -1,0 +1,25 @@
+:root {
+    /* dark colors */
+    --polar-dark-1: #1B1F27;
+    --polar-dark-2: #2B303B;
+    --polar-dark-3: #3B424F;
+    --polar-dark-4: #4D5566;
+
+    /* mist colors */
+    --polar-mist-1: #D6DCE8;
+    --polar-mist-2: #E4E9F1;
+    --polar-mist-3: #EEF1F6;
+
+    /* glacier colors */
+    --polar-glacier-1: #8CB8B4;
+    --polar-glacier-2: #7B9BC2;
+    --polar-glacier-3: #5A7CA6;
+
+    /* accent colors */
+    --polar-accent-red: #BB6C71;
+    --polar-accent-orange: #D18C5E;
+    --polar-accent-yellow: #D9BE6C;
+    --polar-accent-green: #8FAE7D;
+    --polar-accent-purple: #A084A6;
+    --polar-accent-magenta: #C58398;
+}

@@ -1,15 +1,32 @@
 :root {
     /* theme fonts */
-    --font-body: "Geist", sans-serif;
-    --font-heading: inherit;
+    --font-body: "Albert Sans", sans-serif;
+    --font-heading: "Gilda Display", serif;
     --font-mono: "Geist Mono", monospace;
 
     /* theme colors */
-    --foreground: #111111;
-    --background: #F7F3EF;
-    --card: #FDF9F8;
-    --warning: #FFE59A;
-    --danger: #FFB5C1;
-    --success: #B7E1D1;
-    --info: #A9D3FF;
+    --background: var(--polar-mist-3);
+    --foreground: var(--polar-dark-1);
+    --card: var(--polar-mist-2);
+    --card-foreground: var(--polar-dark-1);
+    --popover: var(--polar-mist-2);
+    --popover-foreground: var(--polar-dark-1);
+    --primary: var(--polar-dark-1);
+    --primary-foreground: var(--polar-mist-3);
+    --secondary: var(--polar-mist-1);
+    --secondary-foreground: var(--polar-dark-2);
+    --muted: var(--polar-mist-2);
+    --muted-foreground: var(--polar-dark-4);
+    --accent: var(--polar-mist-1);
+    --accent-foreground: var(--polar-dark-2);
+    --destructive: var(--polar-accent-red);
+    --destructive-foreground: var(--polar-dark-1);
+    --border: var(--polar-mist-1);
+    --input: var(--polar-mist-1);
+    --success: var(--polar-accent-green);
+    --success-foreground: var(--polar-dark-1);
+    --warning: var(--polar-accent-yellow);
+    --warning-foreground: var(--polar-dark-1);
+    --info: var(--polar-glacier-2);
+    --info-foreground: var(--polar-dark-1);
 }
